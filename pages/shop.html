@@ -1,11 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+            rel="stylesheet">
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container py-5">
+            <div class="category-buttons m-1">
+                <button class="category-btn item-allitem"><span class="">All Products</span></button>
+                <button class="category-btn">Women</button>
+                <button class="category-btn">Men</button>
+                <button class="category-btn">Bag</button>
+                <button class="category-btn">Shoes</button>
+                <button class="category-btn">Watches</button>
+            </div>
+
+        </div>
+        <div class="container py-5">
+            <div class="row" id="shop-container"></div>
+        </div>
+    </body>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+    const ShopProducts = [
+            { imgSrc: "bag.png", title: "Shop Item 1", price: 222, sale: "-30%" },
+            { imgSrc: "bag.png", title: "Shop Item 2", price: 199 },
+            { imgSrc: "bag.png", title: "Shop Item 3", price: 150 },
+            { imgSrc: "bag.png", title: "Shop Item 4", price: 299 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99, sale: "-50%" },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
+            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+
+        ];
+
+        function renderProducts(containerId, products,) {
+            const container = document.getElementById(containerId);
+            for (let i = 0; i < products.length; i++) {
+                const p = products[i];
+                container.innerHTML += `
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="product-card">
+                            <div class="product-image">
+                                ${p.sale ? `<span class="sale-badge">${p.sale}</span>` : ""}
+                                <button class="Shop-btn ">
+                                    <i class="fa-regular fa-heart"></i>
+                                </button>
+                                <button class="view-btn">
+                                    <i class="fas fa-magnifying-glass"></i>
+                                </button>
+                                <img src="${p.imgSrc}" alt="${p.title}">
+                            </div>
+                            <div class="product-info">
+                                <h5 class="product-title">${p.title}</h5>
+                                <div class="product-price">
+                                    <span class="current-price">$${p.price}</span>
+                                </div>
+                                <button class="add-to-cart">
+                                    <i class="fas fa-shopping-cart me-2"></i>
+                                    Add To Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        renderProducts("shop-container", ShopProducts);
+</script>
 </html>
