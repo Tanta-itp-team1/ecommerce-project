@@ -41,6 +41,7 @@ header nav form button{
 header .icons svg{
     margin: 10px;
     cursor: pointer;
+    color: black;
 }
 header .icons svg:first-child{
     margin-left: 20px;
@@ -216,17 +217,39 @@ footer .social-media{
 }
 @media all and (max-width: 991px){
     .navbar-collapse{
-        background-color: gray;
+        background-color: rgba(0, 0, 0, 0.848);
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-top: 30px;
     }
-        .navbar-collapse ul li{
-            margin: 10px;
-        }
-        a.nav-link{
+    .navbar-collapse ul {
+        width: 100%;
+        text-align: center;
+    }
+    .navbar-collapse ul li{
+        margin: 10px;
+    }
+    a.nav-link{
         color: white !important;
-        }
+    }
+    a.nav-link:hover{
+        color: #DB4444 !important;
+    }
+    a.nav-link.active{
+        border-bottom: 1px solid white;
+    }
+    .navbar-collapse svg{
+        color: white !important;
+    }
+    .carousel-item .card-body{
+        text-align: center;
+    }
+    .staff .carousel-indicators {
+        bottom: -3%;
+    }
         
 }
+
+/* xs <576px sm ≥576px md ≥768px lg ≥992px xl ≥1200px xxl ≥1400px */
