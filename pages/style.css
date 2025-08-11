@@ -251,3 +251,6 @@ body {
     display: flex;
     gap: 10px; 
 }
+.redHeart{
+  color: red;
+}

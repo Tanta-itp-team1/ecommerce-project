@@ -32,33 +32,21 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
     const ShopProducts = [
-            { imgSrc: "bag.png", title: "Shop Item 1", price: 222, sale: "-30%" },
-            { imgSrc: "bag.png", title: "Shop Item 2", price: 199 },
-            { imgSrc: "bag.png", title: "Shop Item 3", price: 150 },
-            { imgSrc: "bag.png", title: "Shop Item 4", price: 299 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99, sale: "-50%" },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
-            { imgSrc: "bag.png", title: "Shop Item 5", price: 99,  },
-            { imgSrc: "bag.png", title: "Shop Item 6", price: 180 },
+            {id:1 ,imgSrc: "bag.png", title: "Shop Item 1",existence:false, price: 222, sale: "-30%" },
+            {id:2 ,imgSrc: "bag.png", title: "Shop Item 2",existence:false, price: 199 },
+            {id:3 ,imgSrc: "bag.png", title: "Shop Item 3",existence:false, price: 150 },
+            {id:4 ,imgSrc: "bag.png", title: "Shop Item 4",existence:false, price: 299 },
+            {id:5 ,imgSrc: "bag.png", title: "Shop Item 5",existence:false, price: 99,  },
+            {id:6 ,imgSrc: "bag.png", title: "Shop Item 6",existence:false, price: 180 },
+            {id:7 ,imgSrc: "bag.png", title: "Shop Item 5",existence:false, price: 99,  },
+            {id:8 ,imgSrc: "bag.png", title: "Shop Item 6",existence:false, price: 180 },
+            {id:9 ,imgSrc: "bag.png", title: "Shop Item 5",existence:false, price: 99, sale: "-50%" },
+            {id:10 ,imgSrc: "bag.png", title: "Shop Item 6",existence:false, price: 180 },
+            
 
         ];
-
+        let LocalVar = JSON.parse(localStorage.getItem('wishListProducts'))
+        let WishlistProducts=localStorage.getItem('wishListProducts')?LocalVar:[];
         function renderProducts(containerId, products,) {
             const container = document.getElementById(containerId);
             for (let i = 0; i < products.length; i++) {
@@ -68,11 +56,11 @@
                         <div class="product-card">
                             <div class="product-image">
                                 ${p.sale ? `<span class="sale-badge">${p.sale}</span>` : ""}
-                                <button class="Shop-btn ">
-                                    <i class="fa-regular fa-heart"></i>
+                                <button class="Shop-btn "onclick="copyToWishlist(${i})">
+                                    <i id="whiteHeart-${i}" class="fa-regular fa-heart"></i>
                                 </button>
                                 <button class="view-btn">
-                                    <i class="fas fa-magnifying-glass"></i>
+                                    <i class="fas fa-magnifying-glass" onclick="goToProductDetails(${i})"></i>
                                 </button>
                                 <img src="${p.imgSrc}" alt="${p.title}">
                             </div>
@@ -92,5 +80,35 @@
             }
         }
         renderProducts("shop-container", ShopProducts);
+        function copyToWishlist(index){
+            let exist=false;
+            for (let i=0;i<WishlistProducts.length;i++){
+                if(WishlistProducts[i].id==ShopProducts[index].id){
+                    exist=true;
+                }
+            }
+
+            let heart=document.getElementById(`whiteHeart-${index}`)
+            if(!exist){
+            WishlistProducts.push(ShopProducts[index]);
+            console.log(WishlistProducts);
+                heart.className='fa-solid fa-heart redHeart';
+                
+            
+            localStorage.setItem("wishListProducts",JSON.stringify(WishlistProducts))
+            
+
+        }else{
+            WishlistProducts=WishlistProducts.filter(
+                element=> element.id!=ShopProducts[index].id 
+            );
+            localStorage.setItem("wishListProducts",JSON.stringify(WishlistProducts))
+            heart.className="fa-regular fa-heart ";
+        }
+    };
+    function goToProductDetails(index){
+        window.location.href='test.html';
+    };
+
 </script>
 </html>

@@ -29,16 +29,17 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        const wishlistProducts = [
-            { imgSrc: "bag.png", title: "Wishlist Item 1", price: 222, sale: "-30%" },
-            { imgSrc: "bag.png", title: "Wishlist Item 2", price: 199 },
-            { imgSrc: "bag.png", title: "Wishlist Item 3", price: 150 },
-            { imgSrc: "bag.png", title: "Wishlist Item 4", price: 299 },
-            { imgSrc: "bag.png", title: "Wishlist Item 5", price: 99, sale: "-50%" },
-            { imgSrc: "bag.png", title: "Wishlist Item 6", price: 180 },
-            // { imgSrc: "bag.png", title: "Wishlist Item 5", price: 99, sale: "-50%" },
-            // { imgSrc: "bag.png", title: "Wishlist Item 6", price: 180 }
-        ];
+         let WishlistProducts = JSON.parse(localStorage.getItem("wishListProducts"));
+        //  [
+        //     {id:1 ,imgSrc: "bag.png", title: "Wishlist Item 1", price: 222, sale: "-30%" },
+        //     {id:2 ,imgSrc: "bag.png", title: "Wishlist Item 2", price: 199 },
+        //     {id:3 ,imgSrc: "bag.png", title: "Wishlist Item 3", price: 150 },
+        //     {id:4 ,imgSrc: "bag.png", title: "Wishlist Item 4", price: 299 },
+        //     // { imgSrc: "bag.png", title: "Wishlist Item 5", price: 99, sale: "-50%" },
+        //     // { imgSrc: "bag.png", title: "Wishlist Item 6", price: 180 },
+        //     // { imgSrc: "bag.png", title: "Wishlist Item 5", price: 99, sale: "-50%" },
+        //     // { imgSrc: "bag.png", title: "Wishlist Item 6", price: 180 }
+        // ];
 
         const justForYouProducts = [
             { imgSrc: "bag.png", title: "New Arrival 1", price: 222, sale: "-30%" },
@@ -50,6 +51,7 @@
         ];
         function renderProducts(containerId, products, type = "wishlist") {
             const container = document.getElementById(containerId);
+            container.innerHTML="";
             for (let i = 0; i < products.length; i++) {
                 const p = products[i];
                 container.innerHTML += `
@@ -57,8 +59,12 @@
                         <div class="product-card">
                             <div class="product-image">
                                 ${p.sale ? `<span class="sale-badge">${p.sale}</span>` : ""}
-                                <button class="${type === 'wishlist' ? 'wishlist-btn' : 'view-btn'}">
+                                <button class="${type === 'wishlist' ? 'wishlist-btn ' : 'd-none'}" onclick="deleteItem(${i})">
                                     <i class="fas ${type === 'wishlist' ? 'fa-xmark' : 'fa-magnifying-glass'}"></i>
+                                </button>
+                                <button class=" view-btn" onclick="goToProductDetails(${i})">
+                                    <i class="fas  fa-magnifying-glass"></i>
+                                    
                                 </button>
                                 <img src="${p.imgSrc}" alt="${p.title}">
                             </div>
@@ -77,8 +83,20 @@
                 `;
             }
         }
-        renderProducts("wishlist-container", wishlistProducts, "wishlist");
+        renderProducts("wishlist-container", WishlistProducts, "wishlist");
         renderProducts("justforyou-container", justForYouProducts, "justforyou");
+        function deleteItem(index){
+            WishlistProducts=WishlistProducts.filter(
+                element=> element.id!=WishlistProducts[index].id 
+            );
+            localStorage.setItem("wishListProducts",JSON.stringify(WishlistProducts))
+
+            renderProducts("wishlist-container", WishlistProducts, "wishlist");
+        };
+        function goToProductDetails(index){
+        window.location.href='test.html';
+        };
+
     </script>
 </body>
 </html>
