@@ -1,14 +1,14 @@
 (function () {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  if (!users.some((u) => u.email === "admin@example.com")) {
-    users.push({
+  const data = JSON.parse(localStorage.getItem("ecommerceData")) || [];
+  if (!data["users"].some((u) => u.email === "admin@example.com")) {
+    data["users"].push({
       id: Date.now(),
       username: "Admin",
       email: "admin@example.com",
       password: "admin123",
       role: "admin",
     });
-    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("ecommerceData", JSON.stringify(data));
   }
 })();
 
@@ -58,7 +58,8 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   btnText.textContent = "Logging in...";
 
   setTimeout(() => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const data = JSON.parse(localStorage.getItem("ecommerceData"));
+    const users = data["users"] || [];
     const matchedUser = users.find(
       (user) => user.email === email && user.password === password
     );
