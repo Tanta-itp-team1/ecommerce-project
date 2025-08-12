@@ -1,0 +1,125 @@
+body{
+    font-family: 'Poppins', sans-serif;
+    padding-top: 1.5rem;
+}
+nav{
+background-color: white;
+    box-shadow: 0.1rem 0 0.2rem lightgray;
+}
+
+#nav{
+    padding-bottom: 0.5rem;
+    padding-inline: 3rem;
+    height: 10%;
+    position: fixed;
+    background-color: white;
+    top: 1.5rem;
+    left: 0rem;
+    right: 0rem;
+    border-bottom: lightgray 1px solid;
+    
+}
+
+#black{
+    position: fixed;
+    height: 2rem;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#black-part{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 300;
+}
+
+#black-part a{
+   font-size: medium;
+   text-decoration: none;
+   color: white;
+}
+
+#black-part span{
+    text-decoration: underline;
+}
+
+
+.navbar-toggler {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.navbar-toggler:active{
+    outline: none;
+    border: none;
+}
+#sidebar {
+    color: black;
+    height: calc(100vh - 3rem);
+      margin-top: 3rem;
+      border-right: lightgray 1px solid;
+      background-color: white;
+      width: 250px;
+}
+@media all and (max-width: 700px) {
+    #sidebar {
+        color: black;
+        height: 100vh;
+        margin-top: 3rem;
+        background-color: white;
+        width: 40vw;
+    }
+}
+
+@media all and (max-width: 300px) {
+    #sidebar {
+        color: black;
+        height: 100vh;
+        margin-top: 3rem;
+        background-color: white;
+        width: 20%;
+    }
+}
+@media all and (max-width: 992px) {
+     .navbar-collapse {
+        background-color: white !important;
+        box-shadow: 0.1rem 0.1rem 0.3rem lightgray;
+        z-index: 1050; 
+        position: relative;
+    }
+}
+
+
+@media all and (max-width: 700px) {
+    #sidebar {
+        width: 40vw;
+    }
+}
+
+@media all and (max-width: 300px) {
+    #sidebar {
+        width: 20%;
+    }
+}
+#sidebar a {
+      padding: 10px;
+      display: block;
+      text-decoration: none;
+      color: black;
+}
+#sidebar a:hover{
+     background-color: #495057;
+      color: white;
+      border-radius: 1rem;
+
+}
+
+.submenu {
+  display: none;
+}
+
