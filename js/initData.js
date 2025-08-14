@@ -200,7 +200,7 @@
           stock: 35,
           soldCount: 15,
           description: "Keyboard with rgp Lights.",
-          imageUrl: "Keyboards",
+          imageUrl: "Keyboard.png",
           sellerId: 2,
         },
         {
@@ -288,7 +288,7 @@
           stock: 40,
           soldCount: 18,
           description: "Fast RC car with rechargeable battery.",
-          imageUrl: "car.png",
+          imageUrl: "toy.png",
           sellerId: 2,
         },
         //Electronics again

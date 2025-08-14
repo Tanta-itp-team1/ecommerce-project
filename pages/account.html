@@ -45,33 +45,54 @@
                                 </svg>
                             </button>
                         </form>
-                        <div class="icons">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M11 7C8.239 7 6 9.216 6 11.95C6 14.157 6.875 19.395 15.488 24.69C15.6423 24.7839 15.8194 24.8335 16 24.8335C16.1806 24.8335 16.3577 24.7839 16.512 24.69C25.125 19.395 26 14.157 26 11.95C26 9.216 23.761 7 21 7C18.239 7 16 10 16 10C16 10 13.761 7 11 7Z"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M11 27C11.5523 27 12 26.5523 12 26C12 25.4477 11.5523 25 11 25C10.4477 25 10 25.4477 10 26C10 26.5523 10.4477 27 11 27Z"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path
-                                    d="M25 27C25.5523 27 26 26.5523 26 26C26 25.4477 25.5523 25 25 25C24.4477 25 24 25.4477 24 26C24 26.5523 24.4477 27 25 27Z"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M3 5H7L10 22H26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path
-                                    d="M10 16.6667H25.59C25.7056 16.6667 25.8177 16.6267 25.9072 16.5535C25.9966 16.4802 26.0579 16.3782 26.0806 16.2648L27.8806 7.26479C27.8951 7.19222 27.8934 7.11733 27.8755 7.04552C27.8575 6.97371 27.8239 6.90678 27.7769 6.84956C27.73 6.79234 27.6709 6.74625 27.604 6.71462C27.5371 6.68299 27.464 6.66661 27.39 6.66666H8"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M24 27V24.3333C24 22.9188 23.5224 21.5623 22.6722 20.5621C21.8221 19.5619 20.669 19 19.4667 19H11.5333C10.331 19 9.17795 19.5619 8.32778 20.5621C7.47762 21.5623 7 22.9188 7 24.3333V27"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path
-                                    d="M16.5 14C18.9853 14 21 11.9853 21 9.5C21 7.01472 18.9853 5 16.5 5C14.0147 5 12 7.01472 12 9.5C12 11.9853 14.0147 14 16.5 14Z"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
+                        <div class="icons text-white">
+                            <a href="wishlist2.html" class="position-relative">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11 7C8.239 7 6 9.216 6 11.95C6 14.157 6.875 19.395 15.488 24.69C15.6423 24.7839 15.8194 24.8335 16 24.8335C16.1806 24.8335 16.3577 24.7839 16.512 24.69C25.125 19.395 26 14.157 26 11.95C26 9.216 23.761 7 21 7C18.239 7 16 10 16 10C16 10 13.761 7 11 7Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <span id="wishlist-count"
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    0
+                                </span>
+                            </a>
+                            <a href="cart.html" class="position-relative">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11 27C11.5523 27 12 26.5523 12 26C12 25.4477 11.5523 25 11 25C10.4477 25 10 25.4477 10 26C10 26.5523 10.4477 27 11 27Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path
+                                        d="M25 27C25.5523 27 26 26.5523 26 26C26 25.4477 25.5523 25 25 25C24.4477 25 24 25.4477 24 26C24 26.5523 24.4477 27 25 27Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M3 5H7L10 22H26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M10 16.6667H25.59C25.7056 16.6667 25.8177 16.6267 25.9072 16.5535C25.9966 16.4802 26.0579 16.3782 26.0806 16.2648L27.8806 7.26479C27.8951 7.19222 27.8934 7.11733 27.8755 7.04552C27.8575 6.97371 27.8239 6.90678 27.7769 6.84956C27.73 6.79234 27.6709 6.74625 27.604 6.71462C27.5371 6.68299 27.464 6.66661 27.39 6.66666H8"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    0
+                                </span>
+                            </a>
+                            <div id="account-menu" class="dropdown d-inline-block ms-3">
+                                <a id="account-btn" class="btn btn-danger rounded-circle p-2" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <svg class="text-white" width="25" height="25" viewBox="0 0 32 32" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M24 27V24.3333C24 22.9188 23.5224 21.5623 22.6722 20.5621C21.8221 19.5619 20.669 19 19.4667 19H11.5333C10.331 19 9.17795 19.5619 8.32778 20.5621C7.47762 21.5623 7 22.9188 7 24.3333V27"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M16.5 14C18.9853 14 21 11.9853 21 9.5C21 7.01472 18.9853 5 16.5 5C14.0147 5 12 7.01472 12 9.5C12 11.9853 14.0147 14 16.5 14Z"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                                <ul id="account-dropdown" class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="account.html">My Account</a></li>
+                                    <li><a class="dropdown-item" href="#" id="logout-btn">Logout</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
     
@@ -97,8 +118,6 @@
                 <h6 class="d-none d-lg-block">Manage My Account</h6>
                 <a class="nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile"
                     role="tab">My Profile</a>
-                <a class="nav-link" id="v-pills-address-tab" data-bs-toggle="pill" href="#v-pills-address"
-                    role="tab">Address Book</a>
                 <a class="nav-link" id="v-pills-payment-tab" data-bs-toggle="pill" href="#v-pills-payment" role="tab">My
                     Payment Options</a>
     
@@ -120,50 +139,43 @@
                     <div class="profile-card">
                         <h5 class="mb-4 text-danger">Edit Your Profile</h5>
                         <form>
+                            <div id="alert-container"></div>
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control" value="Md">
+                                    <input id="fname" type="text" class="form-control" value="Md">
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" value="Rimel">
+                                    <input id="lname" type="text" class="form-control" value="Rimel">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" value="rimel111@gmail.com" readonly>
+                                    <input id="email" type="email" class="form-control" value="rimel111@gmail.com">
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Address</label>
-                                    <input type="text" class="form-control" value="Kingston, 5236, United States">
+                                    <input id="address" type="text" class="form-control" value="" placeholder="Enter your address">
                                 </div>
                             </div>
                             <h6 class="mt-4">Password Changes</h6>
                             <div class="mb-3">
-                                <input type="password" class="form-control" placeholder="Current Password">
+                                <input id="currentPassword" type="password" class="form-control" placeholder="Current Password">
                             </div>
                             <div class="mb-3">
-                                <input type="password" class="form-control" placeholder="New Password">
+                                <input id="newPassword" type="password" class="form-control" placeholder="New Password">
                             </div>
                             <div class="mb-4">
-                                <input type="password" class="form-control" placeholder="Confirm New Password">
+                                <input id="confirmPassword" type="password" class="form-control" placeholder="Confirm New Password">
                             </div>
                             <div class="row flex-row-reverse">
-                                <button type="button" class="btn btn-outline-secondary border-0 me-2 col-3 order-2">Cancel</button>
-                                <button type="submit" class="btn btn-save col-3 order-1">Save Changes</button>
+                                <button id="cancel" type="button" class="btn btn-outline-secondary border-0 me-2 col-3 order-2">Cancel</button>
+                                <button id="save" type="submit" class="btn btn-save col-3 order-1">Save Changes</button>
                             </div>
                             
                         </form>
-                    </div>
-                </div>
-    
-                <!-- Address Book -->
-                <div class="tab-pane fade" id="v-pills-address" role="tabpanel">
-                    <div class="profile-card">
-                        <h5 class="text-danger">Address Book</h5>
-                        <p>Manage your shipping and billing addresses here.</p>
                     </div>
                 </div>
     
@@ -172,6 +184,7 @@
                     <div class="profile-card">
                         <h5 class="text-danger">Payment Options</h5>
                         <p>Manage your saved payment methods here.</p>
+                        <p>Coming Soon...</p>
                     </div>
                 </div>
     
@@ -180,6 +193,7 @@
                     <div class="profile-card">
                         <h5 class="text-danger">My Returns</h5>
                         <p>Track and manage your return requests.</p>
+                        <p>Coming Soon...</p>
                     </div>
                 </div>
     
@@ -188,6 +202,7 @@
                     <div class="profile-card">
                         <h5 class="text-danger">My Cancellations</h5>
                         <p>View and manage your cancelled orders.</p>
+                        <p>Coming Soon...</p>
                     </div>
                 </div>
     
@@ -196,6 +211,7 @@
                     <div class="profile-card">
                         <h5 class="text-danger">My Wishlist</h5>
                         <p>Items you have saved for later purchase.</p>
+                        <a class="text-danger" href="../pages/wishlist2.html">Go to Wishlist</a>
                     </div>
                 </div>
             </div>
@@ -284,5 +300,7 @@
     </footer>
     <script src="../js/initData.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/about.js"></script>
+    <script src="../js/account.js"></script>
 </body>
 </html>

@@ -38,13 +38,32 @@ header nav form button{
     border-left: 0 !important;
     border-radius: 0 !important;
 }
-header .icons svg{
-    margin: 10px;
-    cursor: pointer;
+header .icons a{
+    text-decoration: none;
     color: black;
+}
+header .icons #account-menu svg{
+    margin-left: 0 !important;
+
 }
 header .icons svg:first-child{
     margin-left: 20px;
+}
+header .icons #account-dropdown{
+    background-color: #000000cf;
+}
+header .icons #account-dropdown li {
+    margin: 0;
+}
+header .icons #account-dropdown li a{
+    color: white !important;
+}
+header .icons #account-dropdown li:hover{
+    
+}
+header .icons #account-dropdown li:hover a{
+    color: #DB4444 !important;
+    background-color: black !important;
 }
 /* End Header */
 .breadcrumb{
