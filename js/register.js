@@ -1,152 +1,147 @@
-const data = JSON.parse(localStorage.getItem("ecommerceData"));
-const existingUsers = data["users"] || [];
-if (existingUsers.length === 0) {
-  const dummyAdmin = {
-    id: Date.now(),
-    username: "admin",
-    email: "admin@example.com",
-    password: "admin123",
-    role: "admin",
-  };
-  localStorage.setItem("ecommerceData", JSON.stringify([dummyAdmin]));
+if (!localStorage.getItem("ecommerceData")) {
+  localStorage.setItem("ecommerceData", JSON.stringify({
+    users: [{
+      id: Date.now(),
+      name: "Admin",
+      email: "admin@example.com",
+      password: "admin123",
+      role: "admin",
+      status: "active",
+      joinDate: new Date().toISOString()
+    }],
+    lastUserId: Date.now()
+  }));
 }
-document
-  .getElementById("togglePassword")
-  .addEventListener("click", function () {
-    const passwordInput = document.getElementById("password");
-    const passwordIcon = document.getElementById("passwordIcon");
 
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      passwordIcon.classList.remove("bi-eye");
-      passwordIcon.classList.add("bi-eye-slash");
-    } else {
-      passwordInput.type = "password";
-      passwordIcon.classList.remove("bi-eye-slash");
-      passwordIcon.classList.add("bi-eye");
-    }
+const togglePassword = (inputId, iconId) => {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.replace("bi-eye", "bi-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.replace("bi-eye-slash", "bi-eye");
+  }
+};
+
+document.getElementById("togglePassword").addEventListener("click", () => togglePassword("password", "passwordIcon"));
+document.getElementById("toggleConfirmPassword").addEventListener("click", () => togglePassword("confirmPassword", "confirmPasswordIcon"));
+
+// Initialize Bootstrap toasts
+const successToast = new bootstrap.Toast(document.getElementById('toastSuccess'));
+const errorToast = new bootstrap.Toast(document.getElementById('toastError'));
+
+// Registration form
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  
+  // Get form elements
+  const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
+  
+  // Get form values
+  const name = document.getElementById("name");
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const confirmPassword = document.getElementById("confirmPassword");
+  const role = document.getElementById("role");
+  
+  // Reset validation
+  [name, email, password, confirmPassword, role].forEach(input => {
+    input.classList.remove("is-invalid");
   });
 
-document
-  .getElementById("toggleConfirmPassword")
-  .addEventListener("click", function () {
-    const confirmPasswordInput = document.getElementById("confirmPassword");
-    const confirmPasswordIcon = document.getElementById("confirmPasswordIcon");
+  // Validate inputs
+  let isValid = true;
+  
+  if (name.value.trim().length < 2) {
+    name.classList.add("is-invalid");
+    isValid = false;
+  }
+  
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+    email.classList.add("is-invalid");
+    isValid = false;
+  }
+  
+  if (password.value.trim().length < 6) {
+    password.classList.add("is-invalid");
+    isValid = false;
+  }
+  
+  if (password.value.trim() !== confirmPassword.value.trim()) {
+    confirmPassword.classList.add("is-invalid");
+    isValid = false;
+  }
+  
+  if (!role.value) {
+    role.classList.add("is-invalid");
+    isValid = false;
+  }
+  
+  if (!isValid) return;
 
-    if (confirmPasswordInput.type === "password") {
-      confirmPasswordInput.type = "text";
-      confirmPasswordIcon.classList.remove("bi-eye");
-      confirmPasswordIcon.classList.add("bi-eye-slash");
-    } else {
-      confirmPasswordInput.type = "password";
-      confirmPasswordIcon.classList.remove("bi-eye-slash");
-      confirmPasswordIcon.classList.add("bi-eye");
-    }
-  });
+  // Show loading state
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Registering...';
 
-document
-  .getElementById("registerForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
+  // Get existing data
+  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData"));
+  const users = ecommerceData.users || [];
 
-    const username = document.getElementById("username");
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const confirmPassword = document.getElementById("confirmPassword");
-    const role = document.getElementById("role");
-    const registerBtn = this.querySelector('button[type="submit"]');
+  // Check if email exists
+  if (users.some(user => user.email === email.value.trim())) {
+    email.classList.add("is-invalid");
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = "Register";
+    
+    // Show error toast
+    document.getElementById('toastError').querySelector('.toast-body').textContent = "❌ Email already exists!";
+    errorToast.show();
+    return;
+  }
 
-    [username, email, password, confirmPassword, role].forEach((input) => {
-      input.classList.remove("is-invalid");
-    });
+  setTimeout(() => {
+    const newUser = {
+      id: Date.now(),
+      name: name.value.trim(),
+      email: email.value.trim(),
+      password: password.value.trim(),
+      role: role.value,
+      status: "active",
+      joinedDate: new Date().toISOString()
+    };
 
-    let isValid = true;
-    const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,}$/;
+    // Update data
+    users.push(newUser);
+    ecommerceData.users = users;
+    ecommerceData.lastUserId = newUser.id;
+    localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
 
-    if (!usernameRegex.test(username.value.trim())) {
-      username.classList.add("is-invalid");
-      isValid = false;
-    }
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const emailRegex =
-      /^(?!\.)(?!.*\.\.)([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+    // Reset button state
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = "Register";
 
-    if (username.value.trim() === "") {
-      username.classList.add("is-invalid");
-      isValid = false;
-    }
-
-    if (!emailRegex.test(email.value.trim())) {
-      email.classList.add("is-invalid");
-      isValid = false;
-    }
-
-    if (password.value.trim().length < 6) {
-      password.classList.add("is-invalid");
-      isValid = false;
-    }
-
-    if (confirmPassword.value.trim() !== password.value.trim()) {
-      confirmPassword.classList.add("is-invalid");
-      isValid = false;
-    }
-
-    if (role.value === "") {
-      role.classList.add("is-invalid");
-      isValid = false;
-    }
-
-    if (!isValid) return;
-
-    registerBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Registering...`;
-    registerBtn.disabled = true;
-    const data = JSON.parse(localStorage.getItem("ecommerceData"));
-    const users = data["users"] || [];
-    const emailExists = users.some((user) => user.email === email.value.trim());
-
+    document.getElementById('toastSuccess').querySelector('.toast-body').textContent = "✅ Registration successful!";
+    successToast.show();
+    
     setTimeout(() => {
-      if (emailExists) {
-        const errorToast = document.getElementById("toastError");
-        const bsErrorToast = new bootstrap.Toast(errorToast);
-        bsErrorToast.show();
-
-        registerBtn.innerHTML = `Register`;
-        registerBtn.disabled = false;
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (loggedInUser) {
+        window.location.href = "../../index.html";
       } else {
-        const newUser = {
-          id: Date.now(),
-          username: username.value.trim(),
-          email: email.value.trim(),
-          password: password.value.trim(),
-          role: role.value,
-        };
-
-        users.push(newUser);
-        localStorage.setItem("ecommerceData", JSON.stringify(data));
-
-        const successToast = document.getElementById("toastSuccess");
-        const bsSuccessToast = new bootstrap.Toast(successToast);
-        bsSuccessToast.show();
-        registerBtn.innerHTML = `Register`;
-        registerBtn.disabled = false;
-
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 2000);
+        window.location.href = "login.html";
       }
-    }, 1000);
-
-    const btn = document.getElementById("submitBtn");
-    btn.disabled = true;
-    btn.classList.remove("btn-primary");
-    btn.classList.add("btn-secondary");
-    btn.innerHTML =
-      '<span class="spinner-border spinner-border-sm me-2"></span>Registering...';
-
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.classList.remove("btn-secondary");
-      btn.classList.add("btn-primary");
-      btn.innerHTML = "Register";
     }, 2000);
-  });
+  }, 1000);
+});
+
+if (localStorage.getItem("loggedInUser")) {
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  switch(user.role) {
+    case "admin": window.location.href = "/Dashboard/dashboard.html"; break;
+    case "seller": window.location.href = "../seller/dashboard.html"; break;
+    default: window.location.href = "../../index.html";
+  }
+}

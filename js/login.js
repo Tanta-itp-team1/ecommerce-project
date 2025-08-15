@@ -1,7 +1,23 @@
-(function () {
-  const data = JSON.parse(localStorage.getItem("ecommerceData")) || [];
-  if (!data["users"].some((u) => u.email === "admin@example.com")) {
-    data["users"].push({
+
+// Check if user is already logged in on page load
+(function() {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (loggedInUser) {
+    const user = JSON.parse(loggedInUser);
+    // Redirect based on role
+    if (user.role === "admin") {
+      window.location.href = "/Dashboard/dashboard.html";
+    } else if (user.role === "seller") {
+      window.location.href = "../seller/dashboard.html";
+    } else {
+      window.location.href = "../../index.html";
+    }
+    return;
+  }
+
+  const data = JSON.parse(localStorage.getItem("ecommerceData")) || { users: [] };
+  if (!data.users.some(u => u.email === "admin@example.com")) {
+    data.users.push({
       id: Date.now(),
       username: "Admin",
       email: "admin@example.com",
@@ -12,19 +28,17 @@
   }
 })();
 
-document
-  .getElementById("togglePassword")
-  .addEventListener("click", function () {
-    const passwordInput = document.getElementById("password");
-    const eyeIcon = document.getElementById("eyeIcon");
-    const isVisible = passwordInput.type === "text";
+document.getElementById("togglePassword").addEventListener("click", function() {
+  const passwordInput = document.getElementById("password");
+  const eyeIcon = document.getElementById("eyeIcon");
+  const isVisible = passwordInput.type === "text";
 
-    passwordInput.type = isVisible ? "password" : "text";
-    eyeIcon.classList.toggle("bi-eye");
-    eyeIcon.classList.toggle("bi-eye-slash");
-  });
+  passwordInput.type = isVisible ? "password" : "text";
+  eyeIcon.classList.toggle("bi-eye");
+  eyeIcon.classList.toggle("bi-eye-slash");
+});
 
-document.getElementById("loginForm").addEventListener("submit", function (e) {
+document.getElementById("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const emailInput = document.getElementById("email");
@@ -38,14 +52,17 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   let isValid = true;
 
+  // Reset validation
   emailInput.classList.remove("is-invalid");
   passwordInput.classList.remove("is-invalid");
 
+  // Validate email
   if (!emailRegex.test(email)) {
     emailInput.classList.add("is-invalid");
     isValid = false;
   }
 
+  // Validate password
   if (password.length < 6) {
     passwordInput.classList.add("is-invalid");
     isValid = false;
@@ -53,15 +70,16 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 
   if (!isValid) return;
 
+  // Show loading state
   loginBtn.disabled = true;
   spinner.classList.remove("d-none");
   btnText.textContent = "Logging in...";
 
   setTimeout(() => {
     const data = JSON.parse(localStorage.getItem("ecommerceData"));
-    const users = data["users"] || [];
+    const users = data?.users || [];
     const matchedUser = users.find(
-      (user) => user.email === email && user.password === password
+      user => user.email === email && user.password === password
     );
 
     if (matchedUser) {
@@ -70,7 +88,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 
       setTimeout(() => {
         if (matchedUser.role === "admin") {
-          window.location.href = "../admin/panel.html";
+          window.location.href = "/Dashboard/dashboard.html";
         } else if (matchedUser.role === "seller") {
           window.location.href = "../seller/dashboard.html";
         } else {
@@ -81,8 +99,10 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
       new bootstrap.Toast(document.getElementById("loginErrorToast")).show();
     }
 
+    // Reset button state
     spinner.classList.add("d-none");
     btnText.textContent = "Login";
     loginBtn.disabled = false;
   }, 1000);
 });
+
