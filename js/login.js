@@ -1,22 +1,23 @@
-
 // Check if user is already logged in on page load
-(function() {
+(function () {
   const loggedInUser = localStorage.getItem("loggedInUser");
   if (loggedInUser) {
     const user = JSON.parse(loggedInUser);
     // Redirect based on role
     if (user.role === "admin") {
-      window.location.href = "/Dashboard/dashboard.html";
+      window.location.href = "../../Dashboard/adminhome.html";
     } else if (user.role === "seller") {
-      window.location.href = "../seller/dashboard.html";
+      window.location.href = "../../Dashboard/sellerhome.html";
     } else {
-      window.location.href = "../../index.html";
+      window.location.href = "../about.html";
     }
     return;
   }
 
-  const data = JSON.parse(localStorage.getItem("ecommerceData")) || { users: [] };
-  if (!data.users.some(u => u.email === "admin@example.com")) {
+  const data = JSON.parse(localStorage.getItem("ecommerceData")) || {
+    users: [],
+  };
+  if (!data.users.some((u) => u.email === "admin@example.com")) {
     data.users.push({
       id: Date.now(),
       username: "Admin",
@@ -28,17 +29,19 @@
   }
 })();
 
-document.getElementById("togglePassword").addEventListener("click", function() {
-  const passwordInput = document.getElementById("password");
-  const eyeIcon = document.getElementById("eyeIcon");
-  const isVisible = passwordInput.type === "text";
+document
+  .getElementById("togglePassword")
+  .addEventListener("click", function () {
+    const passwordInput = document.getElementById("password");
+    const eyeIcon = document.getElementById("eyeIcon");
+    const isVisible = passwordInput.type === "text";
 
-  passwordInput.type = isVisible ? "password" : "text";
-  eyeIcon.classList.toggle("bi-eye");
-  eyeIcon.classList.toggle("bi-eye-slash");
-});
+    passwordInput.type = isVisible ? "password" : "text";
+    eyeIcon.classList.toggle("bi-eye");
+    eyeIcon.classList.toggle("bi-eye-slash");
+  });
 
-document.getElementById("loginForm").addEventListener("submit", function(e) {
+document.getElementById("loginForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const emailInput = document.getElementById("email");
@@ -79,7 +82,7 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     const data = JSON.parse(localStorage.getItem("ecommerceData"));
     const users = data?.users || [];
     const matchedUser = users.find(
-      user => user.email === email && user.password === password
+      (user) => user.email === email && user.password === password
     );
 
     if (matchedUser) {
@@ -88,11 +91,11 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
       setTimeout(() => {
         if (matchedUser.role === "admin") {
-          window.location.href = "/Dashboard/dashboard.html";
+          window.location.href = "../../Dashboard/adminhome.html";
         } else if (matchedUser.role === "seller") {
-          window.location.href = "../seller/dashboard.html";
+          window.location.href = "../../Dashboard/sellerhome.html";
         } else {
-          window.location.href = "../../index.html";
+          window.location.href = "../about.html";
         }
       }, 2000);
     } else {
@@ -105,4 +108,3 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     loginBtn.disabled = false;
   }, 1000);
 });
-

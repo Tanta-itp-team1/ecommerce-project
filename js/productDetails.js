@@ -63,7 +63,7 @@ function displayProductDetails(product) {
   }
   // Update image
   const imgElement = document.getElementById("productMainImage");
-  imgElement.src = product.imageUrl;
+  imgElement.src = `../assets/images/products/${product.imageUrl}`;
   imgElement.alt = product.name;
 
   // Update review count
