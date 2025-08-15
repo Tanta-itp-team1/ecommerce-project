@@ -15,6 +15,8 @@
         <link href="../css/shop.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/contact_2.css">
         <link rel="stylesheet" href="../css/about.css">
+        <style>
+        </style>
     </head>
 
     <body>
@@ -131,21 +133,7 @@
             <h1 class="page-title text-center">PRODUCT OVERVIEW</h1>
 
             <!-- Category Buttons -->
-            <div class="category-buttons justify-content-center">
-                <button class="category-btn active"
-                    onclick="filterByCategory('all')">All Products</button>
-                <button class="category-btn"
-                    onclick="filterByCategory('women')">Women</button>
-                <button class="category-btn"
-                    onclick="filterByCategory('men')">Men</button>
-                <button class="category-btn"
-                    onclick="filterByCategory('bag')">Bag</button>
-                <button class="category-btn"
-                    onclick="filterByCategory('shoes')">Shoes</button>
-                <button class="category-btn"
-                    onclick="filterByCategory('watches')">Watches</button>
-            </div>
-
+            <div class="category-buttons justify-content-center"></div>
             <!-- Controls -->
             <div class="controls-section">
                 <div class="filter-search-controls">
@@ -300,94 +288,67 @@
                 2022. All right reserved</div>
         </footer>
 
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="../js/shop.js"></script>
         <script>
-        const ShopProducts = [
-            {id:1, imgSrc: "../assets/bag.png", title: "Luxury Handbag", category: "bag", existence:false, price: 222, sale: "-30%" },
-            {id:2, imgSrc: "../assets/bag.png", title: "Designer Purse", category: "bag", existence:false, price: 199 },
-            {id:3, imgSrc: "../assets/bag.png", title: "Women's Dress", category: "women", existence:false, price: 150 },
-            {id:4, imgSrc: "../assets/bag.png", title: "Men's Jacket", category: "men", existence:false, price: 299 },
-            {id:5, imgSrc: "../assets/bag.png", title: "Sport Shoes", category: "shoes", existence:false, price: 99 },
-            {id:6, imgSrc: "../assets/bag.png", title: "Smart Watch", category: "watches", existence:false, price: 180 },
-            {id:7, imgSrc: "../assets/bag.png", title: "Running Shoes", category: "shoes", existence:false, price: 99 },
-            {id:8, imgSrc: "../assets/bag.png", title: "Digital Watch", category: "watches", existence:false, price: 180 },
-            {id:9, imgSrc: "../assets/bag.png", title: "Women's Blouse", category: "women", existence:false, price: 99, sale: "-50%" },
-            {id:10, imgSrc: "../assets/bag.png", title: "Men's Shirt", category: "men", existence:false, price: 180 }
-        ];
-
-        
-        let LocalVar = JSON.parse(localStorage.getItem('wishListProducts'))
-        let WishlistProducts = localStorage.getItem('wishListProducts') ? LocalVar : [];
-
-        
-        let currentProducts = [...ShopProducts]; 
-        let currentCategory = 'all';
-        let currentSort = 'default';
-
-        
-        function renderProducts(products) {
-            const container = document.getElementById('shop-container');
-            container.innerHTML = ''; 
-            
-            for (let i = 0; i < products.length; i++) {
-                const p = products[i];
-                container.innerHTML += `
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="product-card">
-                            <div class="product-image">
-                                ${p.sale ? `<span class="sale-badge">${p.sale}</span>` : ""}
-                                <button class="Shop-btn" onclick="copyToWishlist(${p.id})">
-                                    <i class="${checkWishlist(p.id)?'fa-solid fa-heart redHeart':'fa-regular fa-heart'}"></i>
-                                </button>
-                                <button class="view-btn">
-                                    <i class="fas fa-eye" onclick="goToProductDetails(${i})"></i>
-                                </button>
-                                <img src="${p.imgSrc}" alt="${p.title}">
-                            </div>
-                            <div class="product-info">
-                                <h5 class="product-title">${p.title}</h5>
-                                <div class="product-price">
-                                    <span class="current-price">$${p.price}</span>
+            const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+            const ShopProducts = JSON.parse(localStorage.getItem("ecommerceData")).products;
+            let WishlistProducts = JSON.parse(localStorage.getItem('ecommerceData')).wishlist.find(w=>w.userId = loggedInUser.id).productIds || [];
+            let currentProducts = [...ShopProducts]; 
+            let currentCategory = 'all';
+            let currentSort = 'default';
+            function renderProducts(products) {
+                const container = document.getElementById('shop-container');
+                container.innerHTML = ''; 
+                for (let i = 0; i < products.length; i++) {
+                    const p = products[i];
+                    container.innerHTML += `
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    ${p.discount ? `<span class="sale-badge">${p.discount}%</span>` : ""}
+                                    <button class="Shop-btn" onclick="copyToWishlist(${p.id})">
+                                        <i id="heart-${p.id}" class="${checkWishlist(p.id)?'fa-solid fa-heart redHeart':'fa-regular fa-heart'}"></i>
+                                    </button>
+                                    <button class="view-btn">
+                                        <i class="fas fa-eye" onclick="goToProductDetails(${i})"></i>
+                                    </button>
+                                    <img src="../assets/images/products/${p.imageUrl}" alt="${p.name}">
                                 </div>
-                                <button class="add-to-cart">
-                                    <i class="fas fa-shopping-cart me-2"></i>
-                                    Add To Cart
-                                </button>
+                                <div class="product-info">
+                                    <h5 class="product-title">${p.name}</h5>
+                                    <div class="product-price">
+                                        <span class="current-price ${p.discount? "text-decoration-line-through small text-black" : ""}">${p.price}</span>&nbsp;
+                                        <span class="current-price ${!p.discount? "d-none" : ""}"> $${p.discount ? p.price - p.price * (p.discount / 100) : p.price}</span>
+                                    </div>
+                                    <button class="add-to-cart" onclick="addToCart()">
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        Add To Cart
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             }
-        }
-
-        
-        function filterByCategory(category) {
-            currentCategory = category;
-            
-            
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            
-            if (category === 'all') {
-                currentProducts = [...ShopProducts];
-            } else {
-                currentProducts = ShopProducts.filter(product => product.category === category);
+            function filterByCategory(category, btnElement) {
+                currentCategory = category;
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                btnElement.classList.add('active');
+                if (category === 'all') {
+                    currentProducts = [...ShopProducts];
+                } else {
+                    currentProducts = ShopProducts.filter(product => product.category === category);
+                }
+                renderProducts(currentProducts);
             }
-            
-            renderProducts(currentProducts);
-        }
 
-        
         function toggleFilters() {
             const filtersSection = document.getElementById('filtersSection');
             filtersSection.classList.toggle('show');
         }
-
-       
         function toggleSearch() {
             const searchBox = document.getElementById('searchBox');
             searchBox.classList.toggle('show');
@@ -408,7 +369,7 @@
                 currentProducts = productsToSearch;
             } else {
                 currentProducts = productsToSearch.filter(product => 
-                    product.title.toLowerCase().includes(searchTerm)
+                    product.name.toLowerCase().includes(searchTerm)
                 );
             }
             
@@ -435,7 +396,7 @@
                     sortedProducts.sort((a, b) => b.price - a.price);
                     break;
                 case 'name':
-                    sortedProducts.sort((a, b) => a.title.localeCompare(b.title));
+                    sortedProducts.sort((a, b) => a.name.localeCompare(b.title));
                     break;
                 default:
                     
@@ -469,22 +430,41 @@
         }
 
         
-        function copyToWishlist(productId) {
-            let product = ShopProducts.find(p => p.id === productId);
-            let existIndex = WishlistProducts.findIndex(p => p.id === productId);
-            
-            if (existIndex === -1) {
-                WishlistProducts.push(product);
-            } else {
-                WishlistProducts.splice(existIndex, 1);
+            function copyToWishlist(productId) {
+                const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData"));
+                const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+                const userWishlist = ecommerceData.wishlist.find(w => w.userId === loggedInUser.id);
+                let inWishlist = false;
+
+                if (!userWishlist) {
+                    ecommerceData.wishlist.push({ userId: loggedInUser.id, productIds: [productId] });
+                    inWishlist = true;
+                } else {
+                    const existIndex = userWishlist.productIds.findIndex(id => id === productId);
+                    if (existIndex === -1) {
+                        userWishlist.productIds.push(productId);
+                        inWishlist = true;
+                    } else {
+                        userWishlist.productIds.splice(existIndex, 1);
+                        inWishlist = false;
+                    }
+                }
+
+                localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
+
+                // Change the heart icon directly
+                const heartIcon = document.querySelector(`#heart-${productId}`);
+                if (inWishlist) {
+                    heartIcon.className = "fa-solid fa-heart redHeart";
+                } else {
+                    heartIcon.className = "fa-regular fa-heart";
+                }
             }
-            
-            localStorage.setItem("wishListProducts", JSON.stringify(WishlistProducts));
-            renderProducts(currentProducts); 
-        }
+
 
         function checkWishlist(productID) {
-            return WishlistProducts.some(product => product.id === productID);
+            return WishlistProducts.some(product => product === productID);
         }
 
         function goToProductDetails(index) {
