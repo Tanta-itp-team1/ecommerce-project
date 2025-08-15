@@ -195,48 +195,21 @@
 
 
 
-
 <section style="height: 60vh;">
-     <div class="Flash " >
-  <div class="title d-flex justify-content-start align-items-center">
-    <span>Categories</span>
-    
+  <div class="Flash">
+    <div class="title d-flex justify-content-start align-items-center">
+      <span>Categories</span>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="d-inline-block justify-content-start">Browse By Category</h1>
+    </div>
+    <div id="categoriesContainer" class="cards d-flex m-2">
+    </div>
   </div>
-  <div class="d-flex justify-content-between align-items-center ">
-    <h1 class=" d-inline-block justify-content-start">Browse By Category</h1>
-</div>
-  <div class="cards d-flex m-2">
-    <div class="mycard">
- <i class="fas fa-mobile"></i>
-  <span>Phones</span>    
-  </div>
-  
-  <div class="mycard">
- <i class="fas fa-desktop"></i>
-    <span>Computers</span> 
-  </div>
-  <div class="mycard">
-    <i class="fas fa-camera"></i>
-    <span>Cameras</span>
-  </div>
-  <div class="mycard">
- <i class=""><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-watch" viewBox="0 0 16 16">
-  <path d="M8.5 5a.5.5 0 0 0-1 0v2.5H6a.5.5 0 0 0 0 1h2a.5.5 0 0 0 .5-.5z"/>
-  <path d="M5.667 16C4.747 16 4 15.254 4 14.333v-1.86A6 6 0 0 1 2 8c0-1.777.772-3.374 2-4.472V1.667C4 .747 4.746 0 5.667 0h4.666C11.253 0 12 .746 12 1.667v1.86a6 6 0 0 1 1.918 3.48.502.502 0 0 1 .582.493v1a.5.5 0 0 1-.582.493A6 6 0 0 1 12 12.473v1.86c0 .92-.746 1.667-1.667 1.667zM13 8A5 5 0 1 0 3 8a5 5 0 0 0 10 0"/>
-</svg></i>
-    <span>Smart Watches</span> 
-  </div>
-
-  <div class="mycard">
- <i class="fas fa-headphones"></i>
-  <span>Headphones</span>    
-  </div>
-  </div>
-  
-
-</div>
-
 </section>
+
+
+
 <section>
      <div class="Flash ">
   <div class="title d-flex justify-content-start align-items-center">
@@ -469,6 +442,78 @@
         }
       });
     });
+    const data = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
+  const products = data.products;
+
+
+  const categories = [...new Set(products.map(p => p.category))];
+
+  const container = document.getElementById("categoriesContainer");
+
+
+  const icons = {
+    "Electronics": '<i class="fas fa-mobile"></i>',
+    "Men's Fashion": '<i class="fas fa-tshirt"></i>',
+    "Women\'s Fashion": '<i class="fas fa-female"></i>',
+    "Furniture": '<i class="fas fa-couch"></i>',
+    "Toys": '<i class="fas fa-gamepad"></i>'
+  };
+
+
+  categories.forEach(cat => {
+    const icon = icons[cat] || '<i class="fas fa-tag"></i>';
+    container.innerHTML += `
+      <div class="mycard" onclick="goToCategory('${cat}')">
+        ${icon}
+        <span>${cat}</span>
+      </div>
+    `;
+  });
+
+  function goToCategory(categoryName) {
+    window.location.href = `category.html?name=${encodeURIComponent(categoryName)}`;
+  }
+
+  const flashSales = products.filter(p => p.discount > 0).slice(0, 12);
+
+
+  const bestSelling = [...products].sort((a, b) => b.soldCount - a.soldCount).slice(0, 12);
+
+
+
+  function renderCarousel(carouselId, items) {
+  const carouselInner = document.querySelector(`${carouselId} .carousel-inner`);
+  carouselInner.innerHTML = "";
+
+  for (let i = 0; i < items.length; i += 4) {
+    const chunk = items.slice(i, i + 4);
+    const activeClass = i === 0 ? "active" : "";
+    let cardsHTML = "";
+
+    chunk.forEach(p => {
+      cardsHTML += `
+        <div class="product-card">
+          <img src="${p.imageUrl}" alt="${p.name}">
+          <h4>${p.name}</h4>
+          <h6>$${p.price}</h6>
+        </div>
+      `;
+    });
+
+    carouselInner.innerHTML += `
+      <div class="carousel-item ${activeClass}">
+        <div class="d-flex">
+          ${cardsHTML}
+        </div>
+      </div>
+    `;
+  }
+}
+
+
+renderCarousel("#flashCarousel1", flashSales);
+renderCarousel("#flashCarousel2", bestSelling);
+
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
