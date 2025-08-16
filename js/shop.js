@@ -56,7 +56,7 @@ function renderProducts(products) {
     }"></i>
                                     </button>
                                     <button class="view-btn">
-                                        <i class="fas fa-eye" onclick="goToProductDetails(${i})"></i>
+                                        <i class="fas fa-eye" onclick="goToProductDetails(${p.id})"></i>
                                     </button>
                                     <img src="../assets/images/products/${
                                       p.imageUrl
@@ -84,7 +84,7 @@ function renderProducts(products) {
                             </div>
                         </div>
                     `;
-  }
+  })
 }
 const pagginationArea=document.getElementById('pagginationId');
 const pageNumbers=Math.ceil(currentProducts.length/12); 
