@@ -26,17 +26,20 @@
                             <a class="nav-link" aria-current="page" href="../Home/homepage.html">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="./shop.html">Shop</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="./contact.html">Contact</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="./about.html">About</a>
                         </li>
-                        <li class="nav-item">
+                        <li id="signupli" class="nav-item">
                             <a class="nav-link" href="./auth/register.html">Sign Up</a>
                         </li>
                     </ul>
                     <div class="d-flex">
-                        <form class="d-none d-xl-flex border-1 justify-content-end">
+                        <!-- <form class="d-none d-xl-flex border-1 justify-content-end">
                             <input class="form-control" type="search" placeholder="What are you looking for?"
                                 aria-label="Search">
                             <button class="btn text-white" type="submit">
@@ -47,7 +50,7 @@
                                         stroke="black" stroke-width="1.5" stroke-linecap="round" />
                                 </svg>
                             </button>
-                        </form>
+                        </form> -->
                         <div class="icons text-white">
                             <a href="wishlist2.html" class="position-relative">
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -117,7 +120,7 @@
         <!-- Wishlist Header -->
         <div class="section-header d-flex justify-content-between align-items-center mb-4">
             <h2 class="section-title">Wishlist</h2>
-            <button class="btn btn-dark btn-sm">Move All To Bag</button>
+            <button id="move-all-to-bag" class="btn btn-dark btn-sm">Move All To Bag</button>
         </div>
 
         <!-- Wishlist Products -->
@@ -155,18 +158,18 @@
                 </div>
                 <div class="col-6 col-lg">
                     <h4>Account</h4>
-                    <p>My Account</p>
-                    <p>Login / Register</p>
-                    <p>Cart</p>
-                    <p>Wishlist</p>
-                    <p>Shop</p>
+                    <p><a class="text-white text-decoration-none" href="./account.html">My Account</a></p>
+                    <p><a class="text-white text-decoration-none" href="./auth/login.html">Login</a>/ <a
+                            class="text-white text-decoration-none" href="./auth/register.html">Register</a></p>
+                    <p><a class="text-white text-decoration-none" href="./cart.html">Cart</a></p>
+                    <p><a class="text-white text-decoration-none" href="./shop.html">Shop</a></p>
                 </div>
                 <div class="col-6 col-lg">
                     <h4>Quick Link</h4>
                     <p>Privacy Policy</p>
                     <p>Terms Of Use</p>
                     <p>FAQ</p>
-                    <p>Contact</p>
+                    <p><a class="text-white text-decoration-none" href="./contact_2.html">Contact</a></p>
                 </div>
                 <div class="col-6 col-lg">
                     <h4>Socail Media</h4>
