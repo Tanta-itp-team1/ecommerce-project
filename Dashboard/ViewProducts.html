@@ -19,26 +19,26 @@ const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
 let allProducts = ecommerceData.products;
 
-// ✅ check login
+
 if (!loggedInUser) {
   alert("Please log in to view products.");
   window.location.href = "../pages/auth/login.html";
 }
 
-// ✅ filter products based on role
+
 let visibleProducts = loggedInUser.role === "seller"
   ? allProducts.filter(p => p.sellerId === loggedInUser.id)
   : allProducts;
 
-// render
-renderProducts("shop-container", visibleProducts);
+
+  renderProducts("shop-container", visibleProducts);
 
 function renderProducts(containerId, products) {
   const container = document.getElementById(containerId);
   container.innerHTML = "";
 
   products.forEach(p => {
-    // ✅ handle image (Base64 OR file path)
+
     const imageSrc = p.imageUrl && p.imageUrl.startsWith("data:")
       ? p.imageUrl
       : `./images/${p.imageUrl || "default.png"}`;
@@ -83,7 +83,7 @@ function deleteProduct(productId) {
 
 function editProduct(productId) {
   localStorage.setItem("editProductId", productId);
-  window.location.href = "edit-product.html";
+  window.location.href = "Edit.html";
 }
 </script>
 
