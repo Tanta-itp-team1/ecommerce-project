@@ -187,10 +187,26 @@
 
 
  
-
+<div id="landingCarousel" class="carousel slide landing" data-bs-ride="carousel">
+  <div class="carousel-inner"></div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#landingCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#landingCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
 <section style="padding: 3rem; width:100%; height:90vh;">
 
 <img alt="" src="./imgs/image.png" width="100%" height="100%"/>
+</section>
+<section class="promo-banner d-flex justify-content-center align-items-center text-center text-white" 
+         style="background: url('./imgs/banner.jpg') center/cover no-repeat; height: 50vh;">
+  <div>
+    <h2>Get 20% OFF on your first order</h2>
+    <p>Use Code: <strong>FIRST20</strong></p>
+    <button onclick="window.location.href='shop.html'" class="btn btn-danger">Shop Now</button>
+  </div>
 </section>
 <section style="height: 150vh;" >
 <div class="Flash text-center ">
@@ -219,6 +235,15 @@
 
 </section>
 
+<section style="height: 100vh;">
+  <div class="Flash">
+    <div class="title d-flex justify-content-start align-items-center">
+      <span>Featured</span>
+    </div>
+    <h1 class="d-flex justify-content-start align-items-center">New Arrivals</h1>
+    <div id="newArrivalGrid" class="gr my-5"></div>
+  </div>
+</section>
 <section style="height: 40vh;">
 <div class="myrow">
   <div class="first">
@@ -358,7 +383,7 @@
   });
 
   function goToCategory(categoryName) {
-    window.location.href = `category.html?name=${encodeURIComponent(categoryName)}`;
+    window.location.href = `shop.html?name=${encodeURIComponent(categoryName)}`;
   }
 
   const flashSales = products.filter(p => p.discount > 0).slice(0, 12);
@@ -400,6 +425,43 @@
 
 renderCarousel("#flashCarousel1", flashSales);
 renderCarousel("#flashCarousel2", bestSelling);
+
+function getOriginalPrice(p) {
+  const d = Number(p.discount) || 0;
+  const frac = d < 1 ? d : d / 100;
+  return (p.price / (1 - frac)).toFixed(2);
+}
+
+const landingCarouselInner = document.querySelector("#landingCarousel .carousel-inner");
+const offers = products.filter(p => p.discount > 0).slice(0, 5);
+
+if (landingCarouselInner) {
+  landingCarouselInner.innerHTML = offers.map((p, i) => `
+    <div class="carousel-item ${i === 0 ? "active" : ""}">
+      <img src="${p.imageUrl}" class="d-block w-100" alt="${p.name}">
+      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+        <h5>${p.name}</h5>
+        <p>Now $${p.price} <del>$${getOriginalPrice(p)}</del></p>
+      </div>
+    </div>
+  `).join("");
+}
+
+const newArrivalGrid = document.getElementById("newArrivalGrid");
+const newArrivals = [...products].slice(-4);
+
+if (newArrivalGrid) {
+  newArrivalGrid.innerHTML = `
+    <div class="one" style="background-image: url('${newArrivals[0]?.imageUrl || './imgs/fallback1.jpg'}');"></div>
+    <div class="rightimgs">
+      <div class="two" style="background-image: url('${newArrivals[1]?.imageUrl || './imgs/fallback2.jpg'}');"></div>
+      <div class="bottomright">
+        <div class="three" style="background-image: url('${newArrivals[2]?.imageUrl || './imgs/fallback3.jpg'}');"></div>
+        <div class="four" style="background-image: url('${newArrivals[3]?.imageUrl || './imgs/fallback4.jpg'}');"></div>
+      </div>
+    </div>
+  `;
+}
 
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

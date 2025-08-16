@@ -32,8 +32,13 @@ let currentSort = "default";
 function renderProducts(products) {
   const container = document.getElementById("shop-container");
   container.innerHTML = "";
-  for (let i = 0; i < products.length; i++) {
-    const p = products[i];
+
+  if (products.length === 0) {
+    container.innerHTML = `<p class="text-center">No products found.</p>`;
+    return;
+  }
+
+  products.forEach(p => {
     container.innerHTML += `
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="product-card">

@@ -1,76 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Products</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Products</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body>
-    <script>
+<body class="bg-light">
+
+<div class="container py-4">
+  <h2 class="text-center mb-4">All Products</h2>
+  <div id="shop-container" class="row g-4"></div>
+</div>
+
+<script>
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
 let allProducts = ecommerceData.products;
 
+
 if (!loggedInUser) {
-    alert("Please log in to view products.");
-    window.location.href = "../pages/auth/login.html";
+  alert("Please log in to view products.");
+  window.location.href = "../pages/auth/login.html";
 }
+
 
 let visibleProducts = loggedInUser.role === "seller"
-    ? allProducts.filter(p => p.sellerId === loggedInUser.id)
-    : allProducts;
+  ? allProducts.filter(p => p.sellerId === loggedInUser.id)
+  : allProducts;
 
-renderProducts("shop-container", visibleProducts);
+
+  renderProducts("shop-container", visibleProducts);
 
 function renderProducts(containerId, products) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = "";
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
 
-    products.forEach(p => {
-        container.innerHTML += `
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="product-card">
-                    <div class="product-image">
-                        ${p.discount > 0 ? `<span class="sale-badge">-${p.discount}%</span>` : ""}
-                        <img src="${p.imageUrl}" alt="${p.name}">
-                    </div>
-                    <div class="product-info">
-                        <h5>${p.name}</h5>
-                        <div class="product-price">$${p.price}</div>
-                        
-                        ${showControlButtons(p) }
-                    </div>
-                </div>
-            </div>
-        `;
-    });
+  products.forEach(p => {
+
+    const imageSrc = p.imageUrl && p.imageUrl.startsWith("data:")
+      ? p.imageUrl
+      : `./images/${p.imageUrl || "default.png"}`;
+
+    container.innerHTML += `
+      <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="card shadow-sm h-100">
+          <div class="position-relative">
+            ${p.discount > 0 ? `<span class="badge bg-danger position-absolute top-0 start-0 m-2">-${p.discount}%</span>` : ""}
+            <img src="${imageSrc}" class="card-img-top" alt="${p.name}" style="height: 200px; object-fit: cover;">
+          </div>
+          <div class="card-body text-center">
+            <h5 class="card-title">${p.name}</h5>
+            <p class="card-text fw-bold text-success">$${p.price}</p>
+            ${showControlButtons(p)}
+          </div>
+        </div>
+      </div>
+    `;
+  });
 }
-
 
 function showControlButtons(product) {
-    if (loggedInUser.role === "admin" || (loggedInUser.role === "seller" && product.sellerId === loggedInUser.id)) {
-        return `
-            <button class="btn btn-warning btn-sm mt-2" onclick="editProduct(${product.id})">Edit</button>
-            <button class="btn btn-danger btn-sm mt-2" onclick="deleteProduct(${product.id})">Delete</button>
-        `;
-    }
-    return ""; 
+  if (loggedInUser.role === "admin" || (loggedInUser.role === "seller" && product.sellerId === loggedInUser.id)) {
+    return `
+      <button class="btn btn-warning btn-sm me-2" onclick="editProduct(${product.id})"><i class="bi bi-pencil"></i> Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})"><i class="bi bi-trash"></i> Delete</button>
+    `;
+  }
+  return ""; 
 }
+
 function deleteProduct(productId) {
-    if (!confirm("Are you sure you want to delete this product?")) return;
+  if (!confirm("Are you sure you want to delete this product?")) return;
 
-    ecommerceData.products = ecommerceData.products.filter(p => p.id !== productId);
-    localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
+  ecommerceData.products = ecommerceData.products.filter(p => p.id !== productId);
+  localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
 
-    alert("Product deleted successfully");
-    location.reload();
+  alert("Product deleted successfully");
+  location.reload();
 }
 
 function editProduct(productId) {
-    localStorage.setItem("editProductId", productId);
-    window.location.href = "edit-product.html";
+  localStorage.setItem("editProductId", productId);
+  window.location.href = "Edit.html";
 }
+</script>
 
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
