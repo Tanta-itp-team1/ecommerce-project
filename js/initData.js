@@ -200,7 +200,7 @@
           stock: 35,
           soldCount: 15,
           description: "Keyboard with rgp Lights.",
-          imageUrl: "Keyboard.png",
+          imageUrl: "keyboard.png",
           sellerId: 2,
         },
         {
@@ -280,7 +280,7 @@
 
         // Toys
         {
-          id: 22,
+          id: 21,
           name: "Remote Control Car",
           category: "Toys",
           price: 50,
@@ -293,7 +293,7 @@
         },
         //Electronics again
         {
-          id: 21,
+          id: 22,
           name: "Controller",
           category: "Electronics",
           price: 70,
@@ -301,7 +301,7 @@
           stock: 30,
           soldCount: 12,
           description: "A modern Controller for your Games.",
-          imageUrl: "controller2.png",
+          imageUrl: "controller.png",
           sellerId: 2,
         },
 
