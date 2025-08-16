@@ -56,9 +56,9 @@ function renderProducts(products) {
     }"></i>
                                     </button>
                                     <button class="view-btn">
-                                        <i class="fas fa-eye" onclick="goToProductDetails(${i})"></i>
+                                        <i class="fas fa-eye" onclick="goToProductDetails(${p.id})"></i>
                                     </button>
-                                    <img src="../assets/images/products/${
+                                    <img src="../assets/images/products/${  
                                       p.imageUrl
                                     }" alt="${p.name}">
                                 </div>
@@ -84,7 +84,7 @@ function renderProducts(products) {
                             </div>
                         </div>
                     `;
-  }
+  })
 }
 const pagginationArea=document.getElementById('pagginationId');
 const pageNumbers=Math.ceil(currentProducts.length/12); 
@@ -238,8 +238,8 @@ function checkWishlist(productID) {
   return WishlistProducts.some((product) => product === productID);
 }
 
-function goToProductDetails(index) {
-  window.location.href = "productDetails.html";
+function goToProductDetails(ID) {
+  window.location.href = `productDetails.html?id=${ID}`;
 }
 function addToCart(productId, quantity) {
   // Get ecommerce data from localStorage or initialize it
