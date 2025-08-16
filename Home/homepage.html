@@ -18,7 +18,7 @@
   <div class="nav-wrapper">
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 px-5">
       <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">Exclusive</a>
+        <a class="navbar-brand fw-bold" href="./homepage.html">Exclusive</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
           <span class="navbar-toggler-icon"></span>
@@ -27,9 +27,9 @@
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="../pages/shop.html">Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="../pages/about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="../pages/contact.html">Contact</a></li>
           </ul>
 
           <form class="d-flex align-items-center">
@@ -46,9 +46,11 @@
   </div>
 
   <div class="main-wrapper">
-    <div id="sidebar" class="p-3">
+    <div id="sidebar" class="p-3"></div>
+
+    <!-- <div id="sidebar" class="p-3">
       <a href="#" class="d-flex justify-content-between align-items-center mb-2">
-        <span><i class="fas fa-home me-2"></i> Woman's Fashion</span>
+        <span><i class="fas fa-home me-2"></i> Women's Fashion</span>
         <i class="fas fa-chevron-right"></i>
       </a>
       <div class="submenu">
@@ -97,7 +99,7 @@
       </a>
 
       
-    </div>
+    </div> -->
 
     <div class="landing">
       <img alt="" src="./imgs/landing.png" />
@@ -340,40 +342,100 @@
 
 
   <script>
-    document.querySelectorAll("#sidebar > a").forEach(link => {
-      link.addEventListener("click", function(e) {
-        e.preventDefault();
-        const submenu = this.nextElementSibling;
-        const icon = this.querySelector("i.fas");
-
-        if (submenu && submenu.classList.contains("submenu")) {
-          const isOpen = submenu.style.display === "block";
-          submenu.style.display = isOpen ? "none" : "block";
-          icon.classList.toggle("fa-chevron-right", isOpen);
-          icon.classList.toggle("fa-chevron-down", !isOpen);
-        }
-      });
-    });
-    const data = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
+  const data = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
   const products = data.products;
-
 
   const categories = [...new Set(products.map(p => p.category))];
 
   const container = document.getElementById("categoriesContainer");
 
-
+  
   const icons = {
-    "Electronics": '<i class="fas fa-mobile"></i>',
-    "Men's Fashion": '<i class="fas fa-tshirt"></i>',
-    "Women\'s Fashion": '<i class="fas fa-female"></i>',
-    "Furniture": '<i class="fas fa-couch"></i>',
-    "Toys": '<i class="fas fa-gamepad"></i>'
+    "Electronics": '<i class="fas fa-mobile me-2"></i>',
+    "Men's Fashion": '<i class="fas fa-tshirt me-2"></i>',
+    "Women's Fashion": '<i class="fas fa-female me-2"></i>',
+    "Furniture": '<i class="fas fa-couch me-2"></i>',
+    "Toys": '<i class="fas fa-gamepad me-2"></i>',
+    "Home & Lifestyle": '<i class="fas fa-home me-2"></i>',
+    "Medicine": '<i class="fas fa-capsules me-2"></i>',
+    "Sports & Outdoor": '<i class="fas fa-dumbbell me-2"></i>',
+    "Baby's & Toys": '<i class="fas fa-baby me-2"></i>',
+    "Groceries & Pets": '<i class="fas fa-apple-alt me-2"></i>',
+    "Health & Beauty": '<i class="fas fa-heart me-2"></i>'
+  };
+
+  const subCategories = {
+    "Men's Fashion": ["Men", "Women", "Kids"],
+    "Women's Fashion": ["Dresses", "Shoes", "Accessories"],
+    "Electronics": ["Mobiles", "Laptops", "Accessories"]
   };
 
 
+  const sidebar = document.getElementById("sidebar");
+  sidebar.innerHTML = "";
+
   categories.forEach(cat => {
-    const icon = icons[cat] || '<i class="fas fa-tag"></i>';
+  const hasSub = subCategories[cat];
+  const icon = icons[cat] || '<i class="fas fa-tag me-2"></i>';
+
+  sidebar.innerHTML += `
+    <a href="#" class="d-flex justify-content-between align-items-center mb-2 category-link" data-cat="${cat}">
+      <span>${icon} ${cat}</span>
+      ${hasSub ? '<i class="fas fa-chevron-right toggle-sub"></i>' : ""}
+    </a>
+    ${hasSub ? `
+      <div class="submenu" style="display:none;">
+        ${subCategories[cat].map(sub => `<a href="#" class="sub-link" data-cat="${cat}" data-sub="${sub}">${sub}</a>`).join("")}
+      </div>
+    ` : ""}
+  `;
+});
+
+
+document.querySelectorAll("#sidebar .category-link").forEach(link => {
+  const toggleIcon = link.querySelector(".toggle-sub");
+  const submenu = link.nextElementSibling;
+  const category = link.dataset.cat;
+
+  // 👇 الضغط على اسم الكاتيجوري يفتح صفحة الـ shop
+  link.querySelector("span").addEventListener("click", (e) => {
+    e.preventDefault();
+    goToCategory(category);
+  });
+
+
+  if (toggleIcon && submenu) {
+    toggleIcon.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation(); 
+      const isOpen = submenu.style.display === "block";
+      submenu.style.display = isOpen ? "none" : "block";
+      toggleIcon.classList.toggle("fa-chevron-right", isOpen);
+      toggleIcon.classList.toggle("fa-chevron-down", !isOpen);
+    });
+  }
+});
+
+
+  document.querySelectorAll("#sidebar .sub-link").forEach(link => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      const cat = this.dataset.cat;
+      const sub = this.dataset.sub;
+      goToCategory(cat, sub);
+    });
+  });
+
+
+  function goToCategory(categoryName, subName = "") {
+    let url = `../pages/shop.html?category=${encodeURIComponent(categoryName)}`;
+    if (subName) url += `&sub=${encodeURIComponent(subName)}`;
+    window.location.href = url;
+  }
+
+
+  categories.forEach(cat => {
+    const icon = icons[cat] || '<i class="fas fa-tag me-2"></i>';
     container.innerHTML += `
       <div class="mycard" onclick="goToCategory('${cat}')">
         ${icon}
@@ -382,88 +444,93 @@
     `;
   });
 
-  function goToCategory(categoryName) {
-    window.location.href = `shop.html?name=${encodeURIComponent(categoryName)}`;
-  }
+
+  document.querySelectorAll("button, a").forEach(el => {
+    if (el.innerText.trim().toLowerCase().includes("shop now") || 
+        el.innerText.trim().toLowerCase().includes("view all products")) {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "../pages/shop.html";
+      });
+    }
+  });
+
 
   const flashSales = products.filter(p => p.discount > 0).slice(0, 12);
-
-
   const bestSelling = [...products].sort((a, b) => b.soldCount - a.soldCount).slice(0, 12);
 
-
-
   function renderCarousel(carouselId, items) {
-  const carouselInner = document.querySelector(`${carouselId} .carousel-inner`);
-  carouselInner.innerHTML = "";
+    const carouselInner = document.querySelector(`${carouselId} .carousel-inner`);
+    carouselInner.innerHTML = "";
 
-  for (let i = 0; i < items.length; i += 4) {
-    const chunk = items.slice(i, i + 4);
-    const activeClass = i === 0 ? "active" : "";
-    let cardsHTML = "";
+    for (let i = 0; i < items.length; i += 4) {
+      const chunk = items.slice(i, i + 4);
+      const activeClass = i === 0 ? "active" : "";
+      let cardsHTML = "";
 
-    chunk.forEach(p => {
-      cardsHTML += `
-        <div class="product-card">
-          <img src="${p.imageUrl}" alt="${p.name}">
-          <h4>${p.name}</h4>
-          <h6>$${p.price}</h6>
+      chunk.forEach(p => {
+        cardsHTML += `
+          <div class="product-card">
+            <img src="${p.imageUrl}" alt="${p.name}">
+            <h4>${p.name}</h4>
+            <h6>$${p.price}</h6>
+          </div>
+        `;
+      });
+
+      carouselInner.innerHTML += `
+        <div class="carousel-item ${activeClass}">
+          <div class="d-flex">
+            ${cardsHTML}
+          </div>
         </div>
       `;
-    });
+    }
+  }
 
-    carouselInner.innerHTML += `
-      <div class="carousel-item ${activeClass}">
-        <div class="d-flex">
-          ${cardsHTML}
+  renderCarousel("#flashCarousel1", flashSales);
+  renderCarousel("#flashCarousel2", bestSelling);
+
+  function getOriginalPrice(p) {
+    const d = Number(p.discount) || 0;
+    const frac = d < 1 ? d : d / 100;
+    return (p.price / (1 - frac)).toFixed(2);
+  }
+
+
+  const landingCarouselInner = document.querySelector("#landingCarousel .carousel-inner");
+  const offers = products.filter(p => p.discount > 0).slice(0, 5);
+
+  if (landingCarouselInner) {
+    landingCarouselInner.innerHTML = offers.map((p, i) => `
+      <div class="carousel-item ${i === 0 ? "active" : ""}">
+        <img src="${p.imageUrl}" class="d-block w-100" alt="${p.name}">
+        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+          <h5>${p.name}</h5>
+          <p>Now $${p.price} <del>$${getOriginalPrice(p)}</del></p>
+        </div>
+      </div>
+    `).join("");
+  }
+
+
+  const newArrivalGrid = document.getElementById("newArrivalGrid");
+  const newArrivals = [...products].slice(-4);
+
+  if (newArrivalGrid) {
+    newArrivalGrid.innerHTML = `
+      <div class="one" style="background-image: url('${newArrivals[0]?.imageUrl || './imgs/fallback.jpg'}');"></div>
+      <div class="rightimgs">
+        <div class="two" style="background-image: url('${newArrivals[1]?.imageUrl || './imgs/fallback.jpg'}');"></div>
+        <div class="bottomright">
+          <div class="three" style="background-image: url('${newArrivals[2]?.imageUrl || './imgs/fallback.jpg'}');"></div>
+          <div class="four" style="background-image: url('${newArrivals[3]?.imageUrl || './imgs/fallback.jpg'}');"></div>
         </div>
       </div>
     `;
   }
-}
+</script>
 
-
-renderCarousel("#flashCarousel1", flashSales);
-renderCarousel("#flashCarousel2", bestSelling);
-
-function getOriginalPrice(p) {
-  const d = Number(p.discount) || 0;
-  const frac = d < 1 ? d : d / 100;
-  return (p.price / (1 - frac)).toFixed(2);
-}
-
-const landingCarouselInner = document.querySelector("#landingCarousel .carousel-inner");
-const offers = products.filter(p => p.discount > 0).slice(0, 5);
-
-if (landingCarouselInner) {
-  landingCarouselInner.innerHTML = offers.map((p, i) => `
-    <div class="carousel-item ${i === 0 ? "active" : ""}">
-      <img src="${p.imageUrl}" class="d-block w-100" alt="${p.name}">
-      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
-        <h5>${p.name}</h5>
-        <p>Now $${p.price} <del>$${getOriginalPrice(p)}</del></p>
-      </div>
-    </div>
-  `).join("");
-}
-
-const newArrivalGrid = document.getElementById("newArrivalGrid");
-const newArrivals = [...products].slice(-4);
-
-if (newArrivalGrid) {
-  newArrivalGrid.innerHTML = `
-    <div class="one" style="background-image: url('${newArrivals[0]?.imageUrl || './imgs/fallback1.jpg'}');"></div>
-    <div class="rightimgs">
-      <div class="two" style="background-image: url('${newArrivals[1]?.imageUrl || './imgs/fallback2.jpg'}');"></div>
-      <div class="bottomright">
-        <div class="three" style="background-image: url('${newArrivals[2]?.imageUrl || './imgs/fallback3.jpg'}');"></div>
-        <div class="four" style="background-image: url('${newArrivals[3]?.imageUrl || './imgs/fallback4.jpg'}');"></div>
-      </div>
-    </div>
-  `;
-}
-
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
