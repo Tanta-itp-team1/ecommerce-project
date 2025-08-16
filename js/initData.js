@@ -1,7 +1,7 @@
 (function () {
   if (!localStorage.getItem("ecommerceData")) {
     console.log("Initializing E-commerce data in localStorage...");
-
+  
     const data = {
       users: [
         {
@@ -200,7 +200,7 @@
           stock: 35,
           soldCount: 15,
           description: "Keyboard with rgp Lights.",
-          imageUrl: "keyboard.jpg",
+          imageUrl: "keyboard.png",
           sellerId: 2,
         },
         {
@@ -280,7 +280,7 @@
 
         // Toys
         {
-          id: 21,
+          id: 22,
           name: "Remote Control Car",
           category: "Toys",
           price: 50,
@@ -293,7 +293,7 @@
         },
         //Electronics again
         {
-          id: 22,
+          id: 21,
           name: "Controller",
           category: "Electronics",
           price: 70,
@@ -301,7 +301,7 @@
           stock: 30,
           soldCount: 12,
           description: "A modern Controller for your Games.",
-          imageUrl: "controller.png",
+          imageUrl: "controller2.png",
           sellerId: 2,
         },
 
@@ -428,9 +428,9 @@
         },
       ],
     };
-
     localStorage.setItem("ecommerceData", JSON.stringify(data));
-  } else {
+  }
+   else {
     console.log("E-commerce data already exists in localStorage.");
   }
 })();
