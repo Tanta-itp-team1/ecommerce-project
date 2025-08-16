@@ -1,4 +1,5 @@
-const categoryContainer = document.getElementsByClassName("category-buttons")[0];
+const categoryContainer =
+  document.getElementsByClassName("category-buttons")[0];
 const productsContainer = document.getElementById("shop-container");
 const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData"));
 const categories = [];
@@ -22,7 +23,7 @@ const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || [];
 const ShopProducts = JSON.parse(localStorage.getItem("ecommerceData")).products;
 let WishlistProducts =
   JSON.parse(localStorage.getItem("ecommerceData")).wishlist.find(
-    (w) => (w.userId == loggedInUser.id)
+    (w) => w.userId == loggedInUser.id
   )?.productIds || [];
 let currentProducts = [...ShopProducts];
 let currentCategory = "all";
@@ -147,7 +148,7 @@ function sortProducts(sortType) {
       sortedProducts.sort((a, b) => b.price - a.price);
       break;
     case "name":
-      sortedProducts.sort((a, b) => a.name.localeCompare(b.title));
+      sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
       break;
     default:
       break;
