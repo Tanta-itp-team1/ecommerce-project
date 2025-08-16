@@ -13,10 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const accountDropdown = document.getElementById("account-dropdown");
 
   if (user) {
+    document.getElementById("signupli").style.display ="none";
     // Add role-based dashboard link
     if (user.role === "seller" || user.role === "admin") {
       const dashboardItem = document.createElement("li");
-      dashboardItem.innerHTML = `<a class="dropdown-item" href="dashboard.html">Dashboard</a>`;
+      dashboardItem.innerHTML = `<a class="dropdown-item" href=${
+        user.role === "seller"
+          ? "../Dashboard/sellerhome.html"
+          : "../Dashboard/adminhome.html"
+      }>Dashboard</a>`;
       accountDropdown.insertBefore(dashboardItem, accountDropdown.firstChild);
     }
 

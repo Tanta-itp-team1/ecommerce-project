@@ -12,7 +12,7 @@
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand text-black fw-bold h1" href="../index.html">Exclusive</a>
+                <a class="navbar-brand text-black fw-bold h1" href="../Home/homepage.html">Exclusive</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,10 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="../index.html">Home</a>
+                            <a class="nav-link" aria-current="page" href="../Home/homepage.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="./shop.html">Shop</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" href="#">Contact</a>
@@ -28,12 +31,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="./about.html">About</a>
                         </li>
-                        <li class="nav-item">
+                        <li id="signupli" class="nav-item">
                             <a class="nav-link" href="./auth/register.html">Sign Up</a>
                         </li>
                     </ul>
                     <div class="d-flex">
-                        <form class="d-none d-xl-flex border-1 justify-content-end">
+                        <!-- <form class="d-none d-xl-flex border-1 justify-content-end">
                             <input class="form-control" type="search" placeholder="What are you looking for?"
                                 aria-label="Search">
                             <button class="btn " type="submit">
@@ -44,7 +47,7 @@
                                         stroke="black" stroke-width="1.5" stroke-linecap="round" />
                                 </svg>
                             </button>
-                        </form>
+                        </form> -->
                         <div class="icons text-white">
                             <a href="wishlist2.html" class="position-relative">
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +107,7 @@
     <nav aria-label="breadcrumb">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="../Home/homepage.html">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Contact</li>
             </ol>
         </div>
@@ -135,20 +138,31 @@
                         <p>Emails: support@exclusive.com</p>
                     </div>
                 </aside>
-                <form action="" class="col-12 col-lg-8">
+                <form id="contactForm" action="" class="col-12 col-lg-8">
                     <div class="row justify-content-between">
-                        <input class="col-12 col-md-3" type="text" placeholder="Your Name *">
-                        <input class="col-12 col-md-3" type="email" placeholder="Your Email *">
-                        <input class="col-12 col-md-3" type="phone" placeholder="Your Phone *">
+                        <div class="col-12 col-md-3">
+                            <input type="text" id="name" placeholder="Your Name *" style="width:100%">
+                            <small id="nameError" class="text-danger d-block"></small>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <input type="email" id="email" placeholder="Your Email *" style="width:100%">
+                            <small id="emailError" class="text-danger d-block"></small>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <input type="tel" id="phone" placeholder="Your Phone *" style="width:100%">
+                            <small id="phoneError" class="text-danger d-block"></small>
+                        </div>
                     </div>
                     <div class="row flex-row-reverse">
-                        
-                        <textarea class="col-12" name="message" id="message" placeholder="Your Massage"></textarea>
+                        <div class="col-12">
+                            <textarea id="message" placeholder="Your Message" style="width:100%";></textarea>
+                            <small id="msgError" class="text-danger d-block"></small>
+                        </div>
                         <input class="col-md-4" type="submit" value="Send Message">
                     </div>
-                    <div class="row"></div>
-                    <div class="row"></div>
                 </form>
+                <!-- Bootstrap alert placeholder -->
+                <div id="alertPlaceholder" class="mt-3"></div>
             </div>
         </div>
     </section>
@@ -177,18 +191,17 @@
                 </div>
                 <div class="col-6 col-lg">
                     <h4>Account</h4>
-                    <p>My Account</p>
-                    <p>Login / Register</p>
-                    <p>Cart</p>
-                    <p>Wishlist</p>
-                    <p>Shop</p>
+                    <p><a class="text-white text-decoration-none" href="./account.html">My Account</a></p>
+                    <p><a class="text-white text-decoration-none" href="./auth/login.html">Login</a>/ <a class="text-white text-decoration-none" href="./auth/register.html">Register</a></p>
+                    <p><a class="text-white text-decoration-none" href="./cart.html">Cart</a></p>
+                    <p><a class="text-white text-decoration-none" href="./shop.html">Shop</a></p>
                 </div>
                 <div class="col-6 col-lg">
                     <h4>Quick Link</h4>
                     <p>Privacy Policy</p>
                     <p>Terms Of Use</p>
                     <p>FAQ</p>
-                    <p>Contact</p>
+                    <p><a class="text-white text-decoration-none" href="./contact_2.html">Contact</a></p>
                 </div>
                 <div class="col-6 col-lg">
                     <h4>Socail Media</h4>
@@ -236,5 +249,79 @@
     <script src="../js/initData.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/about.js"></script>
+    <script>
+        const form = document.getElementById("contactForm");
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const phoneInput = document.getElementById("phone");
+        const msgInput = document.getElementById("message");
+
+        const nameError = document.getElementById("nameError");
+        const emailError = document.getElementById("emailError");
+        const phoneError = document.getElementById("phoneError");
+        const msgError = document.getElementById("msgError");
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
+        function showAlert(message, type) {
+            alertPlaceholder.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        }
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            let valid = true;
+            let firstInvalid = null;
+
+            // Clear old errors
+            nameError.textContent = "";
+            emailError.textContent = "";
+            phoneError.textContent = "";
+            msgError.textContent = "";
+
+            // Name check
+            if (nameInput.value.trim().length === 0) {
+                nameError.textContent = "Name is required";
+                if (!firstInvalid) firstInvalid = nameInput;
+                valid = false;
+            }
+
+            // Email check
+            if (!emailRegex.test(emailInput.value)) {
+                emailError.textContent = "Enter a valid email address";
+                if (!firstInvalid) firstInvalid = emailInput;
+                valid = false;
+            }
+
+            // Phone check
+            if (!phoneRegex.test(phoneInput.value)) {
+                phoneError.textContent = "Enter a valid phone number";
+                if (!firstInvalid) firstInvalid = phoneInput;
+                valid = false;
+            }
+
+            // Message check
+            if (msgInput.value.trim().length === 0) {
+                msgError.textContent = "Message cannot be empty";
+                if (!firstInvalid) firstInvalid = msgInput;
+                valid = false;
+            }
+
+            // Focus first invalid field
+            if (!valid && firstInvalid) {
+                firstInvalid.focus();
+                showAlert(" Please fix the errors and try again.", "danger");
+                return;
+            }
+
+            // success
+            showAlert(" Your message has been sent successfully!", "success");
+            form.reset();
+        });
+    </script>
 </body>
 </html>
