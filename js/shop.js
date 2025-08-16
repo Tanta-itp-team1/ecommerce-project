@@ -18,12 +18,12 @@ categories.forEach((category) => {
   });
   categoryContainer.appendChild(btn);
 });
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || [];
 const ShopProducts = JSON.parse(localStorage.getItem("ecommerceData")).products;
 let WishlistProducts =
   JSON.parse(localStorage.getItem("ecommerceData")).wishlist.find(
-    (w) => (w.userId = loggedInUser.id)
-  ).productIds || [];
+    (w) => (w.userId == loggedInUser.id)
+  )?.productIds || [];
 let currentProducts = [...ShopProducts];
 let currentCategory = "all";
 let currentSort = "default";
