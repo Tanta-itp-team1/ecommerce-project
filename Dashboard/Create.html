@@ -83,7 +83,7 @@ function loadCategories() {
 }
 loadCategories();
 
-// ✅ Preview صورة المنتج
+
 document.getElementById('uploadImage').addEventListener('change', function(e) {
   let file = e.target.files[0];
   let reader = new FileReader();
@@ -100,7 +100,7 @@ document.getElementById('uploadImage').addEventListener('change', function(e) {
   }
 });
 
-// ✅ حفظ المنتج الجديد
+
 document.getElementById('saveProduct').addEventListener('click', function() {
   let name = document.getElementById('productName').value.trim();
   let category = document.getElementById('productCategory').value;
@@ -127,7 +127,7 @@ document.getElementById('saveProduct').addEventListener('click', function() {
     stock,
     soldCount: 0,
     description,
-    imageUrl: selectedImage || "default.png", // fallback للصورة
+    imageUrl: selectedImage || "../assets/images/products/placeholder.jpg", 
     sellerId: loggedInUser.id 
   };
 
