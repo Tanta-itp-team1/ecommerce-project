@@ -26,6 +26,7 @@ let WishlistProducts =
     (w) => w.userId == loggedInUser.id
   )?.productIds || [];
 let currentProducts = [...ShopProducts];
+let pagginationArr=currentProducts.slice(0,12);
 let currentCategory = "all";
 let currentSort = "default";
 function renderProducts(products) {
@@ -70,7 +71,7 @@ function renderProducts(products) {
       p.discount ? p.price - p.price * (p.discount / 100) : p.price
     }</span>
                                     </div>
-                                    <button class="add-to-cart" onclick="addToCart()">
+                                    <button class="add-to-cart" onclick="addToCart(${p.id},1)">
                                         <i class="fas fa-shopping-cart me-2"></i>
                                         Add To Cart
                                     </button>
@@ -80,6 +81,15 @@ function renderProducts(products) {
                     `;
   }
 }
+const pagginationArea=document.getElementById('pagginationId');
+const pageNumbers=Math.ceil(currentProducts.length/12); 
+let pages =Array.from({ length: pageNumbers }, (_, i) => i + 1);
+function renderPaggination(){
+  for(let i=0;pages.length>i;i++){
+    pagginationArea.innerHTML+=`<li><a onclick="paggination(${pages[i]},event)" class=${pages[i]==1?"active":""}  >${pages[i]}</a></li>`
+  }
+    
+  }
 function filterByCategory(category, btnElement) {
   currentCategory = category;
   document.querySelectorAll(".category-btn").forEach((btn) => {
@@ -224,7 +234,69 @@ function checkWishlist(productID) {
 }
 
 function goToProductDetails(index) {
-  window.location.href = "test.html";
+  window.location.href = "productDetails.html";
+}
+function addToCart(productId, quantity) {
+  // Get ecommerce data from localStorage or initialize it
+  let data = JSON.parse(localStorage.getItem("ecommerceData")) || { cart: [] };
+
+  // Find the logged in user ID (replace with your actual variable)
+  let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); 
+  if (!loggedInUser || !loggedInUser.id) {
+    alert("You must be logged in to add items to the cart.");
+    return;
+  }
+
+  // Find the user's cart
+  let userCart = data.cart.find(c => c.userId === loggedInUser.id);
+
+  // If no cart exists for this user, create one
+  if (!userCart) {
+    userCart = { userId: loggedInUser.id, items: [] };
+    data.cart.push(userCart);
+  }
+
+  // Check if product is already in cart
+  let existingItem = userCart.items.find(item => item.productId === productId);
+  if (existingItem) {
+    existingItem.quantity += quantity; // Increment quantity
+    showToast("+1 Item Added","success");
+  } else {
+    userCart.items.push({ productId, quantity }); // Add new product
+    showToast("Item Added Successfully To Cart","success");
+  }
+
+  // Save back to localStorage
+  localStorage.setItem("ecommerceData", JSON.stringify(data));
+
+  console.log(`Product ${productId} added to cart. Current cart:, userCart.items`);
+}
+function showToast(message, type = "danger") {
+    let toastEl = document.getElementById("toastMessage");
+
+    toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+    
+    toastEl.querySelector(".toast-body").textContent = message;
+
+    let toast = new bootstrap.Toast(toastEl);
+    toast.show();
 }
 
-renderProducts(ShopProducts);
+function paggination(pageNum,event){
+  let startIndex;
+  let endIndex;
+  let pagginationIcons = document.querySelectorAll(".pagination>li>a.active");
+  console.log(pagginationIcons);
+    if(pagginationIcons.length>0){
+      pagginationIcons[0].className="";
+    }
+  startIndex=(pageNum-1)*12;
+  endIndex=startIndex+12;
+  pagginationArr=currentProducts.slice(startIndex,endIndex);
+  event.target.className="active";
+  renderProducts(pagginationArr);
+  window.scrollTo(top);
+}
+
+renderProducts(pagginationArr);
+renderPaggination();

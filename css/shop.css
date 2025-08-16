@@ -280,6 +280,46 @@ body {
 .redHeart {
     color: #ff4d4d;
 }
+.pagination {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 16px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.pagination li {
+  display: inline-block;
+  list-style: none;
+}
+.pagination li a {
+  display: block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  background-color: #fff;
+  text-align: center;
+  text-decoration: none;
+  color: #252525;
+  border-radius: 8px;
+  margin: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+.pagination li a:hover, .pagination li a.active {
+  color: #fff;
+  background-color: #ff4d4d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.pagination li:first-child a {
+  border-radius: 8px;
+}
+.pagination li:last-child a {
+  border-radius: 8px;
+}
 
 /* === Mobile Responsive === */
 @media (max-width: 768px) {
