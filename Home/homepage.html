@@ -88,7 +88,7 @@
 
   <div class="main-wrapper">
   <div id="sidebar" class="p-3"></div>
-  <div class="l">
+  <div class="">
     <div class="hero-banner flex-grow-1">
     <div class="hero-content">
       <h2>Smasung plasma Series</h2>
@@ -102,106 +102,8 @@
   </div>
   <div class="landing">
   <div id="landingCarousel" class="carousel slide" data-bs-ride="carousel">
-
-    <div class="carousel-indicators ">
-      <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="0" class="active"></button>
-      <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="1"></button>
-      <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="2"></button>
-      <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="3"></button>
-      <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="4"></button>
-      <button type="button" data-bs-target="#landingCarousel" data-bs-slide-to="5"></button>
-    </div>
-
-
-    <div class="carousel-inner">
-
-
-     
-<div class="carousel-item">
-        <div class="hero-banner">
-          <div class="hero-content">
-            <h2>Home Appliances</h2>
-            <h1>Exclusive Deals & Discounts</h1>
-            <button class="btn text-decoration-underline">Shop Now →</button>
-          </div>
-          <div class="hero-img">
-            <img src="./imgs/table.png" alt="Home Appliances">
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="hero-banner">
-          <div class="hero-content">
-            <h2>Work Smarter</h2>
-            <h1>High-Performance PCs</h1>
-            <button class="btn text-decoration-underline">Shop Now →</button>
-          </div>
-          <div class="hero-img">
-            <img src="./imgs/dell.png" alt="Dell">
-          </div>
-        </div>
-      </div>
-
-
-      <div class="carousel-item">
-        <div class="hero-banner">
-          <div class="hero-content">
-            <h2>Fashion for Every Occasion</h2>
-            <h1>Trendy Styles at Unbeatable Prices</h1>
-            <button class="btn text-decoration-underline">Shop Now →</button>
-          </div>
-          <div class="hero-img">
-            <img src="./imgs/Johnny.png" alt="Fashion">
-          </div>
-        </div>
-      </div>
-
-
-      <div class="carousel-item">
-        <div class="hero-banner">
-          <div class="hero-content">
-            <h2>Premium Sound</h2>
-            <h1>Immerse Yourself in Music</h1>
-            <button class="btn text-decoration-underline">Shop Now →</button>
-          </div>
-          <div class="hero-img">
-            <img src="./imgs/speaker.png" alt="Speakers">
-          </div>
-        </div>
-      </div>
-
-
-      
-
-      <!-- Slide 6 -->
-      <div class="carousel-item">
-        <div class="hero-banner">
-          <div class="hero-content">
-            <h2>New Season Collection</h2>
-            <h1>Fresh Arrivals Just for You</h1>
-            <button class="btn text-decoration-underline">Shop Now →</button>
-          </div>
-          <div class="hero-img">
-            <img src="./imgs/perfume.jpeg" alt="Collection">
-          </div>
-        </div>
-      </div>
-       <div class="carousel-item active">
-        <div class="hero-banner">
-          <div class="hero-content">
-            <h2>Samsung Plasma Series</h2>
-            <h1>Up to 10% off Voucher</h1>
-            <button class="btn text-decoration-underline">Shop Now →</button>
-          </div>
-          <div class="hero-img">
-            <img src="./imgs/samsung.png" alt="Samsung">
-          </div>
-        </div>
-      </div>
-
-    </div>
-
+    <div class="carousel-indicators" id="carouselIndicators"></div>
+    <div class="carousel-inner" id="carouselInner"></div>
 
     <button class="carousel-control-prev" type="button" data-bs-target="#landingCarousel" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -211,6 +113,7 @@
     </button>
   </div>
 </div>
+
 
   </div>
   
@@ -517,6 +420,41 @@ function goToProduct(id) {
 
   setInterval(updateCountdown, 1000);
   updateCountdown();
+
+  const indicatorsContainer = document.getElementById("carouselIndicators");
+  const carouselInner = document.getElementById("carouselInner");
+
+
+  const featuredProducts = products.slice(0, 6);
+
+  featuredProducts.forEach((product, index) => {
+
+    const indicatorBtn = document.createElement("button");
+    indicatorBtn.type = "button";
+    indicatorBtn.setAttribute("data-bs-target", "#landingCarousel");
+    indicatorBtn.setAttribute("data-bs-slide-to", index);
+    if (index === 0) indicatorBtn.classList.add("active");
+    indicatorsContainer.appendChild(indicatorBtn);
+
+
+    const itemDiv = document.createElement("div");
+    itemDiv.className = `carousel-item ${index === 0 ? "active" : ""}`;
+
+    itemDiv.innerHTML = `
+      <div class="hero-banner">
+        <div class="hero-content">
+          <h2>${product.category}</h2>
+          <h1>${product.name} - ${product.discount > 0 ? product.discount + "% Off" : "Best Price"}</h1>
+          <button class="btn text-decoration-underline">Shop Now →</button>
+        </div>
+        <div class="hero-img">
+          <img src="../assets/images/products/${product.imageUrl}" alt="${product.name}">
+        </div>
+      </div>
+    `;
+
+    carouselInner.appendChild(itemDiv);
+  });
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
