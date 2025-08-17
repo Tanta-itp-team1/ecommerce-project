@@ -8,17 +8,42 @@ ecommerceData.products.forEach((p) => {
     categories.push(p.category);
   }
 });
-categoryContainer.innerHTML = `<button class="category-btn active" onclick="filterByCategory('all', this)">All Products</button>`;
+categoryContainer.innerHTML = `<button class="category-btn active"  onclick="filterByCategory('all', this)">All Products</button>`;
 // Add category buttons dynamically
 categories.forEach((category) => {
   const btn = document.createElement("button");
   btn.className = "category-btn";
   btn.textContent = category;
+  btn.setAttribute("data-category", category);
+  btn.addEventListener("click", function () {
+    window.location.href = `shop.html?category=${encodeURIComponent(category)}`;
+  });
   btn.addEventListener("click", function () {
     filterByCategory(category, btn);
   });
   categoryContainer.appendChild(btn);
 });
+const params = new URLSearchParams(window.location.search);
+const selectedCategory = params.get("category");
+
+// After rendering, apply filter if category exists in URL
+window.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".category-btn");
+
+  if (selectedCategory) {
+    buttons.forEach((btn) => {
+      if (btn.getAttribute("data-category") === selectedCategory) {
+        btn.classList.add("active");
+        filterByCategory(selectedCategory, btn);
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+  } else {
+    filterByCategory("all", buttons[0]);
+  }
+});
+
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || [];
 const ShopProducts = JSON.parse(localStorage.getItem("ecommerceData")).products;
 let WishlistProducts =
@@ -26,7 +51,8 @@ let WishlistProducts =
     (w) => w.userId == loggedInUser.id
   )?.productIds || [];
 let currentProducts = [...ShopProducts];
-let pagginationArr=currentProducts.slice(0,12);
+let filteredProducts = [...currentProducts];
+let pagginationArr=filteredProducts.slice(0,12);
 let currentCategory = "all";
 let currentSort = "default";
 function renderProducts(products) {
@@ -297,11 +323,41 @@ function paggination(pageNum,event){
     }
   startIndex=(pageNum-1)*12;
   endIndex=startIndex+12;
-  pagginationArr=currentProducts.slice(startIndex,endIndex);
+  pagginationArr=filteredProducts.slice(startIndex,endIndex);
   event.target.className="active";
   renderProducts(pagginationArr);
-  window.scrollTo(top);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function filterByCategory(category, btn) {
+  // reset active class
+  document.querySelectorAll(".category-btn").forEach((b) => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  if (category === "all") {
+    filteredProducts = [...currentProducts];
+  } else {
+    filteredProducts = currentProducts.filter((p) => p.category === category);
+  }pagginationArr = filteredProducts.slice(0, 12);
+  renderProducts(pagginationArr);
+  renderPaggination();
+}
+function renderPaggination() {
+  const paginationContainer = document.querySelector(".pagination");
+  paginationContainer.innerHTML = "";
+  //number of pages based on filteredProducts which is a slice of current products ::::a slice of ecommerceData
+  const totalPages = Math.ceil(filteredProducts.length / 12);
+  for (let i = 1; i <= totalPages; i++) {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.textContent = i;
+    a.href = "#";
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      paggination(i, e);
+    });
+    if (i === 1) a.classList.add("active");
+    li.appendChild(a);
+    paginationContainer.appendChild(li);
+  }
 }
 
-renderProducts(pagginationArr);
-renderPaggination();

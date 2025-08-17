@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order View</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f2f5;
+    }
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: none;
+    }
+    .status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 8px;
+      font-weight: 500;
+      color: #fff;
+      font-size: 0.875rem;
+    }
+    .Pending { background-color: #ffc107; }
+    .Shipped { background-color: #7f8c8d; }
+    .Delivered { background-color: #2ecc71; }
+    .Cancelled { background-color: #dc3545; }
+  </style>
+</head>
+<body>
+
+<div class="container py-5">
+  <div class="card p-4">
+    <h2 class="text-center mb-4">Orders</h2>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="Search by customer or product...">
+      </div>
+      <div class="col-md-3">
+        <select id="statusFilter" class="form-select form-select-lg">
+          <option value="">Select Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover table-striped-columns  align-middle text-center">
+        <thead class="table">
+          <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const orders = [
+    {id: 1, customer: 'abdo', product: 'Laptop', quantity: 1, status: 'Pending'},
+    {id: 2, customer: 'ali', product: 'Smartphone', quantity: 2, status: 'Shipped'},
+    {id: 3, customer: 'ahmed', product: 'Headphone', quantity: 3, status: 'Delivered'},
+    {id: 4, customer: 'mostafa', product: 'Monitor', quantity: 1, status: 'Cancelled'},
+    {id: 5, customer: 'maged', product: 'Keyboard', quantity: 2, status: 'Pending'},
+    {id: 6, customer: 'kareem', product: 'Mouse', quantity: 1, status: 'Delivered'},
+  ];
+  const tableBody = document.getElementById('ordersTable');
+  const searchInput = document.getElementById('searchInput');
+  const statusFilter = document.getElementById('statusFilter');
+
+  function renderOrders(orders) {
+    tableBody.innerHTML = '';
+    orders.forEach(order => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${order.id}</td>
+        <td>${order.customer}</td>
+        <td>${order.product}</td>
+        <td>${order.quantity}</td>
+        <td><span class="status ${order.status}">${order.status}</span></td>`;
+      tableBody.appendChild(row);
+    });
+  }
+
+  function filterOrders() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const statusTerm = statusFilter.value;
+    const filtered = orders.filter(order => {
+      const matchesSearch = order.customer.toLowerCase().includes(searchTerm) ||
+                            order.product.toLowerCase().includes(searchTerm);
+      const matchesStatus = statusTerm === '' || order.status === statusTerm;
+      return matchesSearch && matchesStatus;
+    });
+    renderOrders(filtered);
+  }
+  searchInput.addEventListener('input', filterOrders);
+  statusFilter.addEventListener('change', filterOrders);
+  renderOrders(orders);
+</script>
+</body>
+</html>
