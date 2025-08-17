@@ -46,6 +46,9 @@
 </head>
 
 <body>
+<div class="sidebar-toggle">
+  <i class="fas fa-bars"></i>
+</div>
 
 
   <div id="black">
@@ -410,60 +413,71 @@
       `;
     });
 
-
-  function renderCarousel(carouselId, items) {
+function renderCarousel(carouselId, items) {
   const carouselInner = document.querySelector(`${carouselId} .carousel-inner`);
   carouselInner.innerHTML = "";
 
-  for (let i = 0; i < items.length; i += 4) {
-    const chunk = items.slice(i, i + 4);
+  function getItemsPerSlide() {
+    if (window.innerWidth < 576) return 1; 
+    if (window.innerWidth < 768) return 2; 
+    if (window.innerWidth < 992) return 3; 
+    return 4; 
+  }
+
+  let itemsPerSlide = getItemsPerSlide();
+
+  for (let i = 0; i < items.length; i += itemsPerSlide) {
+    const chunk = items.slice(i, i + itemsPerSlide);
     const activeClass = i === 0 ? "active" : "";
     let cardsHTML = "";
 
     chunk.forEach(p => {
-      cardsHTML += `
-        <div class="product-card">
-          ${p.discount > 0 ? `<span class="discount">-${p.discount}%</span>` : ""}
+     cardsHTML += `
+  <div class="product-card flex-fill mx-2">
+    ${p.discount > 0 ? `<span class="discount">-${p.discount}%</span>` : ""}
 
-          <!-- Action icons -->
-          <div class="icons">
-            <i class="far fa-heart"></i>
-          </div>
 
-          <img src="../assets/images/products/${p.imageUrl}" 
-               alt="${p.name}" 
-               onerror="this.src='../assets/images/products/placeholder.jpg'">
+    <a class="icons" href="../pages/wishlist.html">
+      <i class="far fa-heart"></i>
+    </a>
 
-          <h4>${p.name}</h4>
-          <div class="price">
-            ${
-              p.discount > 0
-                ? `
-                  <span class="old">$${p.price}</span>
-                  <span class="new">$${(p.price - (p.price * p.discount / 100)).toFixed(2)}</span>
-                `
-                : `
-                  <span class="new">$${p.price}</span>
-                `
-            }
-          </div>
+    <img src="../assets/images/products/${p.imageUrl}" 
+         alt="${p.name}" 
+         onerror="this.src='../assets/images/products/placeholder.jpg'">
 
-          <button class="add-to-cart">
-            <i class="fas fa-shopping-cart"></i> Add To Cart
-          </button>
-        </div>
-      `;
+    <h4>${p.name}</h4>
+    <div class="price">
+      ${
+        p.discount > 0
+          ? `
+            <span class="old">$${p.price}</span>
+            <span class="new">$${(p.price - (p.price * p.discount / 100)).toFixed(2)}</span>
+          `
+          : `<span class="new">$${p.price}</span>`
+      }
+    </div>
+
+
+    <a class="add-to-cart btn" href="../pages/cart.html">
+      <i class="fas fa-shopping-cart"></i> Add To Cart
+    </a>
+  </div>
+`;
+
     });
 
     carouselInner.innerHTML += `
       <div class="carousel-item ${activeClass}">
-        <div class="d-flex justify-content-around">
+        <div class="d-flex justify-content-center">
           ${cardsHTML}
         </div>
       </div>
     `;
   }
+
+  window.addEventListener("resize", () => renderCarousel(carouselId, items));
 }
+
 
 
 function goToProduct(id) {
