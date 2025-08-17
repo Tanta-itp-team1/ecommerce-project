@@ -504,35 +504,6 @@ section {
 .carousel-indicators .active {
   background-color: red;  
 }
-#countdown {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-#time {
-  border: 2px gray solid;
-  border-radius: 50%;
-  padding: 1rem;
-  background-color: aliceblue;
-  width: 70px;
-  height: 70px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#time span {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-#time small {
-  font-size: 0.7rem;
-  color: gray;
-}
-
 
 /* .gr{
   display: grid; */

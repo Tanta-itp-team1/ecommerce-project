@@ -423,27 +423,31 @@
     chunk.forEach(p => {
       cardsHTML += `
         <div class="product-card">
-         
-          <span class="discount">${p.discount}%</span>
+          ${p.discount > 0 ? `<span class="discount">-${p.discount}%</span>` : ""}
 
           <!-- Action icons -->
           <div class="icons">
             <i class="far fa-heart"></i>
           </div>
 
-
           <img src="../assets/images/products/${p.imageUrl}" 
                alt="${p.name}" 
                onerror="this.src='../assets/images/products/placeholder.jpg'">
 
-         
           <h4>${p.name}</h4>
           <div class="price">
-            <span class="old">$${(p.price + 5).toFixed(2)}</span>
-            <span class="new">$${p.price}</span>
+            ${
+              p.discount > 0
+                ? `
+                  <span class="old">$${p.price}</span>
+                  <span class="new">$${(p.price - (p.price * p.discount / 100)).toFixed(2)}</span>
+                `
+                : `
+                  <span class="new">$${p.price}</span>
+                `
+            }
           </div>
 
-          <!-- Add to cart button -->
           <button class="add-to-cart">
             <i class="fas fa-shopping-cart"></i> Add To Cart
           </button>
@@ -460,6 +464,7 @@
     `;
   }
 }
+
 
 function goToProduct(id) {
   window.location.href = `../pages/productDetails.html?id=${id}`;
