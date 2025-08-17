@@ -6,7 +6,7 @@ body {
   flex-direction: column;
 }
 
-/* الشريط الأسود فوق */
+
 #black {
   background-color: black;
   color: white;
@@ -23,7 +23,7 @@ body {
   text-decoration: underline;
 }
 
-/* النافبار */
+
 .nav-wrapper {
   position: sticky;
   top: 0;
@@ -32,14 +32,14 @@ body {
   box-shadow: 0.1rem 0 0.2rem lightgray;
 }
 
-/* تقسيم الصفحة */
+
 .main-wrapper {
   display: grid;
   grid-template-columns: 250px 1fr;
   flex: 1;
 }
 
-/* السايدبار */
+
 #sidebar {
   color: black;
   border-right: lightgray 1px solid;
@@ -79,6 +79,7 @@ body {
 }
 .carousel-caption {
   position: fixed;
+  background-color: rgba(2,2, 2, 0.7);
   top: 10rem;
   right: 0;
   left: 0;
@@ -286,7 +287,7 @@ align-items: flex-start;
   transform: translateY(-5px);
 }
 
-/* صورة المنتج */
+
 .product-card img {
   width: 100%;
   height: 180px;
@@ -294,7 +295,7 @@ align-items: flex-start;
   margin-bottom: 10px;
 }
 
-/* البادج */
+
 .product-card .discount {
   position: absolute;
   top: 10px;
@@ -306,7 +307,7 @@ align-items: flex-start;
   border-radius: 5px;
 }
 
-/* الأيقونات */
+
 .product-card .icons {
   position: absolute;
   top: 10px;
@@ -329,14 +330,14 @@ align-items: flex-start;
   background: #eee;
 }
 
-/* العنوان */
+
 .product-card h4 {
   font-size: 1rem;
   margin: 10px 0;
   font-weight: 500;
 }
 
-/* السعر */
+
 .product-card .price {
   margin: 5px 0;
 }
@@ -352,7 +353,6 @@ align-items: flex-start;
   font-weight: bold;
 }
 
-/* زر Add to Cart */
 .product-card .add-to-cart {
   width: 100%;
   padding: 10px;
@@ -495,6 +495,44 @@ section {
   font-size: 0.9rem;
   color: gray;
 }
+.carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;   
+  background-color: #555;  
+
+.carousel-indicators .active {
+  background-color: red;  
+}
+#countdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#time {
+  border: 2px gray solid;
+  border-radius: 50%;
+  padding: 1rem;
+  background-color: aliceblue;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#time span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+#time small {
+  font-size: 0.7rem;
+  color: gray;
+}
+
 
 /* .gr{
   display: grid; */
