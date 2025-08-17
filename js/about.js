@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const accountDropdown = document.getElementById("account-dropdown");
 
   if (user) {
-    document.getElementById("signupli").style.display ="none";
+    document.getElementById("signupli").style.display = "none";
     // Add role-based dashboard link
     if (user.role === "seller" || user.role === "admin") {
       const dashboardItem = document.createElement("li");
@@ -46,3 +46,25 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 });
+function updateCounters() {
+  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || {};
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  if (!loggedInUser) return;
+
+  // Wishlist count
+  const wishlistEntry = ecommerceData.wishlist?.find(
+    (w) => w.userId === loggedInUser.id
+  );
+  const wishlistCount = wishlistEntry ? wishlistEntry.productIds.length : 0;
+  document.getElementById("wishlist-count").textContent = wishlistCount;
+
+  // Cart count (sum of quantities)
+  const userCart = ecommerceData.cart?.find(
+    (c) => c.userId === loggedInUser.id
+  );
+  const cartCount = userCart
+    ? userCart.items.reduce((sum, i) => sum + i.quantity, 0)
+    : 0;
+  document.getElementById("cart-count").textContent = cartCount;
+}

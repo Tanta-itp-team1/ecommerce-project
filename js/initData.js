@@ -200,11 +200,7 @@
           stock: 35,
           soldCount: 15,
           description: "Keyboard with rgp Lights.",
-<<<<<<< HEAD
           imageUrl: "keyboard.png",
-=======
-          imageUrl: "Keyboard.png",
->>>>>>> c9dfea3136a65dd18d0dcf250026955b34f7fd37
           sellerId: 2,
         },
         {

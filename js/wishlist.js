@@ -93,7 +93,7 @@ function renderProducts(containerId, products, type) {
 
       return `
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="product-card" onclick="openProduct(${p.id})">
+                <div class="product-card" data-id="${p.id}">
                     <div class="product-image position-relative">
                         ${
                           p.discount
@@ -117,16 +117,28 @@ function renderProducts(containerId, products, type) {
                     <div class="product-info mt-3">
                         <h5 class="product-title">${p.name}</h5>
                         <div class="product-price">
-                            <span class="current-price">$${
-                              p.price - p.price * (p.discount / 100)
-                            }</span> &nbsp;
-                            <span class="current-price text-decoration-line-through text-muted">$${
-                              p.price
-                            }</span>
-                            
+                            ${
+                              p.discount
+                                ? `<span class="current-price">
+                                $${(
+                                  p.price -
+                                  p.price * (p.discount / 100)
+                                ).toFixed(2)}
+                              </span> &nbsp;
+                              <span class="current-price text-decoration-line-through text-muted">
+                                $${p.price.toFixed(2)}
+                              </span>
+                            `
+                                : `
+                              <span class="current-price">$${p.price.toFixed(
+                                2
+                              )}</span>
+                            `
+                            } 
                         </div>
-                        <button class="btn btn-outline-dark btn-sm mt-2" onclick="event.stopPropagation();">
-                            <i class="fas fa-shopping-cart me-2"></i>Add To Cart
+                        <button data-id="${p.id}" class="add-to-cart">
+                                    <i class="fas fa-shopping-cart me-2"></i>
+                                    Add To Cart
                         </button>
                     </div>
                 </div>
@@ -135,7 +147,14 @@ function renderProducts(containerId, products, type) {
     })
     .join("");
 }
-
+// product details
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".product-card");
+  if (card && !e.target.closest("button")) {
+    const productId = card.dataset.id;
+    openProduct(productId);
+  }
+});
 // ===== Open product page =====
 function openProduct(productId) {
   window.location.href = `productDetails.html?id=${productId}`;
@@ -173,6 +192,7 @@ function toggleWishlist(productId) {
     (p) => (wishlistEntry?.productIds || []).includes(p.id)
   );
   renderProducts("wishlist-container", updatedWishlistProducts, "wishlist");
+  updateCounters();
 }
 // ===== Remove from wishlist =====
 function removeFromWishlist(productId) {
@@ -196,9 +216,97 @@ function removeFromWishlist(productId) {
     (p) => wishlistEntry?.productIds.includes(p.id)
   );
 
-  // Re-render
   renderProducts("wishlist-container", updatedWishlistProducts, "wishlist");
+  updateCounters();
 }
+// ===== Add to Cart (with delegation on wishlist container) =====
+const wishlistContainer = document.getElementById("wishlist-container");
+
+wishlistContainer.addEventListener("click", (e) => {
+  const btn = e.target.closest("button.add-to-cart");
+  if (!btn) return;
+  e.stopPropagation();
+  if (!loggedInUser) {
+    alert("Please log in to add items to cart");
+    return;
+  }
+  const productId = parseInt(btn.dataset.id);
+  let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || {};
+  ecommerceData.cart = Array.isArray(ecommerceData.cart)
+    ? ecommerceData.cart
+    : [];
+  let userCart = ecommerceData.cart.find((c) => c.userId === loggedInUser.id);
+  if (!userCart) {
+    userCart = { userId: loggedInUser.id, items: [] };
+    ecommerceData.cart.push(userCart);
+  }
+  const existingItem = userCart.items.find((i) => i.productId === productId);
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    userCart.items.push({ productId, quantity: 1 });
+  }
+  localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
+  btn.innerHTML = `<i class="fas fa-check me-2"></i> Added`;
+  btn.disabled = true;
+  updateCounters();
+});
+const moveAllBtn = document.getElementById("move-all-to-bag");
+
+moveAllBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  if (!loggedInUser) {
+    alert("Please log in to move items to cart");
+    return;
+  }
+
+  // Get user's wishlist
+  const wishlistEntry = ecommerceData["wishlist"].find(
+    (w) => w.userId === loggedInUser.id
+  );
+
+  if (!wishlistEntry || wishlistEntry.productIds.length === 0) {
+    alert("Your wishlist is empty!");
+    return;
+  }
+
+  // Ensure cart exists
+  ecommerceData.cart = Array.isArray(ecommerceData.cart)
+    ? ecommerceData.cart
+    : [];
+
+  let userCart = ecommerceData.cart.find((c) => c.userId === loggedInUser.id);
+  if (!userCart) {
+    userCart = { userId: loggedInUser.id, items: [] };
+    ecommerceData.cart.push(userCart);
+  }
+
+  // Move each product from wishlist into cart
+  wishlistEntry.productIds.forEach((productId) => {
+    const existingItem = userCart.items.find((i) => i.productId === productId);
+    if (existingItem) {
+      existingItem.quantity += 1; // increment if already in cart
+    } else {
+      userCart.items.push({ productId, quantity: 1 });
+    }
+  });
+
+  // Clear wishlist after moving
+  wishlistEntry.productIds = [];
+
+  // Save updates
+  localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
+
+  // Re-render
+  renderProducts("wishlist-container", [], "wishlist");
+  renderProducts("suggested-container", suggestedProducts, "suggested");
+
+  // Feedback
+  moveAllBtn.innerHTML = `<i class="fas fa-check me-2"></i> Moved!`;
+  moveAllBtn.disabled = true;
+  updateCounters();
+});
 
 // ===== Initial Rendering =====
 renderProducts("wishlist-container", wishlistProducts, "wishlist");
