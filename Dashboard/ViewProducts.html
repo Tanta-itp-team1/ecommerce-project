@@ -24,6 +24,10 @@
 </head>
 <body>
   <div class="container">
+    <button class="action-btn create-btn" onclick="goToCreatePage()">
+  <i class="fas fa-plus"></i> Create Product
+</button>
+
     <h1><i class="fas fa-box"></i> Products</h1>
 
     <table>
@@ -107,7 +111,7 @@ function showControlButtons(product) {
 
 function viewProduct(productId) {
   localStorage.setItem("viewProductId", productId);
-  window.location.href = "./ProductDetails.html";
+  window.location.href = "../pages/productDetails.html";
 }
 
 
@@ -123,6 +127,10 @@ function editProduct(productId) {
   localStorage.setItem("editProductId", productId);
   window.location.href = "./Edit.html";
 }
+function goToCreatePage() {
+  window.location.href = "./Create.html";
+}
+
 </script>
 </body>
 </html>
