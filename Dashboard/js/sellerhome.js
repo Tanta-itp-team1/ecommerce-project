@@ -193,10 +193,20 @@ window.addEventListener("load", function () {
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span>${p.id}</span>
                   <div class="d-flex align-items-center">
-                    <img src="../../assets/images/products/${p.imageUrl}" alt="${p.name}" width="40" height="40" class="me-2 rounded">
-                    ${p.name}
+<img src="${
+        p.imageUrl.startsWith("data:")
+          ? p.imageUrl
+          : "../../assets/images/products/" + p.imageUrl
+      }" 
+    alt="${p.name}" 
+    width="40" 
+    height="40" 
+    class="me-2 rounded">
+                        ${p.name}
                   </div>
-                  <span class="badge ${badgeClass} rounded-pill">${p[badgeKey]}</span>
+                  <span class="badge ${badgeClass} rounded-pill">${
+        p[badgeKey]
+      }</span>
                 </li>
             `;
     });

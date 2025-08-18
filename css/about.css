@@ -1,26 +1,34 @@
 body{
     font-family: "Inter", sans-serif;
 }
-header nav{
-    height: 80px;
-    border-bottom: 1px solid #ccc; 
-    padding-top: 15px;   
+header .navwrapper {
+    border-bottom: 1px solid rgb(0 0 0 / 21%);
 }
-header nav .navbar-brand{
+header nav ul li a.active {
+    border-bottom: 1px solid black;
+}
+header nav .navbar-brand {
     font-size: 24px;
     letter-spacing: 3%;
     margin-bottom: 0;
 }
-header nav ul li{
+header nav ul li {
     margin-right: 2rem;
 }
-header nav ul li a{
-    color: black !important;
+header nav ul li a {
     padding-bottom: 0 !important;
 }
-header nav ul li a.active{
-    border-bottom: 1px solid black;
+header .icons a {
+    text-decoration: none;
+    color: black;
+    margin-left: 15px;
 }
+header .icons #account-dropdown li:hover a {
+    color: #DB4444 !important;
+}
+
+/* 
+
 header nav form input.form-control{
     background-color: #F5F5F5 !important;
     border-radius: 0;
@@ -38,30 +46,7 @@ header nav form button{
     border-left: 0 !important;
     border-radius: 0 !important;
 }
-header .icons a{
-    text-decoration: none;
-    color: black;
-}
-header .icons #account-menu svg{
-    margin-left: 0 !important;
-
-}
-header .icons svg:first-child{
-    margin-left: 20px;
-}
-header .icons #account-dropdown{
-    background-color: #000000cf;
-}
-header .icons #account-dropdown li {
-    margin: 0;
-}
-header .icons #account-dropdown li a{
-    color: white !important;
-}
-header .icons #account-dropdown li:hover a{
-    color: #DB4444 !important;
-    background-color: black !important;
-}
+*/
 /* End Header */
 .breadcrumb{
     margin-top: 5rem;
@@ -232,32 +217,27 @@ footer .social-media{
     width: 170px !important;
 }
 @media all and (max-width: 991px){
-    .navbar-collapse{
-        background-color: rgba(0, 0, 0, 0.848);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-top: 30px;
+    .navbar-collapse {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
     }
     .navbar-collapse ul {
-        width: 100%;
         text-align: center;
     }
-    .navbar-collapse ul li{
-        margin: 10px;
+    .navbar-collapse ul li {
+        margin: 10px 0 10px;
     }
-    a.nav-link{
-        color: white !important;
+    .navbar-collapse .icons{
+        margin: 10px 0 10px;
     }
-    a.nav-link:hover{
-        color: #DB4444 !important;
+    #account-dropdown{
+        overflow: hidden;
     }
-    a.nav-link.active{
-        border-bottom: 1px solid white;
-    }
-    .navbar-collapse svg{
-        color: white !important;
+    #account-dropdown li{
+        text-align: left !important;
     }
     .carousel-item .card-body{
         text-align: center;

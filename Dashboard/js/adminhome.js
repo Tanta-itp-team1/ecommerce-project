@@ -163,8 +163,8 @@ window.addEventListener("load", function () {
   // Fill Recent Orders
   const recentOrdersTable = document.getElementById("recentOrdersTable");
   recentOrdersTable.innerHTML = orders
-    .slice(-5) // Last 5 orders
-    .reverse() // Show newest first
+    .slice(-5)
+    .reverse()
     .map(
       (order) => `
         <tr>
@@ -193,7 +193,7 @@ window.addEventListener("load", function () {
   const users = ecommerceData.users || [];
   const newUsersList = document.getElementById("newUsersList");
   newUsersList.innerHTML = users
-    .slice(-5) // Last 5 registered
+    .slice(-5)
     .reverse()
     .map(
       (user) => `
@@ -225,7 +225,7 @@ window.addEventListener("load", function () {
     badgeClass,
     headers
   ) => {
-    element.innerHTML = ""; // Clear old content
+    element.innerHTML = "";
     if (items.length === 0) {
       element.innerHTML = `<li class="list-group-item">${emptyText}</li>`;
       return;
@@ -246,8 +246,15 @@ window.addEventListener("load", function () {
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <span>${p.id} </span>
           <div class="d-flex align-items-center">
-            <img src="../../assets/images/products/${p.imageUrl}" alt="${p.name}" width="40" height="40" class="me-2 rounded">
-            ${p.name}
+        <img src="${
+          p.imageUrl.startsWith("data:")
+            ? p.imageUrl
+            : "../../assets/images/products/" + p.imageUrl
+        }" 
+    alt="${p.name}" 
+    width="40" 
+    height="40" 
+    class="me-2 rounded">            ${p.name}
           </div>
           <span class="badge ${badgeClass} rounded-pill">${p[badgeKey]}</span>
         </li>
