@@ -44,9 +44,8 @@ if (!loggedInUser || (loggedInUser.role !== "seller" && loggedInUser.role !== "a
     alert("You are not authorized to edit products.");
     window.location.href = "../auth/login.html";
 }
+const productId = parseInt(localStorage.getItem("editProductId"));
 
-const params = new URLSearchParams(window.location.search);
-const productId = parseInt(params.get("id"));
 
 let data = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
 let products = data.products || [];
@@ -54,12 +53,12 @@ let product = products.find(p => p.id === productId);
 
 if (!product) {
     alert("Product not found");
-    window.location.href = "ViewProducts.html";
+    window.location.href = "./ViewProducts.html";
 }
 
 if (loggedInUser.role === "seller" && product.sellerId !== loggedInUser.id) {
     alert("You are not allowed to edit this product.");
-    window.location.href = "products-list.html";
+    window.location.href = "./ViewProducts.html";
 }
 
 document.getElementById("productId").value = product.id;
@@ -76,7 +75,7 @@ document.getElementById("updateProduct").addEventListener("click", function() {
 
     localStorage.setItem("ecommerceData", JSON.stringify(data));
     alert("Product updated successfully");
-    window.location.href = "products-list.html";
+    window.location.href = "./ViewProducts.html";
 });
 </script>
 
