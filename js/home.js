@@ -61,7 +61,7 @@ function renderCarousel(carouselId, items) {
     ${p.discount > 0 ? `<span class="discount">-${p.discount}%</span>` : ""}
 
 
-    <a class="icons" href="../pages/wishlist.html">
+    <a class="icons text-dark text-decoration-none" href="../pages/wishlist.html">
       <i class="far fa-heart"></i>
     </a>
 
@@ -176,7 +176,7 @@ startCountdown("2025-08-23T23:59:59", "Flash");
         <div class="hero-content">
           <h2>${product.category}</h2>
           <h1>${product.name} - ${product.discount > 0 ? product.discount + "% Off" : "Best Price"}</h1>
-          <button class="btn text-decoration-underline">Shop Now →</button>
+          <button class="btn " id="shopnow">Shop Now →</button>
         </div>
         <div class="hero-img">
           <img src="../assets/images/products/${product.imageUrl}" alt="${product.name}">
@@ -203,7 +203,7 @@ startCountdown("2025-08-23T23:59:59", "Flash");
     let productsHTML = "";
     randomProducts.forEach(p => {
       productsHTML += `
-        <a href="../pages/productDetails.html?id=${p.id}" class="product text-decoration-none text-dark">
+        <a href="../pages/productDetails.html?id=${p.id}" class="product bg-white text-decoration-none text-dark">
           <img src="../assets/images/products/${p.imageUrl}" 
                alt="${p.name}" 
                onerror="this.src='../assets/images/products/placeholder.jpg'">
