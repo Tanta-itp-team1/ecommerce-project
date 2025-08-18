@@ -329,6 +329,7 @@ hr {
   display: grid;
   gap: 1.5rem;
   width: 100%;
+  min-height: 100%;
   box-sizing: border-box;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
