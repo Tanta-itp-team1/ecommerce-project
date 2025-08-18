@@ -172,7 +172,7 @@ startCountdown("2025-08-23T23:59:59", "Flash");
     itemDiv.className = `carousel-item ${index === 0 ? "active" : ""}`;
 
     itemDiv.innerHTML = `
-      <div class="hero-banner">
+      <div class="hero-banner" onclick="goToProduct(${product.id})">
         <div class="hero-content">
           <h2>${product.category}</h2>
           <h1>${product.name} - ${product.discount > 0 ? product.discount + "% Off" : "Best Price"}</h1>
@@ -228,4 +228,31 @@ startCountdown("2025-08-23T23:59:59", "Flash");
 
 
 renderRandomCategories(products);
+
+
+function renderFeaturedGrid(products) {
+  
+  const randomProducts = [...products].sort(() => 0.5 - Math.random()).slice(0, 4);
+
+  const slots = ["one", "two", "three", "four"];
+  slots.forEach((slot, index) => {
+    const product = randomProducts[index];
+    const slotDiv = document.querySelector(`.${slot}`);
+
+    if (product && slotDiv) {
+      slotDiv.style.backgroundImage = `url('../assets/images/products/${product.imageUrl}')`;
+slotDiv.style.backgroundSize = " auto 80% "; 
+slotDiv.style.backgroundPosition = "center";
+slotDiv.style.backgroundRepeat = "no-repeat";
+slotDiv.style.backgroundPosition = "center";
+  slotDiv.style.backgroundRepeat = "no-repeat"; 
+  slotDiv.style.cursor = "pointer";
+
+      slotDiv.onclick = () => goToProduct(product.id);
+    }
+  });
+}
+
+renderFeaturedGrid(products);
+
 

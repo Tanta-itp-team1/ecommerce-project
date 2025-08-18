@@ -322,13 +322,30 @@ hr {
   margin: 0;
   color: #222;
 }
-
 #categoriesContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.5rem;
   width: 100%;
   box-sizing: border-box;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+/* 
+#categoriesContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+} */
+@media (max-width: 768px) {
+  .categoriesContainer {
+    display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  }
 }
 
 .mycard {
@@ -343,6 +360,8 @@ hr {
   transition: all 0.3s ease;
   cursor: pointer;
   text-align: center;
+  width: 100%;
+  min-height: 100%;
 }
 
 .mycard i {
@@ -377,35 +396,7 @@ hr {
 }
 
 
-@media (min-width: 1200px) {
-  #categoriesContainer {
-    grid-template-columns: repeat(6, 1fr); 
-  }
-}
 
-@media (min-width: 992px) and (max-width: 1199px) {
-  #categoriesContainer {
-    grid-template-columns: repeat(4, 1fr); 
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  #categoriesContainer {
-    grid-template-columns: repeat(3, 1fr); 
-  }
-}
-
-@media (max-width: 767px) {
-  #categoriesContainer {
-    grid-template-columns: repeat(2, 1fr); 
-  }
-}
-
-@media (max-width: 480px) {
-  #categoriesContainer {
-    grid-template-columns: 1fr; 
-  }
-}
 
 
 
@@ -451,26 +442,7 @@ hr {
 }
 
 
-@media (max-width: 768px) {
-  #sidebar {
-    position: fixed;
-    top: 0;
-    left: -260px;
-    height: 100%;
-    min-width: 250px;
-    background: white;
-    z-index: 2000;
-    overflow-y: auto;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-    transition: left 0.3s ease-in-out;
-  }
-  #sidebar.active {
-    left: 0;
-  }
-  .main-wrapper {
-    grid-template-columns: 1fr !important;
-  }
-}
+
 
 @media (max-width: 992px) {
   .product-card {
@@ -659,8 +631,9 @@ height: 100%;
 .one , .two , .three , .four{
 width: 100%;
 height: 100%;
-border-radius: 1px;
+border-radius: 10px;
 border: 1px black solid;
+padding: 1rem;
 }
 @media (max-width: 768px) {
   .featured-grid {
@@ -681,6 +654,7 @@ gap: 0.2rem;
 grid-template-columns: 1fr 1fr;
 height: 100%;
 }
+
 
 .one{
 
