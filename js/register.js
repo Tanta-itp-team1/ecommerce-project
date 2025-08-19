@@ -28,19 +28,15 @@ const togglePassword = (inputId, iconId) => {
 document.getElementById("togglePassword").addEventListener("click", () => togglePassword("password", "passwordIcon"));
 document.getElementById("toggleConfirmPassword").addEventListener("click", () => togglePassword("confirmPassword", "confirmPasswordIcon"));
 
-// Initialize Bootstrap toasts
 const successToast = new bootstrap.Toast(document.getElementById('toastSuccess'));
 const errorToast = new bootstrap.Toast(document.getElementById('toastError'));
 
-// Registration form
 document.getElementById("registerForm").addEventListener("submit", function(e) {
   e.preventDefault();
   
-  // Get form elements
   const form = e.target;
   const submitBtn = form.querySelector('button[type="submit"]');
   
-  // Get form values
   const name = document.getElementById("name");
   const email = document.getElementById("email");
   const password = document.getElementById("password");
@@ -52,7 +48,6 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
     input.classList.remove("is-invalid");
   });
 
-  // Validate inputs
   let isValid = true;
   
   if (name.value.trim().length < 2) {
@@ -86,17 +81,14 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Registering...';
 
-  // Get existing data
   const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData"));
   const users = ecommerceData.users || [];
 
-  // Check if email exists
   if (users.some(user => user.email === email.value.trim())) {
     email.classList.add("is-invalid");
     submitBtn.disabled = false;
     submitBtn.innerHTML = "Register";
     
-    // Show error toast
     document.getElementById('toastError').querySelector('.toast-body').textContent = "❌ Email already exists!";
     errorToast.show();
     return;
@@ -113,13 +105,11 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
       joinedDate: new Date().toISOString()
     };
 
-    // Update data
     users.push(newUser);
     ecommerceData.users = users;
     ecommerceData.lastUserId = newUser.id;
     localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
 
-    // Reset button state
     submitBtn.disabled = false;
     submitBtn.innerHTML = "Register";
 

@@ -48,7 +48,7 @@ handleResize();
 const validationPatterns = {
   name: /^[a-zA-Z\s]{2,50}$/,
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/
+  password: /^.{6,}$/
 };
 
 function initializeEcommerceData() {
@@ -87,7 +87,6 @@ function initializeEcommerceData() {
     };
     localStorage.setItem("ecommerceData", JSON.stringify(defaultData));
   } else {
-    // Ensure existing data has lastUserId set
     const existingData = JSON.parse(localStorage.getItem("ecommerceData"));
     if (!existingData.lastUserId && existingData.users && existingData.users.length > 0) {
       existingData.lastUserId = Math.max(...existingData.users.map(user => user.id));
@@ -213,7 +212,6 @@ function renderCustomersTable(customers) {
     });
   });
 
-  // Add event listeners to delete buttons
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
       const id = parseInt(this.getAttribute("data-id"));
@@ -225,7 +223,6 @@ function renderCustomersTable(customers) {
   });
 }
 
-// Validate form inputs
 function validateInput(input, pattern, errorMessage) {
   const isValid = pattern.test(input.value.trim());
   if (!isValid) {
@@ -237,7 +234,6 @@ function validateInput(input, pattern, errorMessage) {
   return isValid;
 }
 
-// Show loading state for button
 function setButtonLoading(button, isLoading) {
   if (isLoading) {
     button.classList.add("btn-loading");
@@ -253,7 +249,6 @@ document.addEventListener("DOMContentLoaded", function () {
   loadCustomers();
   updateNavbarUser();
 
-  // Initialize password toggle
   document.getElementById("toggleNewPassword").addEventListener("click", function () {
     const passwordInput = document.getElementById("newPassword");
     const icon = this.querySelector("i");
@@ -277,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("newPassword").addEventListener("input", function() {
-    validateInput(this, validationPatterns.password, "Password must be 8-20 characters with at least one uppercase, one lowercase, one number and one special character");
+    validateInput(this, validationPatterns.password, "Password must be at least 6 characters long");
   });
 
   document.getElementById("newRole").addEventListener("change", function() {
@@ -297,7 +292,6 @@ document.addEventListener("DOMContentLoaded", function () {
     validateInput(this, validationPatterns.email, "Please enter a valid email address");
   });
 
-  // Initialize filter event listeners
   document.getElementById("nameFilter").addEventListener("input", filterCustomers);
   document.getElementById("roleFilter").addEventListener("change", filterCustomers);
   document.getElementById("statusFilter").addEventListener("change", filterCustomers);
@@ -308,18 +302,15 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCustomers();
   });
 
-  // Save new customer
   document.getElementById("saveCustomerBtn").addEventListener("click", function () {
     const nameInput = document.getElementById("newName");
     const emailInput = document.getElementById("newEmail");
     const passwordInput = document.getElementById("newPassword");
     const roleInput = document.getElementById("newRole");
 
-    // Validate all fields
     const isNameValid = validateInput(nameInput, validationPatterns.name, "Please enter a valid name (2-50 characters)");
     const isEmailValid = validateInput(emailInput, validationPatterns.email, "Please enter a valid email address");
-    const isPasswordValid = validateInput(passwordInput, validationPatterns.password, "Password must be 8-20 characters with at least one uppercase, one lowercase, one number and one special character");
-    const isRoleValid = roleInput.value ? true : false;
+ const isPasswordValid = validateInput(passwordInput, validationPatterns.password, "Password must be at least 6 characters");    const isRoleValid = roleInput.value ? true : false;
     
     if (!isRoleValid) {
       roleInput.classList.add("is-invalid");
@@ -341,7 +332,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { users: [], lastUserId: 0 };
     const users = ecommerceData.users;
 
-    // Check if email already exists
     if (users.some((user) => user.email === email)) {
       emailInput.classList.add("is-invalid");
       emailInput.nextElementSibling.textContent = "Email already exists";
@@ -413,7 +403,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Check if email already exists for another user
     if (users.some((user, index) => user.email === email && index !== userIndex)) {
       emailInput.classList.add("is-invalid");
       emailInput.nextElementSibling.textContent = "Email already exists for another customer";
@@ -424,7 +413,6 @@ document.addEventListener("DOMContentLoaded", function () {
     setButtonLoading(this, true);
 
     setTimeout(() => {
-      // Update customer
       users[userIndex] = {
         ...users[userIndex],
         name,
@@ -517,7 +505,6 @@ function updateNavbarUser() {
     document.querySelector(".dropdown-menu .text-muted").textContent = 
       loggedInUser.role ? loggedInUser.role.charAt(0).toUpperCase() + loggedInUser.role.slice(1) : "User";
 
-    // Update avatar with user's initials
     const initials = loggedInUser.name.split(" ").map(n => n[0]).join("");
     const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=6366f1&color=fff`;
 

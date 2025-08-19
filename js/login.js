@@ -9,7 +9,7 @@
     } else if (user.role === "seller") {
       window.location.href = "../../Dashboard/sellerhome.html";
     } else {
-      window.location.href = "../about.html";
+      window.location.href = "../index.html";
     }
     return;
   }
@@ -55,17 +55,14 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   let isValid = true;
 
-  // Reset validation
   emailInput.classList.remove("is-invalid");
   passwordInput.classList.remove("is-invalid");
 
-  // Validate email
   if (!emailRegex.test(email)) {
     emailInput.classList.add("is-invalid");
     isValid = false;
   }
 
-  // Validate password
   if (password.length < 6) {
     passwordInput.classList.add("is-invalid");
     isValid = false;
@@ -73,7 +70,6 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 
   if (!isValid) return;
 
-  // Show loading state
   loginBtn.disabled = true;
   spinner.classList.remove("d-none");
   btnText.textContent = "Logging in...";
@@ -95,14 +91,13 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
         } else if (matchedUser.role === "seller") {
           window.location.href = "../../Dashboard/sellerhome.html";
         } else {
-          window.location.href = "../about.html";
+          window.location.href = "../index.html";
         }
       }, 2000);
     } else {
       new bootstrap.Toast(document.getElementById("loginErrorToast")).show();
     }
 
-    // Reset button state
     spinner.classList.add("d-none");
     btnText.textContent = "Login";
     loginBtn.disabled = false;
