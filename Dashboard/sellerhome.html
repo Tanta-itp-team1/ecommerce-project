@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./css/dashboard.css" />
+    <link rel="stylesheet" href="./css/dashboardhome.css" />
 </head>
 
 <body>
@@ -106,31 +107,9 @@
         <main class="w-100 main-content" style="max-height: 100vh;">
             <div class="container-fluid p-4">
                 <div class="row g-4">
-                    <!-- Total Orders -->
-                    <div class="col-md-6 col-lg-3 ">
-                        <div class="card text-white bg-info h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Orders</h5>
-                                <h2 id="totalOrders">0</h2>
-                                <small id="orderStatus">Pending: 0 | Completed: 0</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Total Revenue -->
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card text-white bg-success h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Revenue</h5>
-                                <h2 id="totalRevenue">$0</h2>
-                                <small id="frozenRevenue">Frozen: $0</small>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Total Products -->
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card text-white bg-warning h-100">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-white card-stat bg-gradient-primary h-100">
                             <div class="card-body">
                                 <h5 class="card-title">Products</h5>
                                 <h2 id="totalProducts">0</h2>
@@ -138,9 +117,30 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Total Orders -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-white card-stat bg-gradient-info h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Orders</h5>
+                                <h2 id="totalOrders">0</h2>
+                                <small id="orderStatus">Pending: 0 | Completed: 0</small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Total Revenue -->
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-white card-stat bg-gradient-success h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Revenue</h5>
+                                <h2 id="totalRevenue">$0</h2>
+                                <canvas id="revenueSparkline" height="40"></canvas>
+                                <small id="frozenRevenue">Frozen: $0</small>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Top Page -->
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card text-white bg-secondary h-100">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-white card-stat bg-gradient-secondary h-100">
                             <div class="card-body">
                                 <h5 class="card-title">Top Page</h5>
                                 <h2 id="topPage">N/A</h2>

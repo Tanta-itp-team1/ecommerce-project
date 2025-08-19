@@ -65,9 +65,37 @@ window.addEventListener("load", function () {
     "Nov",
     "Dec",
   ];
-
+  const revenueCtx = document
+    .getElementById("revenueSparkline")
+    .getContext("2d");
+new Chart(revenueCtx, {
+  type: "line",
+  data: {
+    labels: monthLabels,
+    datasets: [
+      {
+        data: salesByMonth,
+        borderColor: "#fff",
+        backgroundColor: "rgba(255,255,255,0.2)",
+        fill: true,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { display: false },
+      y: { display: false },
+    },
+  },
+});
   // Sales Overview (Line Chart)
   const ctxSales = document.getElementById("salesChart").getContext("2d");
+  const salesGradient = ctxSales.createLinearGradient(0, 0, 0, 200);
+  salesGradient.addColorStop(0, "rgba(78,115,223,0.3)");
+  salesGradient.addColorStop(1, "rgba(78,115,223,0)");
   new Chart(ctxSales, {
     type: "line",
     data: {
@@ -77,19 +105,21 @@ window.addEventListener("load", function () {
           label: "Sales ($)",
           data: salesByMonth,
           fill: true,
-          borderColor: "rgba(75, 192, 192, 1)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          tension: 0.3,
+          borderColor: "#4e73df",
+          backgroundColor: salesGradient,
+          fill: true,
+          tension: 0.4,
           pointRadius: 4,
-          pointBackgroundColor: "#4bc0c0",
+          pointHoverRadius: 6,
         },
       ],
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { position: "top" },
-        title: { display: true, text: "Monthly Sales Overview" },
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { ticks: { beginAtZero: true } },
       },
     },
   });
@@ -108,19 +138,10 @@ window.addEventListener("load", function () {
           data: [
             pendingOrders,
             completedOrders,
-            myOrders.filter((o) => o.status === "canceled").length,
+            ecommerceData.orders.filter((o) => o.status === "canceled").length,
           ],
-          backgroundColor: [
-            "rgba(255, 205, 86, 0.7)",
-            "rgba(75, 192, 192, 0.7)",
-            "rgba(255, 99, 132, 0.7)",
-          ],
-          borderColor: [
-            "rgba(255, 205, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(255, 99, 132, 1)",
-          ],
-          borderWidth: 1,
+          backgroundColor: ["#f6c23e", "#1cc88a", "#e74a3b"],
+          hoverOffset: 6,
         },
       ],
     },
@@ -128,8 +149,9 @@ window.addEventListener("load", function () {
       responsive: true,
       plugins: {
         legend: { position: "bottom" },
-        title: { display: true, text: "Orders by Status" },
+        tooltip: { enabled: true },
       },
+      cutout: "70%", // makes it a donut with empty center
     },
   });
 

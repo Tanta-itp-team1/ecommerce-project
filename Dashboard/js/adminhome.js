@@ -5,11 +5,7 @@ const totalUsers = document.getElementById("totalUsers");
 const totalOrders = document.getElementById("totalOrders");
 const totalRevenue = document.getElementById("totalRevenue");
 const totalProducts = document.getElementById("totalProducts");
-const totalVisitors = document.getElementById("totalVisitors");
-const topPage = document.getElementById("topPage");
-const topProduct = ecommerceData.products.reduce((max, product) => {
-  return product.soldCount > (max?.soldCount || 0) ? product : max;
-}, null);
+
 //all substats
 const newUsers = document.getElementById("newUsers");
 const orderStatus = document.getElementById("orderStatus");
@@ -21,6 +17,7 @@ const completedOrders = ecommerceData.orders.filter(
 ).length;
 const frozenRevenue = document.getElementById("frozenRevenue");
 const availableProducts = document.getElementById("availableProducts");
+const revenueGrowth = document.getElementById("revenueGrowth");
 //assigning to main stats
 totalUsers.innerText = ecommerceData.users.length;
 totalOrders.innerText = ecommerceData.orders.length;
@@ -31,17 +28,15 @@ totalRevenue.innerText =
     .filter((o) => o.status === "Delivered")
     .reduce((sum, order) => sum + (order.totalAmount || 0), 0)
     .toFixed(2);
-totalVisitors.innerText = 3250;
 //assigning to the substats
-newUsers.innerText =
-  "+" +
-  ecommerceData.users.filter((user) => {
-    let createdAt = new Date(user.createdAt || new Date());
-    return (
-      createdAt >= new Date(new Date().setMonth(new Date().getMonth() - 1))
-    );
-  }).length +
-  " new this month";
+const oneMonthAgo = new Date();
+oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+const newUsersCount = ecommerceData.users.filter((user) => {
+  if (!user.joinedDate) return false; // skip if missing
+  const createdAt = new Date(user.joinedDate);
+  return createdAt >= oneMonthAgo;
+}).length;
+newUsers.innerText = `+${newUsersCount} new this month`;
 orderStatus.innerText = `Pending: ${pendingOrders} | Completed: ${completedOrders}`;
 frozenRevenue.innerText = `Frozen: ${
   "$" +
@@ -52,11 +47,6 @@ frozenRevenue.innerText = `Frozen: ${
 }`;
 availableProducts.innerText =
   "Available: " + ecommerceData.products.filter((sp) => sp.stock > 0).length;
-if (topProduct) {
-  topPage.innerHTML = `<a href="../pages/productDetails.html?id=${topProduct.id}" class="text-white">${topProduct.name}</a>`;
-} else {
-  topPage.innerText = "N/A";
-}
 // second section charts
 window.addEventListener("load", function () {
   const salesByMonth = Array(12).fill(0); // Jan to Dec
@@ -83,9 +73,37 @@ window.addEventListener("load", function () {
     "Nov",
     "Dec",
   ];
-
+  const revenueCtx = document
+    .getElementById("revenueSparkline")
+    .getContext("2d");
+  new Chart(revenueCtx, {
+    type: "line",
+    data: {
+      labels: monthLabels,
+      datasets: [
+        {
+          data: salesByMonth,
+          borderColor: "#fff",
+          backgroundColor: "rgba(255,255,255,0.2)",
+          fill: true,
+          tension: 0.4,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { display: false },
+        y: { display: false },
+      },
+    },
+  });
   // --- Sales Overview (Line Chart) ---
   const ctxSales = document.getElementById("salesChart").getContext("2d");
+  const salesGradient = ctxSales.createLinearGradient(0, 0, 0, 200);
+  salesGradient.addColorStop(0, "rgba(78,115,223,0.3)");
+  salesGradient.addColorStop(1, "rgba(78,115,223,0)");
   new Chart(ctxSales, {
     type: "line",
     data: {
@@ -95,24 +113,21 @@ window.addEventListener("load", function () {
           label: "Sales ($)",
           data: salesByMonth,
           fill: true,
-          borderColor: "rgba(75, 192, 192, 1)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          tension: 0.3,
+          borderColor: "#4e73df",
+          backgroundColor: salesGradient,
+          fill: true,
+          tension: 0.4,
           pointRadius: 4,
-          pointBackgroundColor: "#4bc0c0",
+          pointHoverRadius: 6,
         },
       ],
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: {
-          position: "top",
-        },
-        title: {
-          display: true,
-          text: "Monthly Sales Overview",
-        },
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { ticks: { beginAtZero: true } },
       },
     },
   });
@@ -124,7 +139,7 @@ window.addEventListener("load", function () {
   new Chart(ctxOrders, {
     type: "pie",
     data: {
-      labels: ["Pending", "delivered", "Cancelled"],
+      labels: ["Pending", "Delivered", "Cancelled"],
       datasets: [
         {
           label: "Orders",
@@ -133,31 +148,18 @@ window.addEventListener("load", function () {
             completedOrders,
             ecommerceData.orders.filter((o) => o.status === "canceled").length,
           ],
-          backgroundColor: [
-            "rgba(255, 205, 86, 0.7)",
-            "rgba(75, 192, 192, 0.7)",
-            "rgba(255, 99, 132, 0.7)",
-          ],
-          borderColor: [
-            "rgba(255, 205, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(255, 99, 132, 1)",
-          ],
-          borderWidth: 1,
+          backgroundColor: ["#f6c23e", "#1cc88a", "#e74a3b"],
+          hoverOffset: 6,
         },
       ],
     },
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          position: "bottom",
-        },
-        title: {
-          display: true,
-          text: "Orders by Status",
-        },
+        legend: { position: "bottom" },
+        tooltip: { enabled: true },
       },
+      cutout: "70%", // makes it a donut with empty center
     },
   });
   // Fill Recent Orders
