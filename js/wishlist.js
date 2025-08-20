@@ -66,7 +66,7 @@ function renderProducts(containerId, products, type) {
       } else if (type === "suggested") {
         const isInWishlist = wishlistIds.includes(p.id);
         iconHTML = `<i class="${
-          isInWishlist ? "text-danger fas" : "far"
+          isInWishlist ? "redHeart fas" : "far"
         } fa-heart"></i>`;
         iconClickHandler = `toggleWishlist(${p.id})`;
       }
