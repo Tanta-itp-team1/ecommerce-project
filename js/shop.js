@@ -159,14 +159,15 @@ function searchProducts() {
       : ShopProducts.filter((product) => product.category === currentCategory);
 
   if (searchTerm === "") {
-    currentProducts = productsToSearch;
+    filteredProducts = productsToSearch;
   } else {
-    currentProducts = productsToSearch.filter((product) =>
+    filteredProducts = productsToSearch.filter((product) =>
       product.name.toLowerCase().includes(searchTerm)
     );
   }
-
-  renderProducts(currentProducts);
+  pagginationArr=filteredProducts.slice(0,12);
+  renderProducts(pagginationArr);
+  renderPaggination();
 }
 
 function sortProducts(sortType) {
@@ -179,7 +180,7 @@ function sortProducts(sortType) {
     });
   event.target.classList.add("active");
 
-  let sortedProducts = [...currentProducts];
+  let sortedProducts = [...filteredProducts];
 
   switch (sortType) {
     case "price-low":
@@ -189,30 +190,33 @@ function sortProducts(sortType) {
       sortedProducts.sort((a, b) => b.price - a.price);
       break;
     case "name":
-      sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
       break;
-    default:
+    default:sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
       break;
   }
 
-  currentProducts = sortedProducts;
-  renderProducts(currentProducts);
+  filteredProducts=sortedProducts;
+  pagginationArr=sortedProducts.slice(0,12)
+  renderProducts(pagginationArr);
+  renderPaggination();
 }
 
 function filterByPrice() {
   const minPrice = document.getElementById("minPrice").value || 0;
   const maxPrice = document.getElementById("maxPrice").value || 999999;
-
+ 
   let productsToFilter =
     currentCategory === "all"
-      ? ShopProducts
-      : ShopProducts.filter((product) => product.category === currentCategory);
+      ? currentProducts
+      : currentProducts.filter((product) => product.category === currentCategory);
 
-  currentProducts = productsToFilter.filter(
+  filteredProducts = productsToFilter.filter(
     (product) => product.price >= minPrice && product.price <= maxPrice
   );
-
-  renderProducts(currentProducts);
+  pagginationArr=filteredProducts.slice(0,12);
+  renderProducts(pagginationArr);
+  renderPaggination();
 }
 
 function setPriceRange(min, max) {
