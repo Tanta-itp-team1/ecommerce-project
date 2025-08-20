@@ -1,11 +1,20 @@
 
 const data = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
 const products = Array.isArray(data.products) ? data.products : [];
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || null;
 
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-
+let wishlistEntry = data.wishlist.find(w => w.userId === loggedInUser?.id);
+if (!wishlistEntry) {
+  wishlistEntry = { userId: loggedInUser?.id, productIds: [] };
+  data.wishlist.push(wishlistEntry);
+}
+let userCart = data.cart.find(c => c.userId === loggedInUser?.id);
+if (!userCart) {
+  userCart = { userId: loggedInUser?.id, items: [] };
+  data.cart.push(userCart);
+}
 function toast(msg) {
   const t = document.createElement("div");
   t.textContent = msg;
@@ -16,56 +25,65 @@ function toast(msg) {
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 1200);
 }
-
 function updateCounts() {
   const favEl = document.getElementById("favCount");
   const cartEl = document.getElementById("cartCount");
-  if (favEl) favEl.textContent = favorites.length;
-  if (cartEl) cartEl.textContent = cart.length;
+
+  if (favEl) favEl.textContent = wishlistEntry.productIds.length;
+  if (cartEl) {
+    const total = userCart.items.reduce((sum, item) => sum + item.quantity, 0);
+    cartEl.textContent = total;
+  }
 }
 
 
+
+
 function addToCart(productId) {
-  if (!cart.includes(productId)) {
-    cart.push(productId);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCounts();
-    toast("✅ Added to cart");
+  const existingItem = userCart.items.find(i => i.productId === productId);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+    toast("➕ Increased quantity in cart");
   } else {
-    toast("⚠️ Already in cart");
+    userCart.items.push({ productId, quantity: 1 });
+    toast("✅ Added to cart");
   }
+
+  localStorage.setItem("ecommerceData", JSON.stringify(data));
+  updateCounts();
 }
 
 
 function toggleFavorite(productId, btn) {
-  const i = favorites.indexOf(productId);
-  if (i > -1) {
-    favorites.splice(i, 1);
+  const idx = wishlistEntry.productIds.indexOf(productId);
+
+  if (idx > -1) {
+    wishlistEntry.productIds.splice(idx, 1);
     toast("❌ Removed from wishlist");
   } else {
-    favorites.push(productId);
+    wishlistEntry.productIds.push(productId);
     toast("❤️ Added to wishlist");
   }
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  updateCounts();
 
+  localStorage.setItem("ecommerceData", JSON.stringify(data));
+  updateCounts();
 
   if (btn) {
     const icon = btn.querySelector("i");
     if (icon) {
-      const isFav = favorites.includes(productId);
+      const isFav = wishlistEntry.productIds.includes(productId);
       icon.classList.toggle("fas", isFav);
       icon.classList.toggle("far", !isFav);
     }
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
   updateCounts();
 
 
-  const categories = [...new Set(JSON.parse(localstorage.getItem("ecommerceData")).categories)];
+  const categories = [...new Set(JSON.parse(localStorage.getItem("ecommerceData")).categories)];
   const categoriesContainer = document.getElementById("categoriesContainer");
 
   const icons = {
@@ -126,13 +144,13 @@ document.addEventListener("DOMContentLoaded", function () {
           ? (p.price - (p.price * p.discount / 100)).toFixed(2)
           : p.price;
 
-        const isFav = favorites.includes(p.id);
+const isFav = wishlistEntry.productIds.includes(p.id);
 
         cardsHTML += `
           <div class="product-card flex-fill mx-2">
             ${hasDiscount ? `<span class="discount">-${p.discount}%</span>` : ""}
 
-            <!-- فيڤوريت -->
+
             <button class="icons text-dark btn p-0" onclick="toggleFavorite(${p.id}, this)" title="Wishlist">
               <i class="${isFav ? "fas" : "far"} fa-heart"></i>
             </button>
