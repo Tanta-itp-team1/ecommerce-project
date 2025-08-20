@@ -263,20 +263,6 @@ body {
   padding: 0.25rem 0.5rem;
 }
 
-.role-badge-admin {
-  background-color: #dc3545;
-}
-
-.role-badge-seller {
-  background-color: #ffc107;
-  color: #000;
-}
-
-.role-badge-customer {
-  background-color: #0dcaf0;
-  color: #000;
-}
-
 .toast-container {
   position: fixed;
   top: 20px;
@@ -384,3 +370,45 @@ body {
 .role-badge-customer {
   background-color: #10b981;
 }
+
+
+.create-btn {
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #333;
+  margin: 2rem auto;
+
+
+}
+.create-btn:hover{
+  color: white;
+  background-color: darkblue;
+}
+.create-btn i {
+  margin-right: 5px;
+}
+.status-discount {
+  background: #ef4444; /* أحمر */
+  color: white;
+  border-radius: 5px;
+}
+.status-nodiscount {
+  background: #94a3b8; /* رمادي */
+  color: white;
+  border-radius: 5px;
+}
+.action-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin: 2px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: white;
+}
+.edit-btn { background: #3b82f6; }   /* أزرق */
+.delete-btn { background: #ef4444; } /* أحمر */
+.view-btn { background: #6b7280; }   /* رمادي */
+
