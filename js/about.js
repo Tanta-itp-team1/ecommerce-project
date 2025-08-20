@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     // If not logged in, replace with login link
     document.getElementById("account-menu").innerHTML = `
-      <a href="./auth/login.html">
+      <a href="login.html">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M24 27V24.3333C24 22.9188 23.5224 21.5623 22.6722 20.5621C21.8221 19.5619 20.669 19 19.4667 19H11.5333C10.331 19 9.17795 19.5619 8.32778 20.5621C7.47762 21.5623 7 22.9188 7 24.3333V27"

@@ -44,7 +44,21 @@ section {
   background: white;
   box-shadow: 0.1rem 0 0.2rem var(--border-color);
 }
+#searchInput:focus {
+  border: 1px solid lightgray !important;
+  outline: none !important;
+  box-shadow: none !important;
 
+}
+#searchButton{
+    border: 1px solid lightgray !important;
+
+}
+#searchButton:focus{
+    border: 1px solid lightgray !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 .main-wrapper {
   display: grid;
   grid-template-columns: 1fr 4fr;
@@ -601,7 +615,7 @@ border-radius: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.2rem;
-  height: 70vh;
+  height: 60vh;
   max-width: 100%;
   margin: auto 0;
 box-sizing: border-box;

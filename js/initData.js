@@ -293,6 +293,8 @@
         },
 
         // Electronics again
+        
+        //Electronics again
         {
           id: 21,
           name: "Controller",
@@ -400,6 +402,30 @@
           stock: 35,
           soldCount: 14,
           description: "Family board game set.",
+          imageUrl: "toy.png",
+          sellerId: 2,
+        },
+        {
+          id: 31,
+          name: "Red Car",
+          category: "Toys",
+          price: 50,
+          discount: 10,
+          stock: 40,
+          soldCount: 18,
+          description: "Fast RC car with rechargeable battery.",
+          imageUrl: "toy.png",
+          sellerId: 2,
+        },
+        {
+          id: 32,
+          name: "Racing Car",
+          category: "Toys",
+          price: 50,
+          discount: 10,
+          stock: 40,
+          soldCount: 18,
+          description: "Fast RC car with rechargeable battery.",
           imageUrl: "toy.png",
           sellerId: 2,
         },

@@ -37,7 +37,7 @@ function displayProductDetails(product) {
   document.getElementById("productCategory").textContent = product.category;
   document.getElementById(
     "productCategory"
-  ).href = `../index.html?category=${encodeURIComponent(product.category)}`;
+  ).href = `../pages/shop.html?category=${encodeURIComponent(product.category)}`;
   document.getElementById("productNameBreadcrumb").textContent = product.name;
 
   // Update main product info
@@ -52,7 +52,6 @@ function displayProductDetails(product) {
 
   document.getElementById("productDescription").textContent =
     product.description;
-  // Update stock status
   const stockElement = document.getElementById("stockStatus");
   if (product.stock > 0) {
     stockElement.textContent = `In Stock (${product.stock} available)`;
@@ -61,12 +60,10 @@ function displayProductDetails(product) {
     stockElement.textContent = "Out of Stock";
     stockElement.className = "text-danger";
   }
-  // Update image
   const imgElement = document.getElementById("productMainImage");
   imgElement.src = `../assets/images/products/${product.imageUrl}`;
   imgElement.alt = product.name;
 
-  // Update review count
   document.getElementById(
     "reviewCount"
   ).textContent = `(${product.soldCount} Reviews)`;
@@ -90,8 +87,19 @@ function decreaseQuantity() {
 
 function addToCart(productId, quantity) {
   if (!loggedInUser) {
-    alert("Please login to add items to your cart");
-    window.location.href = "../pages/auth/login.html";
+    const toast = new bootstrap.Toast(document.getElementById("buyToast"));
+    const toastBody = document.querySelector(".toast-body");
+    const toastHeader = document.querySelector(".toast-header strong");
+    
+    toastHeader.textContent = "Error";
+    toastBody.textContent = "Please login to add items to your cart";
+    document.getElementById("buyToast").classList.add("bg-danger");
+    
+    toast.show();
+    
+    setTimeout(() => {
+      window.location.href = "../pages/auth/login.html";
+    }, 2000);
     return;
   }
   const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || {
