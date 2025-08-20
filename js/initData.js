@@ -293,7 +293,7 @@
         },
 
         // Electronics again
-        
+
         //Electronics again
         {
           id: 21,
@@ -408,7 +408,7 @@
         {
           id: 31,
           name: "Red Car",
-          category: "Toys",
+          categoryId: 5, // Toys
           price: 50,
           discount: 10,
           stock: 40,
@@ -420,7 +420,7 @@
         {
           id: 32,
           name: "Racing Car",
-          category: "Toys",
+          categoryId: 5, // Toys
           price: 50,
           discount: 10,
           stock: 40,
