@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCounts();
 
 
-  const categories = [...new Set(products.map(p => p.category))];
+  const categories = [...new Set(JSON.parse(localstorage.getItem("ecommerceData")).categories)];
   const categoriesContainer = document.getElementById("categoriesContainer");
 
   const icons = {
