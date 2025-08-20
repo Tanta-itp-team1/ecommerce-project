@@ -40,6 +40,11 @@ function updateCounts() {
 
 
 function addToCart(productId) {
+  if (!loggedInUser) {
+    toast(" Please log in First.");
+    window.location.href = "../pages/auth/login.html";
+    return;
+  }
   const existingItem = userCart.items.find(i => i.productId === productId);
 
   if (existingItem) {
@@ -56,6 +61,11 @@ function addToCart(productId) {
 
 
 function toggleFavorite(productId, btn) {
+  if (!loggedInUser) {
+    toast("Please log in to add items to your cart");
+    window.location.href = "../pages/auth/login.html";
+    return;
+  }
   const idx = wishlistEntry.productIds.indexOf(productId);
 
   if (idx > -1) {
