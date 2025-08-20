@@ -22,9 +22,9 @@ toggleBtn.addEventListener("click", toggleSidebar);
 window.addEventListener("resize", handleResize);
 handleResize();
 
-menuLinks.forEach((link) => {
-  link.addEventListener("click", function () {
-    menuLinks.forEach((l) => l.classList.remove("active"));
-    this.classList.add("active");
-  });
-});
+// menuLinks.forEach((link) => {
+//   link.addEventListener("click", function () {
+//     menuLinks.forEach((l) => l.classList.remove("active"));
+//     this.classList.add("active");
+//   });
+// });
