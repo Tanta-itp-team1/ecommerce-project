@@ -144,7 +144,7 @@ function renderReviews() {
   });
 }
 
-// Render Add Review Form with Star Rating (Clickable)
+// Render Add Review Form with Star Rating
 function renderAddReviewForm() {
   const section = document.getElementById("add-review-section");
   section.innerHTML = "";
