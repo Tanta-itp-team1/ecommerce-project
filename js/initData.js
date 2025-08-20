@@ -1,7 +1,7 @@
 (function () {
   if (!localStorage.getItem("ecommerceData")) {
     console.log("Initializing E-commerce data in localStorage...");
-  
+
     const data = {
       users: [
         {
@@ -34,7 +34,7 @@
         {
           id: 1,
           name: "Men's Leather Jacket",
-          category: "Men's Fashion",
+          categoryId: 1,
           price: 120,
           discount: 15,
           stock: 25,
@@ -46,7 +46,7 @@
         {
           id: 2,
           name: "Men's Sneakers",
-          category: "Men's Fashion",
+          categoryId: 1,
           price: 60,
           discount: 10,
           stock: 50,
@@ -58,7 +58,7 @@
         {
           id: 3,
           name: "Men's Formal Shirt",
-          category: "Men's Fashion",
+          categoryId: 1,
           price: 35,
           discount: 0,
           stock: 70,
@@ -70,7 +70,7 @@
         {
           id: 4,
           name: "Men's Jeans",
-          category: "Men's Fashion",
+          categoryId: 1,
           price: 45,
           discount: 5,
           stock: 40,
@@ -82,7 +82,7 @@
         {
           id: 5,
           name: "Men's Hoodie",
-          category: "Men's Fashion",
+          categoryId: 1,
           price: 50,
           discount: 12,
           stock: 30,
@@ -96,7 +96,7 @@
         {
           id: 6,
           name: "Women's Summer Dress",
-          category: "Women's Fashion",
+          categoryId: 2,
           price: 40,
           discount: 10,
           stock: 45,
@@ -108,7 +108,7 @@
         {
           id: 7,
           name: "Women's Handbag",
-          category: "Women's Fashion",
+          categoryId: 2,
           price: 80,
           discount: 5,
           stock: 35,
@@ -120,7 +120,7 @@
         {
           id: 8,
           name: "Women's Heels",
-          category: "Women's Fashion",
+          categoryId: 2,
           price: 55,
           discount: 0,
           stock: 25,
@@ -132,7 +132,7 @@
         {
           id: 9,
           name: "Women's Blouse",
-          category: "Women's Fashion",
+          categoryId: 2,
           price: 30,
           discount: 8,
           stock: 50,
@@ -144,7 +144,7 @@
         {
           id: 10,
           name: "Women's Jeans",
-          category: "Women's Fashion",
+          categoryId: 2,
           price: 45,
           discount: 10,
           stock: 40,
@@ -158,7 +158,7 @@
         {
           id: 11,
           name: "Speaker LGT",
-          category: "Electronics",
+          categoryId: 3,
           price: 500,
           discount: 15,
           stock: 20,
@@ -170,7 +170,7 @@
         {
           id: 12,
           name: "Laptop Pro 15",
-          category: "Electronics",
+          categoryId: 3,
           price: 1200,
           discount: 20,
           stock: 15,
@@ -182,7 +182,7 @@
         {
           id: 13,
           name: "Playstation",
-          category: "Electronics",
+          categoryId: 3,
           price: 80,
           discount: 5,
           stock: 60,
@@ -194,7 +194,7 @@
         {
           id: 14,
           name: "Modern Keyboard",
-          category: "Electronics",
+          categoryId: 3,
           price: 200,
           discount: 10,
           stock: 35,
@@ -206,7 +206,7 @@
         {
           id: 15,
           name: "Bluetooth Speaker",
-          category: "Electronics",
+          categoryId: 3,
           price: 90,
           discount: 8,
           stock: 40,
@@ -220,7 +220,7 @@
         {
           id: 16,
           name: "Table with shilves",
-          category: "Furniture",
+          categoryId: 4,
           price: 350,
           discount: 12,
           stock: 10,
@@ -232,7 +232,7 @@
         {
           id: 17,
           name: " Chair",
-          category: "Furniture",
+          categoryId: 4,
           price: 150,
           discount: 10,
           stock: 25,
@@ -244,7 +244,7 @@
         {
           id: 18,
           name: "Sofa Set",
-          category: "Furniture",
+          categoryId: 4,
           price: 800,
           discount: 18,
           stock: 5,
@@ -256,7 +256,7 @@
         {
           id: 19,
           name: "Bed Frame",
-          category: "Furniture",
+          categoryId: 4,
           price: 400,
           discount: 15,
           stock: 8,
@@ -268,7 +268,7 @@
         {
           id: 20,
           name: "Bookshelf",
-          category: "Furniture",
+          categoryId: 4,
           price: 120,
           discount: 0,
           stock: 12,
@@ -282,7 +282,7 @@
         {
           id: 22,
           name: "Remote Control Car",
-          category: "Toys",
+          categoryId: 5,
           price: 50,
           discount: 10,
           stock: 40,
@@ -291,12 +291,14 @@
           imageUrl: "toy.png",
           sellerId: 2,
         },
-        
+
+        // Electronics again
+
         //Electronics again
         {
           id: 21,
           name: "Controller",
-          category: "Electronics",
+          categoryId: 3,
           price: 70,
           discount: 5,
           stock: 30,
@@ -305,11 +307,10 @@
           imageUrl: "controller2.png",
           sellerId: 2,
         },
-
         {
           id: 23,
           name: "Camera",
-          category: "Electronics",
+          categoryId: 3,
           price: 90,
           discount: 8,
           stock: 15,
@@ -321,7 +322,7 @@
         {
           id: 24,
           name: "Controller",
-          category: "Electronics",
+          categoryId: 3,
           price: 25,
           discount: 0,
           stock: 50,
@@ -333,7 +334,7 @@
         {
           id: 25,
           name: "Speaker high tech",
-          category: "Electronics",
+          categoryId: 3,
           price: 35,
           discount: 5,
           stock: 45,
@@ -347,7 +348,7 @@
         {
           id: 26,
           name: "Men's Watch",
-          category: "Men's Fashion",
+          categoryId: 1,
           price: 150,
           discount: 10,
           stock: 20,
@@ -359,7 +360,7 @@
         {
           id: 27,
           name: "bag",
-          category: "Women's Fashion",
+          categoryId: 2,
           price: 120,
           discount: 15,
           stock: 18,
@@ -371,7 +372,7 @@
         {
           id: 28,
           name: "TV",
-          category: "Electronics",
+          categoryId: 3,
           price: 350,
           discount: 12,
           stock: 25,
@@ -383,7 +384,7 @@
         {
           id: 29,
           name: "Recliner Chair",
-          category: "Furniture",
+          categoryId: 4,
           price: 500,
           discount: 20,
           stock: 6,
@@ -395,7 +396,7 @@
         {
           id: 30,
           name: "Board Game",
-          category: "Toys",
+          categoryId: 5,
           price: 40,
           discount: 8,
           stock: 35,
@@ -407,7 +408,7 @@
         {
           id: 31,
           name: "Red Car",
-          category: "Toys",
+          categoryId: 5, // Toys
           price: 50,
           discount: 10,
           stock: 40,
@@ -419,7 +420,7 @@
         {
           id: 32,
           name: "Racing Car",
-          category: "Toys",
+          categoryId: 5, // Toys
           price: 50,
           discount: 10,
           stock: 40,
@@ -452,10 +453,16 @@
           orderDate: "2025-08-10",
         },
       ],
+      categories: [
+        { id: 1, name: "Men's Fashion" },
+        { id: 2, name: "Women's Fashion" },
+        { id: 3, name: "Electronics" },
+        { id: 4, name: "Furniture" },
+        { id: 5, name: "Toys" },
+      ],
     };
     localStorage.setItem("ecommerceData", JSON.stringify(data));
-  }
-   else {
+  } else {
     console.log("E-commerce data already exists in localStorage.");
   }
 })();
