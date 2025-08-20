@@ -42,16 +42,14 @@ saveCategoryBtn.addEventListener("click", () => {
 });
 //edit category
 let id = null;
-document
-  .getElementsByTagName("tbody")[0]
-  .addEventListener("click", (e) => {
-    if (e.target.closest(".edit-btn")) {
-      id = parseInt(e.target.closest(".edit-btn").dataset.id, 10);
-      new bootstrap.Modal(document.getElementById("editCategoryModal")).show();
-      const editName = document.getElementById("editName");
-      editName.value = data.categories.find((c) => c.id === id).name;
-    }
-  });
+document.getElementsByTagName("tbody")[0].addEventListener("click", (e) => {
+  if (e.target.closest(".edit-btn")) {
+    id = parseInt(e.target.closest(".edit-btn").dataset.id, 10);
+    new bootstrap.Modal(document.getElementById("editCategoryModal")).show();
+    const editName = document.getElementById("editName");
+    editName.value = data.categories.find((c) => c.id === id).name;
+  }
+});
 document.getElementById("updateCategoryBtn").addEventListener("click", () => {
   const editName = document.getElementById("editName");
   let name = editName.value.trim();
@@ -65,7 +63,7 @@ document.getElementById("updateCategoryBtn").addEventListener("click", () => {
     .filter((n) => n)
     .join(" ");
   const exists = data.categories.some(
-    (c) => c.name.toLowerCase() === name.toLowerCase() && c.id !== currentEditId
+    (c) => c.name.toLowerCase() === name.toLowerCase() && c.id !== id
   );
   if (exists) {
     editName.classList.add("is-invalid");
@@ -147,7 +145,6 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
     categoryToDelete = null;
   }, 800); // little delay for UX
 });
-
 
 // ====== utilites functions ======
 // render category

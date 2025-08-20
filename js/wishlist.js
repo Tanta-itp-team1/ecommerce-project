@@ -166,6 +166,14 @@ function toggleWishlist(productId) {
   renderProducts("wishlist-container", updatedWishlistProducts, "wishlist");
   updateCounters();
 }
+function updateCounters() {
+  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || {};
+  const wishlistEntry = ecommerceData.wishlist?.find(w => w.userId === loggedInUser.id);
+  const cartEntry = ecommerceData.cart?.find(c => c.userId === loggedInUser.id);
+
+  document.getElementById("wishlist-count").textContent = wishlistEntry ? wishlistEntry.productIds.length : 0;
+  document.getElementById("cart-count").textContent = cartEntry ? cartEntry.items.reduce((sum, i) => sum + i.quantity, 0) : 0;
+}
 
 function removeFromWishlist(productId) {
   const wishlistEntry = ecommerceData["wishlist"].find(
@@ -270,7 +278,7 @@ moveAllBtn.addEventListener("click", (e) => {
 
 
   renderProducts("wishlist-container", [], "wishlist");
-  renderProducts("suggested-container", suggestedProducts, "suggested");
+renderProducts("suggested-container", getSuggestedProducts(), "suggested");
 
 
   moveAllBtn.innerHTML = `<i class="fas fa-check me-2"></i> Moved!`;

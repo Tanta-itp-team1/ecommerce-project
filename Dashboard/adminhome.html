@@ -18,10 +18,13 @@
             <button class="btn btn-link text-dark me-2" id="sidebarToggle">
                 <i class="bi bi-list fs-4"></i>
             </button>
-            <a class="navbar-brand fw-bold text-dark" href="dashboard.html">
+            <a class="navbar-brand fw-bold text-dark" href="#">
                 <span class="text-primary">Admin</span>Pro
             </a>
-            <div class="d-flex ms-auto">
+            <a href="../Home/homepage.html" target="_blank" class="btn btn-outline-primary ms-auto">
+                Visit Site
+            </a>
+            <div class="d-flex ms-2">
                 <div class="dropdown">
                     <div class="user-profile dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff"
@@ -44,8 +47,8 @@
                             <hr class="dropdown-divider my-2" />
                         </li>
                         <li>
-                            <a class="dropdown-item d-flex align-items-center py-2" href="admin-profile.html"><i
-                                    class="bi bi-person me-2"></i>Profile</a>
+                            <a class="dropdown-item d-flex align-items-center py-2" href="../pages/account.html"><i
+                                    class="bi bi-person me-2"></i>Account</a>
                         </li>
                         <li onclick="logout()">
                             <a class="dropdown-item d-flex align-items-center py-2 text-danger" href="#"><i
@@ -74,21 +77,10 @@
                 <li class="sidebar-divider"></li>
 
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#productsCollapse">
+                    <a class="nav-link" href="ViewProducts.html">
                         <i class="bi bi-box-seam"></i>
                         <span>Products</span>
-                        <i class="bi bi-chevron-down float-end small"></i>
                     </a>
-                    <div class="collapse" id="productsCollapse">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="./ViewProducts.html">All Products</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="./Create.html">Add New</a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="categories.html">

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 <body>
-    <!-- Check if user is logged in and has admin role -->
+
     <script>
         (function() {
             const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -20,7 +20,7 @@
         })();
     </script>
 
-    <!-- Toast container -->
+
     <div class="toast-container">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -43,8 +43,10 @@
             <a class="navbar-brand fw-bold text-dark" href="dashboard.html">
                <span class="text-primary">Admin</span>Pro
             </a>
-            
-            <div class="d-flex ms-auto">
+            <a href="../Home/homepage.html" target="_blank" class="btn btn-outline-primary ms-auto">
+                Visit Site
+            </a>
+            <div class="d-flex ms-2">
                 <div class="dropdown">
                     <div class="user-profile dropdown-toggle" data-bs-toggle="dropdown">
                         <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Admin">
