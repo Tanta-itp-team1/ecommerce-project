@@ -225,7 +225,7 @@
   </div>
 </div>
 
-<!-- ========== Delete Confirm Modal ========== -->
+
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-3 shadow">
@@ -248,7 +248,6 @@
           <i class="fas fa-plus"></i> Create Product
         </button>
 
-
         <h1 class="mb-4"><i class="fas fa-box"></i> Products</h1>
         <div class="table-responsive">
           <table class="table table-striped table-hover align-middle">
@@ -265,8 +264,15 @@
             <tbody id="productsTableBody"></tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls -->
+        <nav>
+          <ul class="pagination justify-content-center mt-3" id="pagination"></ul>
+        </nav>
+
       </div>
     </div>
+
 <script>
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || { role: "admin" };
 let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
@@ -276,26 +282,44 @@ let visibleProducts = loggedInUser.role === "seller"
   ? allProducts.filter(p => p.sellerId === loggedInUser.id)
   : allProducts;
 
-renderProducts("productsTableBody", visibleProducts);
+// ==================== Pagination ====================
+let currentPage = 1;
+let itemsPerPage = 5;
+
+// ==================== Toast Function ====================
+function showToast(message, type = "success") {
+  const toastEl = document.getElementById("liveToast");
+  const toastBody = document.getElementById("toastMessage");
+
+  toastBody.textContent = message;
+  toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+
+  const toast = new bootstrap.Toast(toastEl);
+  toast.show();
+}
 
 // ==================== Render Products ====================
-function renderProducts(containerId, products) {
+function renderProducts(containerId, products, page = 1) {
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginated = products.slice(start, end);
+
   const container = document.getElementById(containerId);
   container.innerHTML = "";
 
-  if (!products.length) {
+  if (!paginated.length) {
     container.innerHTML = `<tr><td colspan="6">No products found</td></tr>`;
     return;
   }
 
-  products.forEach((p, index) => {
+  paginated.forEach((p, index) => {
     const imageSrc = p.imageUrl && p.imageUrl.startsWith("data:")
       ? p.imageUrl
       : `../assets/images/products/${p.imageUrl || "default.png"}`;
 
     container.innerHTML += `
       <tr>
-        <td>${index + 1}</td>
+        <td>${start + index + 1}</td>
         <td><img src="${imageSrc}" alt="${p.name}" style="width:80px; height:80px; object-fit:cover;"></td>
         <td>${p.name}</td>
         <td class="fw-bold d-none d-md-table-cell">$${p.price}</td>
@@ -310,8 +334,11 @@ function renderProducts(containerId, products) {
       </tr>
     `;
   });
+
+  renderPagination(products.length, page);
 }
 
+// ==================== Control Buttons ====================
 function showControlButtons(product) {
   if (loggedInUser.role === "admin" || (loggedInUser.role === "seller" && product.sellerId === loggedInUser.id)) {
     return `
@@ -327,12 +354,30 @@ function showControlButtons(product) {
     `;
   }
   return `
-     <button class="btn btn-sm btn-secondary" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
-        <i class="fas fa-eye"></i> View
-      </button>
+    <button class="btn btn-sm btn-secondary" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
+      <i class="fas fa-eye"></i> View
+    </button>
   `;
 }
 
+// ==================== Pagination ====================
+function renderPagination(totalItems, page) {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    pagination.innerHTML += `
+      <li class="page-item ${i === page ? 'active' : ''}">
+        <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+      </li>`;
+  }
+}
+
+function goToPage(page) {
+  currentPage = page;
+  renderProducts("productsTableBody", visibleProducts, currentPage);
+}
 
 // ==================== Image Upload ====================
 let selectedImageCreate = "";
@@ -362,42 +407,28 @@ setupImageUpload("productImageEdit", "previewImageEdit", "edit");
 // For Create Modal
 setupImageUpload("productImageCreate", "previewImageCreate", "create");
 
-// ==================== Validation Regex ====================
+// ==================== Validation ====================
 const nameRegex = /^[A-Za-z][A-Za-z0-9 ]*$/; 
 
 function validateFields(name, category, price, discount, stock, image) {
   let isValid = true;
 
-  // Product Name
-  if (!nameRegex.test(name.value.trim())) {
-    name.classList.add("is-invalid"); isValid = false;
-  } else { name.classList.remove("is-invalid"); }
+  if (!nameRegex.test(name.value.trim())) { name.classList.add("is-invalid"); isValid = false; }
+  else { name.classList.remove("is-invalid"); }
 
-  // Category
-  if (!category.value.trim()) {
-    category.classList.add("is-invalid"); isValid = false;
-  } else { category.classList.remove("is-invalid"); }
+  if (!category.value.trim()) { category.classList.add("is-invalid"); isValid = false; }
+  else { category.classList.remove("is-invalid"); }
 
-  // Price
-  if (price.value <= 0 || !price.value) {
-    price.classList.add("is-invalid"); isValid = false;
-  } else { price.classList.remove("is-invalid"); }
+  if (price.value <= 0 || !price.value) { price.classList.add("is-invalid"); isValid = false; }
+  else { price.classList.remove("is-invalid"); }
 
-  // Discount
-  if (discount.value < 0 || discount.value > 100) {
-    discount.classList.add("is-invalid"); isValid = false;
-  } else { discount.classList.remove("is-invalid"); }
+  if (discount.value < 0 || discount.value > 100) { discount.classList.add("is-invalid"); isValid = false; }
+  else { discount.classList.remove("is-invalid"); }
 
-  // Stock
-  if (stock.value < 0 || !stock.value) {
-    stock.classList.add("is-invalid"); isValid = false;
-  } else { stock.classList.remove("is-invalid"); }
+  if (stock.value < 0 || !stock.value) { stock.classList.add("is-invalid"); isValid = false; }
+  else { stock.classList.remove("is-invalid"); }
 
-  // Image
-  if (!image) {
-    showToast("Image is required", "danger");
-    isValid = false;
-  }
+  if (!image) { showToast("Image is required", "danger"); isValid = false; }
 
   return isValid;
 }
@@ -431,7 +462,11 @@ document.getElementById("createProductBtn").addEventListener("click", function (
   showToast("Product created successfully!", "success");
   bootstrap.Modal.getInstance(document.getElementById("createProductModal")).hide();
 
-  renderProducts("productsTableBody", ecommerceData.products);
+  visibleProducts = (loggedInUser.role === "seller")
+    ? ecommerceData.products.filter(p => p.sellerId === loggedInUser.id)
+    : ecommerceData.products;
+
+  renderProducts("productsTableBody", visibleProducts, currentPage);
 });
 
 // ==================== Edit Product ====================
@@ -487,7 +522,11 @@ document.getElementById("updateProductBtn").addEventListener("click", function (
   showToast("Product updated successfully!", "success");
   bootstrap.Modal.getInstance(document.getElementById("editProductModal")).hide();
 
-  renderProducts("productsTableBody", ecommerceData.products);
+  visibleProducts = (loggedInUser.role === "seller")
+    ? ecommerceData.products.filter(p => p.sellerId === loggedInUser.id)
+    : ecommerceData.products;
+
+  renderProducts("productsTableBody", visibleProducts, currentPage);
 });
 
 // ==================== Delete Product ====================
@@ -507,32 +546,25 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", function()
   ecommerceData.products = ecommerceData.products.filter(p => p.id != productToDelete);
   localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
 
-  document.querySelector(`.delete-btn[data-id="${productToDelete}"]`).closest("tr").remove();
-
   showToast("Product deleted successfully!", "success");
   productToDelete = null;
 
   bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal")).hide();
-});
 
-  
+  visibleProducts = (loggedInUser.role === "seller")
+    ? ecommerceData.products.filter(p => p.sellerId === loggedInUser.id)
+    : ecommerceData.products;
+
+  renderProducts("productsTableBody", visibleProducts, currentPage);
+});
 
 // ==================== Sidebar Toggle ====================
 document.getElementById("sidebarToggle").addEventListener("click", function() {
   document.getElementById("adminSidebar").classList.toggle("collapsed");
 });
 
-// ==================== Toast Function ====================
-function showToast(message, type = "success") {
-  const toastEl = document.getElementById("liveToast");
-  const toastBody = document.getElementById("toastMessage");
-
-  toastBody.textContent = message;
-  toastEl.className = `toast align-items-center text-bg-${type} border-0`;
-
-  const toast = new bootstrap.Toast(toastEl);
-  toast.show();
-}
+// ==================== First Load ====================
+renderProducts("productsTableBody", visibleProducts, currentPage);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
