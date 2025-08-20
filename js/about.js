@@ -64,7 +64,7 @@ function updateCounters() {
     (c) => c.userId === loggedInUser.id
   );
   const cartCount = userCart
-    ? userCart.items.reduce((sum, i) => sum + i.quantity, 0)
+    ? userCart.items.length
     : 0;
   document.getElementById("cart-count").textContent = cartCount;
 }
