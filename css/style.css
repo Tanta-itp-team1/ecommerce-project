@@ -207,6 +207,16 @@ body {
   text-decoration: none;
   transition: all 0.3s ease;
 }
+#move-all-to-bag{
+   background: white;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
 
 .see-all-btn:hover,
 .move-all-btn:hover {
