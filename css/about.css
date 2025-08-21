@@ -4,9 +4,7 @@ body{
 header .navwrapper {
     border-bottom: 1px solid rgb(0 0 0 / 21%);
 }
-header nav ul li a.active {
-    border-bottom: 1px solid black;
-}
+
 header nav .navbar-brand {
     font-size: 24px;
     letter-spacing: 3%;
@@ -17,8 +15,13 @@ header nav ul li {
 }
 header nav ul li a {
     padding-bottom: 0 !important;
+    transition: all .2s ease-in-out !important;
 }
-
+header nav ul li a.active,
+header nav ul li a:hover {
+    color: #DB4444 !important;
+    transform: scale(1.1);
+}
 header .icons a {
     text-decoration: none;
     color: black;
