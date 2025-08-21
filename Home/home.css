@@ -91,10 +91,7 @@ section {
   display: none;
 }
 
-.landing {
-  padding: 4rem 2rem;
-  height: 80vh;
-}
+
 #countdown ,#flashcountdown{
   color: var(--main-color);
 }
@@ -104,12 +101,19 @@ section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  background: #000;
-  color: white;
-  padding: 2rem;
-  border-radius: 10px;
+  background: lightgrey;
+  color: black;
+  height: 70vh;
+  width: 100%;
 }
-
+.hero-img{
+  height: 90%;
+  width: 80%;
+  padding: 1rem;
+}
+.hero-content{
+  padding: 0 10%;
+}
 .hero-content h2 {
   font-size: 1.5rem;
   font-weight: 400;
@@ -118,15 +122,19 @@ section {
 .hero-content h1 {
   font-size: 2rem;
   font-weight: bold;
-  margin: 1rem 0;
+  margin: 1rem auto;
 }
 
 .hero-img img {
   width: 100%;
-  max-height: 300px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
 }
-
+.hero #carouselIndicators {
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+}
 .Flash {
   max-width: 95vw;
   padding: 1rem 2rem;
@@ -157,9 +165,6 @@ section {
   border-radius: 2px;
 }
 
-#landing-carousel {
-  height: 60vh;
-}
 
 .carousel-caption h5,
 .carousel-caption p {
@@ -360,7 +365,8 @@ hr {
 }
 
 .mycard {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
+  
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.5rem 1rem;
@@ -512,18 +518,18 @@ footer {
   text-decoration: underline;
 }
 .random-categories{
-  min-height: 80vh;
+  min-height: 60vh;
   width: 70vw;
-background-color: gray;
+/* background-color: gray; */
 border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(4,auto);
   padding: 2rem;
-  margin: 1rem;
+  margin: 0.5rem;
 }
 .random-categories .category-card {
-  border: 1px solid white;
-  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
   
   height: 100%;
   padding: 1rem;
@@ -531,7 +537,7 @@ border-radius: 10px;
   background: transparent;
   color: white;
   margin: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
 }
 
 .random-categories .category-card h3 {
@@ -550,8 +556,9 @@ border-radius: 10px;
 }
 
 .random-categories .product {
-  border: 1px solid white;
-  border-radius: 8px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
   padding: 0.5rem;
   text-align: center;
   transition: transform 0.2s ease;

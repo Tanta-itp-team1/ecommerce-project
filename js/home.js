@@ -3,6 +3,81 @@ const data = JSON.parse(localStorage.getItem("ecommerceData")) || { products: []
 const products = Array.isArray(data.products) ? data.products : [];
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || null;
 
+
+
+  function renderCarousel(carouselId, items) {
+    const carouselInner = document.querySelector(`${carouselId} .carousel-inner`);
+    if (!carouselInner) return;
+    carouselInner.innerHTML = "";
+
+    function getItemsPerSlide() {
+      if (window.innerWidth < 576) return 1;
+      if (window.innerWidth < 768) return 2;
+      if (window.innerWidth < 992) return 3;
+      return 4;
+    }
+
+    const itemsPerSlide = getItemsPerSlide();
+
+    for (let i = 0; i < items.length; i += itemsPerSlide) {
+      const chunk = items.slice(i, i + itemsPerSlide);
+      const activeClass = i === 0 ? "active" : "";
+      let cardsHTML = "";
+
+      chunk.forEach(p => {
+        const hasDiscount = Number(p.discount) > 0;
+        const priceNow = hasDiscount
+          ? (p.price - (p.price * p.discount / 100)).toFixed(2)
+          : p.price;
+
+const isFav = wishlistEntry.productIds.includes(p.id);
+
+        cardsHTML += `
+          <div class="product-card flex-fill mx-2">
+            ${hasDiscount ? `<span class="discount">-${p.discount}%</span>` : ""}
+
+
+            <button class="icons text-dark btn p-0" onclick="toggleFavorite(${p.id}, this)" title="Wishlist">
+              <i class="${isFav ? "fas" : "far"} fa-heart"></i>
+            </button>
+
+            <img src="../assets/images/products/${p.imageUrl}"
+                 alt="${p.name}"
+                 onerror="this.src='../assets/images/products/placeholder.jpg'">
+
+            <h4>${p.name}</h4>
+            <div class="price">
+              ${
+                hasDiscount
+                  ? `<span class="old">$${p.price}</span>
+                     <span class="new">$${priceNow}</span>`
+                  : `<span class="new">$${p.price}</span>`
+              }
+            </div>
+
+            <!-- كارت -->
+            <button class="add-to-cart btn" onclick="addToCart(${p.id})">
+              <i class="fas fa-shopping-cart"></i> Add To Cart
+            </button>
+          </div>
+        `;
+      });
+
+      carouselInner.innerHTML += `
+        <div class="carousel-item ${activeClass}">
+          <div class="d-flex justify-content-center">
+            ${cardsHTML}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function goToProduct(id) {
+    window.location.href = `../pages/productDetails.html?id=${id}`;
+  }
+
+
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let wishlistEntry = data.wishlist.find(w => w.userId === loggedInUser?.id);
@@ -131,78 +206,6 @@ if (categoriesContainer) {
 
 
 
-  function renderCarousel(carouselId, items) {
-    const carouselInner = document.querySelector(`${carouselId} .carousel-inner`);
-    if (!carouselInner) return;
-    carouselInner.innerHTML = "";
-
-    function getItemsPerSlide() {
-      if (window.innerWidth < 576) return 1;
-      if (window.innerWidth < 768) return 2;
-      if (window.innerWidth < 992) return 3;
-      return 4;
-    }
-
-    const itemsPerSlide = getItemsPerSlide();
-
-    for (let i = 0; i < items.length; i += itemsPerSlide) {
-      const chunk = items.slice(i, i + itemsPerSlide);
-      const activeClass = i === 0 ? "active" : "";
-      let cardsHTML = "";
-
-      chunk.forEach(p => {
-        const hasDiscount = Number(p.discount) > 0;
-        const priceNow = hasDiscount
-          ? (p.price - (p.price * p.discount / 100)).toFixed(2)
-          : p.price;
-
-const isFav = wishlistEntry.productIds.includes(p.id);
-
-        cardsHTML += `
-          <div class="product-card flex-fill mx-2">
-            ${hasDiscount ? `<span class="discount">-${p.discount}%</span>` : ""}
-
-
-            <button class="icons text-dark btn p-0" onclick="toggleFavorite(${p.id}, this)" title="Wishlist">
-              <i class="${isFav ? "fas" : "far"} fa-heart"></i>
-            </button>
-
-            <img src="../assets/images/products/${p.imageUrl}"
-                 alt="${p.name}"
-                 onerror="this.src='../assets/images/products/placeholder.jpg'">
-
-            <h4>${p.name}</h4>
-            <div class="price">
-              ${
-                hasDiscount
-                  ? `<span class="old">$${p.price}</span>
-                     <span class="new">$${priceNow}</span>`
-                  : `<span class="new">$${p.price}</span>`
-              }
-            </div>
-
-            <!-- كارت -->
-            <button class="add-to-cart btn" onclick="addToCart(${p.id})">
-              <i class="fas fa-shopping-cart"></i> Add To Cart
-            </button>
-          </div>
-        `;
-      });
-
-      carouselInner.innerHTML += `
-        <div class="carousel-item ${activeClass}">
-          <div class="d-flex justify-content-center">
-            ${cardsHTML}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  function goToProduct(id) {
-    window.location.href = `../pages/productDetails.html?id=${id}`;
-  }
-
   const flashSales = products.filter(p => Number(p.discount) > 0).slice(0, 12);
   const bestSelling = [...products].sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0)).slice(0, 12);
   const newArrivals = [...products].slice(-8);
@@ -265,6 +268,9 @@ const isFav = wishlistEntry.productIds.includes(p.id);
     featuredProducts.forEach((product, index) => {
       const indicatorBtn = document.createElement("button");
       indicatorBtn.type = "button";
+      indicatorBtn.style.backgroundColor="var(--main-color)";
+      indicatorBtn.style.height="2rem";
+      indicatorBtn.style.width="2rem";
       indicatorBtn.setAttribute("data-bs-target", "#landingCarousel");
       indicatorBtn.setAttribute("data-bs-slide-to", index);
       if (index === 0) indicatorBtn.classList.add("active");
@@ -293,22 +299,22 @@ function renderRandomCategories(categories, products) {
   if (!container) return;
   container.innerHTML = "";
 
-  // نختار ٤ كاتيجوري random
+
   const randomCategories = [...categories]
     .sort(() => 0.5 - Math.random())
     .slice(0, 4);
 
   randomCategories.forEach(cat => {
-    // المنتجات الخاصة بالكاتيجوري
+
     const catProducts = products.filter(p => p.categoryId === cat.id);
 
-    // نختار ٤ منتجات random من الكاتيجوري
+
     const randomProducts = catProducts
       .sort(() => 0.5 - Math.random())
       .slice(0, 4);
 
-    // بناء HTML للمنتجات
-    let productsHTML = "";
+
+      let productsHTML = "";
     randomProducts.forEach(p => {
       productsHTML += `
         <a href="../pages/productDetails.html?id=${p.id}" 
@@ -322,10 +328,10 @@ function renderRandomCategories(categories, products) {
       `;
     });
 
-    // إضافة الكاتيجوري مع منتجاتها للـ container
+
     container.innerHTML += `
       <div class="col-12 col-md-6 col-lg-3">
-        <div class="category-card">
+        <div class="category-card text-dark">
           <h3>${cat.name}</h3>
           <div class="products-grid">
             ${productsHTML}
@@ -336,7 +342,7 @@ function renderRandomCategories(categories, products) {
   });
 }
 
-// ناديلها بالـ data الجديدة
+
 renderRandomCategories(categories, products);
 
 

@@ -129,10 +129,10 @@
             <div class="invalid-feedback">Name must start with a letter</div>
           </div>
           <div class="mb-3">
-            <label class="form-label">Category</label>
-            <input type="text" id="productCategoryCreate" class="form-control" required>
-            <div class="invalid-feedback">Category is required</div>
-          </div>
+  <label class="form-label">Category</label>
+  <select id="productCategoryCreate" class="form-select" required></select>
+  <div class="invalid-feedback">Category is required</div>
+</div>
           <div class="row g-2">
             <div class="col-md-4">
               <label class="form-label">Price</label>
@@ -158,6 +158,11 @@
             <label class="form-label">Product Image</label>
             <input type="file" id="productImageCreate" class="form-control" accept="image/*" required>
             <img id="previewImageCreate" class="img-fluid mt-2 d-none" style="max-height: 200px;">
+
+            <input type="file" id="productImageCreate" class="form-control">
+<input type="text" id="productImageUrlCreate" class="form-control mt-2" placeholder="Or enter Image URL">
+
+
           </div>
         </form>
       </div>
@@ -185,10 +190,13 @@
             <div class="invalid-feedback">Name must start with a letter</div>
           </div>
           <div class="mb-3">
-            <label class="form-label">Category</label>
-            <input type="text" id="productCategoryEdit" class="form-control" required>
-            <div class="invalid-feedback">Category is required</div>
-          </div>
+  <label class="form-label">Category</label>
+  <select id="productCategoryEdit" class="form-select" required></select>
+  <div class="invalid-feedback">Category is required</div>
+</div>
+
+          
+
           <div class="row g-2">
             <div class="col-md-4">
               <label class="form-label">Price</label>
@@ -214,6 +222,10 @@
             <label class="form-label">Product Image</label>
             <input type="file" id="productImageEdit" class="form-control" accept="image/*">
             <img id="previewImageEdit" class="img-fluid mt-2 d-none" style="max-height: 200px;">
+            
+<input type="file" id="productImageEdit" class="form-control">
+<input type="text" id="productImageUrlEdit" class="form-control mt-2" placeholder="Or enter Image URL">
+
           </div>
         </form>
       </div>
@@ -432,22 +444,20 @@ function validateFields(name, category, price, discount, stock, image) {
 
   return isValid;
 }
-
-// ==================== Create Product ====================
 document.getElementById("createProductBtn").addEventListener("click", function () {
   const name = document.getElementById("productNameCreate");
-  const category = document.getElementById("productCategoryCreate");
+  const categoryId = parseInt(document.getElementById("productCategoryCreate").value);
   const price = document.getElementById("productPriceCreate");
   const discount = document.getElementById("productDiscountCreate");
   const stock = document.getElementById("productStockCreate");
   const description = document.getElementById("productDescriptionCreate");
 
-  if (!validateFields(name, category, price, discount, stock, selectedImageCreate)) return;
+  if (!validateFields(name, categoryId, price, discount, stock, selectedImageCreate)) return;
 
   let newProduct = {
     id: Date.now(),
     name: name.value.trim(),
-    category: category.value.trim(),
+    categoryId,
     price: parseFloat(price.value),
     discount: parseInt(discount.value) || 0,
     stock: parseInt(stock.value) || 0,
@@ -479,7 +489,7 @@ document.addEventListener("click", function(e) {
       localStorage.setItem("editProductId", product.id);
 
       document.getElementById("productNameEdit").value = product.name;
-      document.getElementById("productCategoryEdit").value = product.category;
+      populateCategoryDropdown("productCategoryEdit", product.categoryId);
       document.getElementById("productPriceEdit").value = product.price;
       document.getElementById("productDiscountEdit").value = product.discount;
       document.getElementById("productStockEdit").value = product.stock;
@@ -498,19 +508,19 @@ document.addEventListener("click", function(e) {
 
 document.getElementById("updateProductBtn").addEventListener("click", function () {
   const name = document.getElementById("productNameEdit");
-  const category = document.getElementById("productCategoryEdit");
+  const categoryId = parseInt(document.getElementById("productCategoryEdit").value);
   const price = document.getElementById("productPriceEdit");
   const discount = document.getElementById("productDiscountEdit");
   const stock = document.getElementById("productStockEdit");
   const description = document.getElementById("productDescriptionEdit");
 
-  if (!validateFields(name, category, price, discount, stock, selectedImageEdit)) return;
+  if (!validateFields(name, categoryId, price, discount, stock, selectedImageEdit)) return;
 
   const productId = parseInt(localStorage.getItem("editProductId"));
   let product = ecommerceData.products.find(p => p.id === productId);
 
   product.name = name.value.trim();
-  product.category = category.value.trim();
+  product.categoryId = categoryId;
   product.price = parseFloat(price.value);
   product.discount = parseInt(discount.value) || 0;
   product.stock = parseInt(stock.value) || 0;
@@ -528,6 +538,19 @@ document.getElementById("updateProductBtn").addEventListener("click", function (
 
   renderProducts("productsTableBody", visibleProducts, currentPage);
 });
+// ==================== Category Dropdown ====================
+function populateCategoryDropdown(selectId, selectedId = null) {
+  const select = document.getElementById(selectId);
+  select.innerHTML = `<option value="">Select Category</option>`;
+
+  ecommerceData.categories.forEach(cat => {
+    const option = document.createElement("option");
+    option.value = cat.id;
+    option.textContent = cat.name;
+    if (selectedId && selectedId == cat.id) option.selected = true;
+    select.appendChild(option);
+  });
+}
 
 // ==================== Delete Product ====================
 let productToDelete = null;
