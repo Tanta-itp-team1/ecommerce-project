@@ -14,7 +14,6 @@ if (!currentUser) {
   window.location.href = "../pages/auth/login.html";
 }
 
-
 const wishlistEntry = ecommerceData["wishlist"].find(
   (w) => w.userId === loggedInUser.id
 );
@@ -90,9 +89,13 @@ function renderProducts(containerId, products, type) {
                         }" onclick="event.stopPropagation(); ${iconClickHandler}">
                             ${iconHTML}
                         </button>
-                        <img src="../assets/images/products/${
-                          p.imageUrl
-                        }" alt="${p.name}">
+                        <img src="${
+                          p.imageUrl.startsWith("http") ||
+                          p.imageUrl.startsWith("data")
+                            ? p.imageUrl
+                            : "../assets/images/products/" + p.imageUrl
+                        }" 
+                                    alt="${p.name}">
                     </div>
                     <div class="product-info mt-3">
                         <h5 class="product-title">${p.name}</h5>
@@ -168,11 +171,19 @@ function toggleWishlist(productId) {
 }
 function updateCounters() {
   const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || {};
-  const wishlistEntry = ecommerceData.wishlist?.find(w => w.userId === loggedInUser.id);
-  const cartEntry = ecommerceData.cart?.find(c => c.userId === loggedInUser.id);
+  const wishlistEntry = ecommerceData.wishlist?.find(
+    (w) => w.userId === loggedInUser.id
+  );
+  const cartEntry = ecommerceData.cart?.find(
+    (c) => c.userId === loggedInUser.id
+  );
 
-  document.getElementById("wishlist-count").textContent = wishlistEntry ? wishlistEntry.productIds.length : 0;
-  document.getElementById("cart-count").textContent = cartEntry ? cartEntry.items.reduce((sum, i) => sum + i.quantity, 0) : 0;
+  document.getElementById("wishlist-count").textContent = wishlistEntry
+    ? wishlistEntry.productIds.length
+    : 0;
+  document.getElementById("cart-count").textContent = cartEntry
+    ? cartEntry.items.length
+    : 0;
 }
 
 function removeFromWishlist(productId) {
@@ -180,15 +191,17 @@ function removeFromWishlist(productId) {
     (w) => w.userId === loggedInUser.id
   );
 
-  if (wishlistEntry) {
-    wishlistEntry.productIds = wishlistEntry.productIds.filter(
-      (id) => id !== productId
-    );
-  }
+  if (!wishlistEntry) return;
 
+  // Keep backup for undo
+  const previousWishlist = [...wishlistEntry.productIds];
+
+  // Remove the product
+  wishlistEntry.productIds = wishlistEntry.productIds.filter(
+    (id) => id !== productId
+  );
 
   localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
-
 
   const updatedWishlistProducts = (ecommerceData["products"] || []).filter(
     (p) => wishlistEntry?.productIds.includes(p.id)
@@ -196,8 +209,37 @@ function removeFromWishlist(productId) {
 
   renderProducts("wishlist-container", updatedWishlistProducts, "wishlist");
   updateCounters();
-}
 
+  // Show toast with undo
+  showUndoToast("Removed from wishlist", () => {
+    wishlistEntry.productIds = previousWishlist;
+    localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
+    renderProducts(
+      "wishlist-container",
+      (ecommerceData["products"] || []).filter((p) =>
+        wishlistEntry?.productIds.includes(p.id)
+      ),
+      "wishlist"
+    );
+    updateCounters();
+  });
+}
+function showUndoToast(message, undoCallback) {
+  let toastEl = document.getElementById("toastMessage");
+  toastEl.className = `toast align-items-center text-bg-danger border-0`;
+
+  const body = toastEl.querySelector(".toast-body");
+  body.innerHTML = `${message} <button class="btn btn-link btn-sm text-white ms-2">Undo</button>`;
+
+  const undoBtn = body.querySelector("button");
+  undoBtn.addEventListener("click", () => {
+    undoCallback();
+    bootstrap.Toast.getInstance(toastEl)?.hide();
+  });
+
+  let toast = new bootstrap.Toast(toastEl);
+  toast.show();
+}
 const wishlistContainer = document.getElementById("wishlist-container");
 
 wishlistContainer.addEventListener("click", (e) => {
@@ -239,7 +281,6 @@ moveAllBtn.addEventListener("click", (e) => {
     return;
   }
 
-
   const wishlistEntry = ecommerceData["wishlist"].find(
     (w) => w.userId === loggedInUser.id
   );
@@ -248,7 +289,6 @@ moveAllBtn.addEventListener("click", (e) => {
     alert("Your wishlist is empty!");
     return;
   }
-
 
   ecommerceData.cart = Array.isArray(ecommerceData.cart)
     ? ecommerceData.cart
@@ -260,32 +300,26 @@ moveAllBtn.addEventListener("click", (e) => {
     ecommerceData.cart.push(userCart);
   }
 
-
   wishlistEntry.productIds.forEach((productId) => {
     const existingItem = userCart.items.find((i) => i.productId === productId);
     if (existingItem) {
-      existingItem.quantity += 1; 
+      existingItem.quantity += 1;
     } else {
       userCart.items.push({ productId, quantity: 1 });
     }
   });
 
-
   wishlistEntry.productIds = [];
-
 
   localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
 
-
   renderProducts("wishlist-container", [], "wishlist");
-renderProducts("suggested-container", getSuggestedProducts(), "suggested");
-
+  renderProducts("suggested-container", getSuggestedProducts(), "suggested");
 
   moveAllBtn.innerHTML = `<i class="fas fa-check me-2"></i> Moved!`;
   moveAllBtn.disabled = true;
   updateCounters();
 });
-
 
 renderProducts("wishlist-container", wishlistProducts, "wishlist");
 renderProducts("suggested-container", suggestedProducts, "suggested");

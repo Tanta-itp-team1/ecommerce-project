@@ -10,7 +10,7 @@ const totalProducts = document.getElementById("totalProducts");
 const newUsers = document.getElementById("newUsers");
 const orderStatus = document.getElementById("orderStatus");
 const pendingOrders = ecommerceData.orders.filter(
-  (o) => o.status === "pending"
+  (o) => o.status === "Pending"
 ).length;
 const completedOrders = ecommerceData.orders.filter(
   (o) => o.status === "Delivered"
@@ -146,7 +146,7 @@ window.addEventListener("load", function () {
           data: [
             pendingOrders,
             completedOrders,
-            ecommerceData.orders.filter((o) => o.status === "canceled").length,
+            ecommerceData.orders.filter((o) => o.status === "Cancelled").length,
           ],
           backgroundColor: ["#f6c23e", "#1cc88a", "#e74a3b"],
           hoverOffset: 6,
