@@ -23,67 +23,73 @@
 
 
   <div class="nav-wrapper">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 px-5">
-      <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="./homepage.html">Exclusive</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 px-5">
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold" href="./homepage.html">Exclusive</a>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link active" href="./homepage.html">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="../pages/shop.html">Shop</a></li>
-            <li class="nav-item"><a class="nav-link" href="../pages/about.html">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="../pages/contact.html">Contact</a></li>
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar content -->
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <!-- Center links -->
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="./homepage.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="../pages/shop.html">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="../pages/about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="../pages/contact.html">Contact</a></li>
+      </ul>
+
+      <!-- Right-side elements -->
+      <div class="d-flex align-items-center ms-auto">
+        <!-- Search + Wishlist + Cart -->
+        <form id="searchForm" class="d-flex align-items-center position-relative me-3" autocomplete="off">
+          <input id="searchInput" class="form-control me-2" type="search" placeholder="Search products..." />
+          <button class="btn me-3" type="submit" id="searchButton">
+            <i class="fas fa-search"></i>
+          </button>
+
+          <div id="searchResults" class="position-absolute bg-white shadow rounded w-100"
+               style="top: 110%; left: 0; z-index: 2000; display:none; max-height: 320px; overflow:auto;"></div>
+
+          <a href="../pages/wishlist2.html" class="text-dark me-3 position-relative">
+            <i class="far fa-heart fs-5"></i>
+            <span id="favCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  >0</span>
+          </a>
+
+          <a href="../pages/cart.html" class="text-dark me-3 position-relative">
+            <i class="fas fa-shopping-cart fs-5"></i>
+            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  >0</span>
+          </a>
+        </form>
+
+        <!-- Account dropdown -->
+        <div id="account-menu" class="dropdown d-inline-block ms-3">
+          <a id="account-btn" class="btn btn-danger rounded-circle p-2" href="#" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <svg class="text-white" width="25" height="25" viewBox="0 0 32 32" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 27V24.3333C24 22.9188 23.5224 21.5623 22.6722 20.5621C21.8221 19.5619 20.669 19 19.4667 19H11.5333C10.331 19 9.17795 19.5619 8.32778 20.5621C7.47762 21.5623 7 22.9188 7 24.3333V27"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16.5 14C18.9853 14 21 11.9853 21 9.5C21 7.01472 18.9853 5 16.5 5C14.0147 5 12 7.01472 12 9.5C12 11.9853 14.0147 14 16.5 14Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <ul id="account-dropdown" class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="account.html">My Account</a></li>
+            <li><a class="dropdown-item" href="#" id="logout-btn">Logout</a></li>
           </ul>
-
-          <form id="searchForm" class="d-flex align-items-center position-relative" autocomplete="off">
-  <input id="searchInput" class="form-control me-2 " type="search"  placeholder="Search products..." />
-  <button class="btn  me-3" type="submit" id="searchButton">
-    <i class="fas fa-search"></i>
-  </button>
-
-  
-  <div id="searchResults" class="position-absolute bg-white shadow rounded w-100"
-       style="top: 110%; left: 0; z-index: 2000; display:none; max-height: 320px; overflow:auto;"></div>
-
-  
-  <a href="../pages/wishlist2.html" class="text-dark me-3 position-relative">
-    <i class="far fa-heart fs-5"></i>
-    <span id="favCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill " style="background-color: darkblue;">0</span>
-  </a>
-
-  
-  <a href="../pages/cart.html" class="text-dark me-3 position-relative">
-    <i class="fas fa-shopping-cart fs-5"></i>
-    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill " style="background-color: darkblue;">0</span>
-  </a>
-</form>
-
         </div>
       </div>
-      <div id="account-menu" class="dropdown d-inline-block ms-3">
-                                    <a id="account-btn" class="btn btn-danger rounded-circle p-2 ms-0" href="#" role="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <svg class="text-white" width="25" height="25" viewBox="0 0 32 32" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M24 27V24.3333C24 22.9188 23.5224 21.5623 22.6722 20.5621C21.8221 19.5619 20.669 19 19.4667 19H11.5333C10.331 19 9.17795 19.5619 8.32778 20.5621C7.47762 21.5623 7 22.9188 7 24.3333V27"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M16.5 14C18.9853 14 21 11.9853 21 9.5C21 7.01472 18.9853 5 16.5 5C14.0147 5 12 7.01472 12 9.5C12 11.9853 14.0147 14 16.5 14Z"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a>
-                                    <ul id="account-dropdown" class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="account.html">My Account</a></li>
-                                        <li><a class="dropdown-item" href="#" id="logout-btn">Logout</a></li>
-                                    </ul>
-                                </div>
-    </nav>
+    </div>
+  </div>
+</nav>
+
   </div>
 
   
