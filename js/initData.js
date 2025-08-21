@@ -127,7 +127,7 @@
           soldCount: 10,
           description: "Red high heels.",
           imageUrl: "jacket2.png",
-          sellerId: 2,
+          sellerId: 3,
         },
         {
           id: 9,
@@ -139,7 +139,7 @@
           soldCount: 18,
           description: "Silk white blouse.",
           imageUrl: "jacket2.png",
-          sellerId: 2,
+          sellerId: 4,
         },
         {
           id: 10,
@@ -151,7 +151,7 @@
           soldCount: 17,
           description: "Skinny blue jeans.",
           imageUrl: "jacket2.png",
-          sellerId: 2,
+          sellerId: 5,
         },
 
         // Electronics
@@ -165,7 +165,7 @@
           soldCount: 8,
           description: "A cool speaker with lights.",
           imageUrl: "speaker.png",
-          sellerId: 2,
+          sellerId: 7,
         },
         {
           id: 12,
@@ -177,7 +177,7 @@
           soldCount: 5,
           description: "High-performance laptop.",
           imageUrl: "laptop.png",
-          sellerId: 2,
+          sellerId: 7,
         },
         {
           id: 13,
@@ -189,7 +189,7 @@
           soldCount: 25,
           description: "Noise-cancelling earbuds.",
           imageUrl: "playstation.png",
-          sellerId: 2,
+          sellerId: 8,
         },
         {
           id: 14,
@@ -201,7 +201,7 @@
           soldCount: 15,
           description: "Keyboard with rgp Lights.",
           imageUrl: "keyboard.png",
-          sellerId: 2,
+          sellerId: 4,
         },
         {
           id: 15,
@@ -213,7 +213,7 @@
           soldCount: 18,
           description: "Portable speaker with deep bass.",
           imageUrl: "speaker2.png",
-          sellerId: 2,
+          sellerId: 3,
         },
 
         // Furniture
@@ -227,7 +227,7 @@
           soldCount: 3,
           description: "A table that has shalves to organise your books.",
           imageUrl: "table.png",
-          sellerId: 2,
+          sellerId: 3,
         },
         {
           id: 17,
@@ -263,7 +263,7 @@
           soldCount: 3,
           description: "Queen-size bed frame.",
           imageUrl: "chair.png",
-          sellerId: 2,
+          sellerId: 6,
         },
         {
           id: 20,
@@ -275,7 +275,7 @@
           soldCount: 5,
           description: "5-tier wooden bookshelf.",
           imageUrl: "table.png",
-          sellerId: 2,
+          sellerId: 4,
         },
 
         // Toys
@@ -289,7 +289,7 @@
           soldCount: 18,
           description: "Fast RC car with rechargeable battery.",
           imageUrl: "toy.png",
-          sellerId: 2,
+          sellerId: 8,
         },
 
         // Electronics again
@@ -305,7 +305,7 @@
           soldCount: 12,
           description: "A modern Controller for your Games.",
           imageUrl: "controller2.png",
-          sellerId: 2,
+          sellerId: 5,
         },
         {
           id: 23,
@@ -317,7 +317,7 @@
           soldCount: 6,
           description: "Modern Camera with high resulations.",
           imageUrl: "camera.png",
-          sellerId: 2,
+          sellerId: 7,
         },
         {
           id: 24,
@@ -329,7 +329,7 @@
           soldCount: 20,
           description: "A black Controller.",
           imageUrl: "controller2.png",
-          sellerId: 2,
+          sellerId: 8,
         },
         {
           id: 25,
@@ -341,7 +341,7 @@
           soldCount: 15,
           description: "A high Tech Speaker.",
           imageUrl: "speaker3.png",
-          sellerId: 2,
+          sellerId: 4,
         },
 
         // Extra products to reach 30+
@@ -355,7 +355,7 @@
           soldCount: 8,
           description: "Luxury analog watch.",
           imageUrl: "jacket.png",
-          sellerId: 2,
+          sellerId: 9,
         },
         {
           id: 27,
@@ -367,7 +367,7 @@
           soldCount: 7,
           description: "Gold-plated bag.",
           imageUrl: "bag.png",
-          sellerId: 2,
+          sellerId: 4,
         },
         {
           id: 28,
@@ -379,7 +379,7 @@
           soldCount: 9,
           description: "A Modern Slim TV.",
           imageUrl: "tv.png",
-          sellerId: 2,
+          sellerId: 6,
         },
         {
           id: 29,
@@ -391,7 +391,7 @@
           soldCount: 2,
           description: "Comfortable recliner chair.",
           imageUrl: "chair.png",
-          sellerId: 2,
+          sellerId: 8,
         },
         {
           id: 30,
@@ -441,17 +441,31 @@
       ],
       wishlist: [{ userId: 3, productIds: [6, 13, 21] }],
       orders: [
+        // {
+        //   // orderId: 101,
+        //   // userId: 3,
+        //   // items: [
+        //   //   { productId: 1, quantity: 1, priceAtPurchase: 102 },
+        //   //   { productId: 6, quantity: 1, priceAtPurchase: 36 },
+        //   // ],
+        //   // totalAmount: 138,
+        //   // status: "Delivered",
+        //   // orderDate: "2025-08-10",
+        // },
         {
-          orderId: 101,
-          userId: 3,
-          items: [
-            { productId: 1, quantity: 1, priceAtPurchase: 102 },
-            { productId: 6, quantity: 1, priceAtPurchase: 36 },
-          ],
-          totalAmount: 138,
-          status: "Delivered",
-          orderDate: "2025-08-10",
-        },
+  orderId: 1755714232104,
+  userId: 2,
+  status: "Pending",
+  orderDate: "2025-08-20T18:23:52.104Z",
+  fullName: "Abdelrahman Ramadan",
+  email: "abdeodoo499@gmail.com",
+  address: "2 SaidShalbi\nTanta Algharbia",
+  items: [
+    { productId: 22, quantity: 1, price: 45 },
+    { productId: 27, quantity: 2, price: 102 }
+  ],
+  totalAmount: 1201.5
+}
       ],
       categories: [
         { id: 1, name: "Men's Fashion" },

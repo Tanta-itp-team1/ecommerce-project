@@ -64,7 +64,7 @@ body {
 .user-profile:hover {
   background-color: #f1f5f9;
 }
-.dropdown-toggle::after{
+.dropdown-toggle::after {
   content: none;
 }
 
@@ -371,7 +371,6 @@ body {
   background-color: #10b981;
 }
 
-
 .create-btn {
   border-radius: 5px;
   padding: 10px 15px;
@@ -379,10 +378,8 @@ body {
   color: white;
   background-color: #333;
   margin: 2rem auto;
-
-
 }
-.create-btn:hover{
+.create-btn:hover {
   color: white;
   background-color: darkblue;
 }
@@ -408,7 +405,47 @@ body {
   font-size: 0.85rem;
   color: white;
 }
-.edit-btn { background: #3b82f6; }   /* أزرق */
-.delete-btn { background: #ef4444; } /* أحمر */
-.view-btn { background: #6b7280; }   /* رمادي */
+  
 
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #f8f9fc;
+  border-radius: 0.35rem;
+}
+
+.page-info {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.page-size-selector {
+  width: auto;
+  display: inline-block;
+}
+
+@media (max-width: 992px) {
+  .admin-sidebar {
+    margin-left: -224px;
+  }
+
+  .admin-sidebar.show {
+    margin-left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .main-content.expanded {
+    margin-left: 0;
+  }
+}
