@@ -93,40 +93,42 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCounts();
 
 
-  const categories = [...new Set(JSON.parse(localStorage.getItem("ecommerceData")).categories)];
-  const categoriesContainer = document.getElementById("categoriesContainer");
+  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || {};
+const categories = ecommerceData.categories || [];
+const categoriesContainer = document.getElementById("categoriesContainer");
 
-  const icons = {
-    "Electronics": '<i class="fas fa-mobile me-2"></i>',
-    "Men\'s Fashion": '<i class="fas fa-tshirt me-2"></i>',
-    "Women\'s Fashion": '<i class="fas fa-female me-2"></i>',
-    "Furniture": '<i class="fas fa-couch me-2"></i>',
-    "Toys": '<i class="fas fa-gamepad me-2"></i>'
-  };
+const icons = {
+  "Electronics": '<i class="fas fa-mobile me-2"></i>',
+  "Men\'s Fashion": '<i class="fas fa-tshirt me-2"></i>',
+  "Women\'s Fashion": '<i class="fas fa-female me-2"></i>',
+  "Furniture": '<i class="fas fa-couch me-2"></i>',
+  "Toys": '<i class="fas fa-gamepad me-2"></i>'
+};
 
-  const subCategories = {
-    "Women\'s Fashion": ["Dresses", "Shoes", "Accessories"],
-    "Electronics": ["Mobiles", "Laptops", "Accessories"]
-  };
+const subCategories = {
+  "Women\'s Fashion": ["Dresses", "Shoes", "Accessories"],
+  "Electronics": ["Mobiles", "Laptops", "Accessories"]
+};
 
-  function goToCategory(categoryName, subName = "") {
-    categoryName = decodeURIComponent(categoryName);
-    let url = `../pages/shop.html?category=${encodeURIComponent(categoryName)}`;
-    if (subName) url += `&sub=${encodeURIComponent(subName)}`;
-    window.location.href = url;
-  }
+function goToCategory(categoryName, subName = "") {
+  categoryName = decodeURIComponent(categoryName);
+  let url = `../pages/shop.html?category=${encodeURIComponent(categoryName)}`;
+  if (subName) url += `&sub=${encodeURIComponent(subName)}`;
+  window.location.href = url;
+}
 
-  if (categoriesContainer) {
-    categories.forEach(cat => {
-      const icon = icons[cat] || '<i class="fas fa-tag"></i>';
-      categoriesContainer.innerHTML += `
-        <div class="mycard" onclick="goToCategory('${encodeURIComponent(cat)}')">
-          ${icon}
-          <span>${cat}</span>
-        </div>
-      `;
-    });
-  }
+if (categoriesContainer) {
+  categories.forEach(cat => {
+    const icon = icons[cat.name] || '<i class="fas fa-tag"></i>';
+    categoriesContainer.innerHTML += `
+      <div class="mycard" onclick="goToCategory('${encodeURIComponent(cat.name)}')">
+        ${icon}
+        <span>${cat.name}</span>
+      </div>
+    `;
+  });
+}
+
 
 
   function renderCarousel(carouselId, items) {
@@ -286,45 +288,57 @@ const isFav = wishlistEntry.productIds.includes(p.id);
     });
   }
 
+function renderRandomCategories(categories, products) {
+  const container = document.getElementById("randomCategoriesSection");
+  if (!container) return;
+  container.innerHTML = "";
 
-  function renderRandomCategories(list) {
-    const container = document.getElementById("randomCategoriesSection");
-    if (!container) return;
-    container.innerHTML = "";
+  // نختار ٤ كاتيجوري random
+  const randomCategories = [...categories]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 4);
 
-    const cats = [...new Set(list.map(p => p.category))];
-    const randomCategories = cats.sort(() => 0.5 - Math.random()).slice(0, 4);
+  randomCategories.forEach(cat => {
+    // المنتجات الخاصة بالكاتيجوري
+    const catProducts = products.filter(p => p.categoryId === cat.id);
 
-    randomCategories.forEach(cat => {
-      const catProducts = list.filter(p => p.category === cat);
-      const randomProducts = catProducts.sort(() => 0.5 - Math.random()).slice(0, 4);
+    // نختار ٤ منتجات random من الكاتيجوري
+    const randomProducts = catProducts
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 4);
 
-      let productsHTML = "";
-      randomProducts.forEach(p => {
-        productsHTML += `
-          <a href="../pages/productDetails.html?id=${p.id}" class="product bg-white text-decoration-none text-dark">
-            <img src="../assets/images/products/${p.imageUrl}"
-                 alt="${p.name}"
-                 onerror="this.src='../assets/images/products/placeholder.jpg'">
-            <p>${p.name}</p>
-            <p class="mb-1 fw-bold">$${p.price}</p>
-          </a>
-        `;
-      });
-
-      container.innerHTML += `
-        <div class="col-12 col-md-6 col-lg-3">
-          <div class="category-card">
-            <h3>${cat}</h3>
-            <div class="products-grid">
-              ${productsHTML}
-            </div>
-          </div>
-        </div>
+    // بناء HTML للمنتجات
+    let productsHTML = "";
+    randomProducts.forEach(p => {
+      productsHTML += `
+        <a href="../pages/productDetails.html?id=${p.id}" 
+           class="product bg-white text-decoration-none text-dark">
+          <img src="../assets/images/products/${p.imageUrl}"
+               alt="${p.name}"
+               onerror="this.src='../assets/images/products/placeholder.jpg'">
+          <p>${p.name}</p>
+          <p class="mb-1 fw-bold">$${p.price}</p>
+        </a>
       `;
     });
-  }
-  renderRandomCategories(products);
+
+    // إضافة الكاتيجوري مع منتجاتها للـ container
+    container.innerHTML += `
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="category-card">
+          <h3>${cat.name}</h3>
+          <div class="products-grid">
+            ${productsHTML}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+// ناديلها بالـ data الجديدة
+renderRandomCategories(categories, products);
+
 
 
   function renderFeaturedGrid(list) {
