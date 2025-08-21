@@ -1,89 +1,159 @@
 /* eslint-disable no-undef */
-// Retrieve logged-in user
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || null;
 let currentProduct = null;
-
+let categories = [];
 document.addEventListener("DOMContentLoaded", function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const productId = parseInt(urlParams.get("id"));
-
-  if (!productId) {
-    alert("Product not found.");
-    return (window.location.href = "../index.html");
-  }
-
-  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData"));
-  if (!ecommerceData || !ecommerceData.products) {
-    alert("No product data available.");
+  if (!localStorage.getItem("ecommerceData")) {
+    alert("No product data available. Redirecting to home page.");
+    window.location.href = "../index.html";
     return;
   }
-
+  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData"));
+  
+  if (ecommerceData.categories && ecommerceData.categories.length > 0) {
+    categories = ecommerceData.categories;
+  } else {
+    categories = [
+      { id: 1, name: "Men's Fashion" },
+      { id: 2, name: "Women's Fashion" },
+      { id: 3, name: "Electronics" },
+      { id: 4, name: "Furniture" },
+      { id: 5, name: "Toys" }
+    ];
+  }
+  if (!ecommerceData.products || ecommerceData.products.length === 0) {
+    alert("No products available. Redirecting to home page.");
+    window.location.href = "../index.html";
+    return;
+  }
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = parseInt(urlParams.get("id"));
+  if (!productId || isNaN(productId)) {
+    alert("Product not found.");
+    window.location.href = "../index.html";
+    return;
+  }
   currentProduct = ecommerceData.products.find((p) => p.id === productId);
   if (!currentProduct) {
     document.getElementById("productTitle").textContent = "Product Not Found";
     return;
   }
-
-  if (!currentProduct.reviews) {
-    currentProduct.reviews = [];
-    const updatedProducts = ecommerceData.products.map(p => p.id === productId ? currentProduct : p);
-    ecommerceData.products = updatedProducts;
-    localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
-  }
-
   displayProductDetails(currentProduct);
-  renderReviews();
-  renderAddReviewForm();
+  updateBreadcrumb();  
+  const increaseBtn = document.getElementById("increaseQuantity");
+  const decreaseBtn = document.getElementById("decreaseQuantity");
+  if (increaseBtn) {
+    increaseBtn.addEventListener("click", increaseQuantity);
+  }
+  if (decreaseBtn) {
+    decreaseBtn.addEventListener("click", decreaseQuantity);
+  }
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('loggedInUser');
+      window.location.href = '../index.html';
+    });
+  }
 });
-
-// Display product details
+function getCategoryName(categoryId) {
+  const category = categories.find(cat => cat.id === categoryId);
+  return category ? category.name : "Unknown Category";
+}
+function updateBreadcrumb() {
+  if (!currentProduct) return;
+  const categoryLink = document.getElementById("productCategory");
+  const productNameBreadcrumb = document.getElementById("productNameBreadcrumb");
+  if (categoryLink) {
+    const categoryName = getCategoryName(currentProduct.categoryId);
+    categoryLink.textContent = categoryName;
+    categoryLink.href = `../pages/shop.html?category=${encodeURIComponent(categoryName)}`;
+  } 
+  if (productNameBreadcrumb) {
+    productNameBreadcrumb.textContent = currentProduct.name || "Unknown Product";
+  }
+}
 function displayProductDetails(product) {
+  if (!product) return;
+  updateBreadcrumb();
   const finalPrice = product.discount > 0
     ? product.price * (1 - product.discount / 100)
     : product.price;
 
-  document.getElementById("productCategory").textContent = product.category;
-  document.getElementById("productCategory").href = `../pages/shop.html?category=${encodeURIComponent(product.category)}`;
-  document.getElementById("productNameBreadcrumb").textContent = product.name;
-
-  document.getElementById("productTitle").textContent = product.name;
-  document.getElementById("productPrice").innerHTML = product.discount > 0
-    ? `<span class="text-decoration-line-through text-muted me-2">$${product.price.toFixed(2)}</span>
-       <span class="text-danger">$${finalPrice.toFixed(2)}</span>`
-    : `$${finalPrice.toFixed(2)}`;
-
-  document.getElementById("productDescription").textContent = product.description;
-
+  const productTitle = document.getElementById("productTitle");
+  if (productTitle) {
+    productTitle.textContent = product.name || "Unknown Product";
+  }
+  const productPrice = document.getElementById("productPrice");
+  if (productPrice) {
+    productPrice.innerHTML = product.discount > 0
+      ? `<span class="text-decoration-line-through text-muted me-2">$${(product.price || 0).toFixed(2)}</span>
+         <span class="text-danger">$${finalPrice.toFixed(2)}</span>`
+      : `$${finalPrice.toFixed(2)}`;
+  }
+  
+  const productDescription = document.getElementById("productDescription");
+  if (productDescription) {
+    productDescription.textContent = product.description || "No description available.";
+  }
+  
   const stockElement = document.getElementById("stockStatus");
-  stockElement.textContent = product.stock > 0
-    ? `In Stock (${product.stock} available)`
-    : "Out of Stock";
-  stockElement.className = product.stock > 0 ? "text-success" : "text-danger";
-
+  if (stockElement) {
+    stockElement.textContent = product.stock > 0
+      ? `In Stock (${product.stock} available)`
+      : "Out of Stock";
+    stockElement.className = product.stock > 0 ? "text-success" : "text-danger";
+  }
+  
+  const quantityInput = document.getElementById("quantityInput");
+  if (quantityInput) {
+    quantityInput.max = product.stock;
+  }
+  
   const imgElement = document.getElementById("productMainImage");
-  imgElement.src = `../assets/images/products/${product.imageUrl}`;
-  imgElement.alt = product.name;
-
-  document.getElementById("reviewCount").textContent = `(${product.reviews.length} Reviews)`;
-
-  document.getElementById("buyNowBtn").onclick = function () {
-    addToCart(product.id, parseInt(document.getElementById("quantityInput").value));
-  };
+  if (imgElement) {
+    imgElement.src = `../assets/images/products/${product.imageUrl || 'placeholder.jpg'}`;
+    imgElement.alt = product.name || "Product Image";
+    imgElement.onerror = function() {
+      this.src = "../assets/images/products/placeholder.jpg";
+    };
+  }
+  
+  const buyNowBtn = document.getElementById("buyNowBtn");
+  if (buyNowBtn) {
+    buyNowBtn.onclick = function () {
+      const quantityInput = document.getElementById("quantityInput");
+      addToCart(product.id, parseInt(quantityInput.value || 1));
+    };
+  }
+  
+  const addToCartBtn = document.getElementById("addToCartBtn");
+  if (addToCartBtn) {
+    addToCartBtn.onclick = function () {
+      const quantityInput = document.getElementById("quantityInput");
+      addToCart(product.id, parseInt(quantityInput.value || 1));
+    };
+  }
 }
-
-// Increase quantity
 function increaseQuantity() {
   const input = document.getElementById("quantityInput");
-  input.value = parseInt(input.value) + 1;
+  if (!input || !currentProduct) return;
+  const currentValue = parseInt(input.value);
+  const maxStock = currentProduct.stock;
+  if (currentValue < maxStock) {
+    input.value = currentValue + 1;
+  } else {
+    showToast("Limit Reached", `Only ${maxStock} items available in stock.`, true);
+  }
 }
-
-// Decrease quantity
 function decreaseQuantity() {
   const input = document.getElementById("quantityInput");
-  if (input.value > 1) input.value = parseInt(input.value) - 1;
+  if (!input) return; 
+  if (input.value > 1) {
+    input.value = parseInt(input.value) - 1;
+  }
 }
-
-// Add to cart
 function addToCart(productId, quantity) {
   if (!loggedInUser) {
     showToast("Error", "Please login to add items to your cart.", true);
@@ -92,171 +162,46 @@ function addToCart(productId, quantity) {
     }, 2000);
     return;
   }
-
-  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { cart: [] };
+  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { 
+    products: [], 
+    users: [], 
+    cart: [] 
+  };
   let cartEntry = ecommerceData.cart.find((c) => c.userId === loggedInUser.id);
   if (!cartEntry) {
     cartEntry = { userId: loggedInUser.id, items: [] };
     ecommerceData.cart.push(cartEntry);
   }
-
   const cartItem = cartEntry.items.find((item) => item.productId === productId);
   if (cartItem) {
-    cartItem.quantity += quantity;
+    const newQuantity = cartItem.quantity + quantity;
+    const product = ecommerceData.products.find(p => p.id === productId);
+    if (product && newQuantity > product.stock) {
+      showToast("Error", `Only ${product.stock - cartItem.quantity} more available in stock.`, true);
+      return;
+    }     
+    cartItem.quantity = newQuantity;
   } else {
     cartEntry.items.push({ productId, quantity });
-  }
-
+  } 
   localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
   showToast("Success", `${quantity} item(s) added to cart!`);
 }
-
-// Render reviews list
-function renderReviews() {
-  const reviewsList = document.getElementById("reviews-list");
-  reviewsList.innerHTML = "";
-
-  if (currentProduct.reviews.length === 0) {
-    reviewsList.innerHTML = '<p class="text-muted">No reviews yet.</p>';
-    return;
-  }
-
-  const users = JSON.parse(localStorage.getItem("ecommerceData"))?.users || [];
-
-  currentProduct.reviews.forEach(review => {
-    const user = users.find(u => u.id === review.userId);
-    const username = user ? user.name : "Unknown User"; // Use 'name' field
-    const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-
-    const card = `
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <h6 class="mb-1">${username}</h6>
-            <small class="text-muted">${new Date(review.date).toLocaleDateString()}</small>
-          </div>
-          <p class="text-warning mb-1">${stars}</p>
-          <p class="mb-0">${review.comment}</p>
-        </div>
-      </div>
-    `;
-    reviewsList.insertAdjacentHTML('beforeend', card);
-  });
-}
-
-// Render Add Review Form with Star Rating
-function renderAddReviewForm() {
-  const section = document.getElementById("add-review-section");
-  section.innerHTML = "";
-
-  if (!loggedInUser) {
-    section.innerHTML = `<p class="text-muted">Please <a href="../pages/auth/login.html">login</a> to leave a review.</p>`;
-    return;
-  }
-
-  const hasReviewed = currentProduct.reviews.some(r => r.userId === loggedInUser.id);
-  if (hasReviewed) {
-    section.innerHTML = `<p class="text-success"><i class="bi bi-check-circle"></i> You have already reviewed this product.</p>`;
-    return;
-  }
-
-  // Star rating UI
-  const starRatingHTML = `
-    <div class="mb-3">
-      <label class="form-label">Your Rating</label>
-      <div id="star-rating" class="fs-4">
-        <span class="star" data-value="1">☆</span>
-        <span class="star" data-value="2">☆</span>
-        <span class="star" data-value="3">☆</span>
-        <span class="star" data-value="4">☆</span>
-        <span class="star" data-value="5">☆</span>
-      </div>
-      <input type="hidden" id="rating-value" required>
-      <div class="invalid-feedback">Please select a rating.</div>
-    </div>
-  `;
-
-  section.innerHTML = `
-    <div class="card p-3 mb-4">
-      <h5>Write a Review</h5>
-      <form id="reviewForm">
-        ${starRatingHTML}
-        <div class="mb-3">
-          <label for="comment" class="form-label">Your Comment</label>
-          <textarea class="form-control" id="comment" rows="3" placeholder="Share your thoughts..." required></textarea>
-        </div>
-        <button type="submit" class="btn btn-danger">Submit Review</button>
-      </form>
-    </div>
-  `;
-
-  // Add star click event
-  const stars = document.querySelectorAll("#star-rating .star");
-  const ratingInput = document.getElementById("rating-value");
-
-  stars.forEach(star => {
-    star.addEventListener("click", function () {
-      const value = parseInt(this.getAttribute("data-value"));
-      ratingInput.value = value;
-
-      // Update stars
-      stars.forEach(s => {
-        s.textContent = parseInt(s.getAttribute("data-value")) <= value ? '★' : '☆';
-        s.style.color = parseInt(s.getAttribute("data-value")) <= value ? '#ffc107' : 'initial';
-      });
-    });
-  });
-
-  // Form submit
-  document.getElementById("reviewForm").addEventListener("submit", handleReviewSubmit);
-}
-
-// Handle review submission
-function handleReviewSubmit(e) {
-  e.preventDefault();
-
-  const ratingInput = document.getElementById("rating-value");
-  const comment = document.getElementById("comment").value.trim();
-  const rating = parseInt(ratingInput.value);
-
-  if (!rating) {
-    ratingInput.classList.add("is-invalid");
-    return;
-  } else {
-    ratingInput.classList.remove("is-invalid");
-  }
-
-  const newReview = {
-    userId: loggedInUser.id,
-    rating,
-    comment,
-    date: new Date().toISOString()
-  };
-
-  currentProduct.reviews.push(newReview);
-
-  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData"));
-  const updatedProducts = ecommerceData.products.map(p => p.id === currentProduct.id ? currentProduct : p);
-  ecommerceData.products = updatedProducts;
-  localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
-
-  showToast("Review Submitted", "Thank you for your feedback!");
-
-  // Re-render
-  renderReviews();
-  renderAddReviewForm();
-}
-
-// Show toast
 function showToast(title, message, isError = false) {
-  document.getElementById("toastTitle").textContent = title;
-  document.getElementById("toastBody").textContent = message;
+  const toastTitle = document.getElementById("toastTitle");
+  const toastBody = document.getElementById("toastBody");
   const toastEl = document.getElementById("buyToast");
-  if (isError) {
-    toastEl.classList.add("bg-danger", "text-white");
+  if (toastTitle && toastBody && toastEl) {
+    toastTitle.textContent = title;
+    toastBody.textContent = message;
+    if (isError) {
+      toastEl.classList.add("bg-danger", "text-white");
+    } else {
+      toastEl.classList.remove("bg-danger", "text-white");
+    }
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
   } else {
-    toastEl.classList.remove("bg-danger", "text-white");
+    alert(`${title}: ${message}`);
   }
-
-  new bootstrap.Toast(toastEl).show();
 }
