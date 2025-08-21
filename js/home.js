@@ -413,3 +413,18 @@ renderRandomCategories(categories, products);
     });
   }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const logoutBtn = document.getElementById("logout-btn");
+  
+  logoutBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+
+
+    localStorage.removeItem("loggedInUser");
+
+   
+    window.location.href = "../pages/auth/login.html";
+  });
+});
