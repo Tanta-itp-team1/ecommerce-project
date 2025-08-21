@@ -13,7 +13,7 @@ const userRole = JSON.parse(localStorage.getItem("loggedInUser")).role;
   const actionsHeader = document.getElementById('actionsHeader');
 
   
-  if(userRole === "admin"){
+  if(userRole === "admin"||userRole==="seller"){
     // addOrderBtn.classList.remove("d-none");
     actionsHeader.classList.remove("d-none");
   }
@@ -37,10 +37,20 @@ const userRole = JSON.parse(localStorage.getItem("loggedInUser")).role;
           </td>
         `;
       }
+      if (userRole === "seller") {
+
+        row += `
+          <td>
+            <button class="action-btn edit-btn" onclick="editOrder(${order.orderId})">Edit</button>
+          </td>
+          
+            `;
+      }
       row += `</tr>`;
       tableBody.innerHTML += row;
     });
   }
+  
   function retriveItems(items){
       result=``;
       items.forEach((item)=>{
@@ -71,23 +81,6 @@ const userRole = JSON.parse(localStorage.getItem("loggedInUser")).role;
     });
     renderOrders(filtered);
   }
-
-  // function addOrder() {
-  //   const customer = document.getElementById('customerName').value.trim();
-  //   const product = document.getElementById('productName').value.trim();
-  //   const quantity = document.getElementById('quantity').value.trim();
-  //   const status = document.getElementById('status').value;
-
-  //   if(!customer || !product || !quantity){ alert('Fill all fields'); return; }
-
-  //   orders.push({id: orderI++, customer, product, quantity, status});
-  //   filterOrders();
-
-  //   document.getElementById('customerName').value='';
-  //   document.getElementById('productName').value='';
-  //   document.getElementById('quantity').value='';
-  //   document.getElementById('status').value='Pending';
-  // }
 
   function deleteOrder(id){
     orders = orders.filter(o => o.orderId !== id);
@@ -125,8 +118,11 @@ const userRole = JSON.parse(localStorage.getItem("loggedInUser")).role;
     //     product.sellerId==userId)
     //     .map(product=>product.id)
 
-  ///////////////////////////////////////////////// seller orders display /////////////////////////////////
+
 if (userRole === "seller") {
+  
+   
+            
 
   function getSellerOrders(Sorders = orders, Sproducts = products, sellerId = userId) {
     return Sorders
