@@ -55,7 +55,7 @@ const isFav = wishlistEntry.productIds.includes(p.id);
               }
             </div>
 
-            <!-- كارت -->
+            
             <button class="add-to-cart btn" onclick="addToCart(${p.id})">
               <i class="fas fa-shopping-cart"></i> Add To Cart
             </button>
@@ -195,14 +195,17 @@ function goToCategory(categoryName, subName = "") {
 if (categoriesContainer) {
   categories.forEach(cat => {
     const icon = icons[cat.name] || '<i class="fas fa-tag"></i>';
-    categoriesContainer.innerHTML += `
-      <div class="mycard" onclick="goToCategory('${encodeURIComponent(cat.name)}')">
-        ${icon}
-        <span>${cat.name}</span>
-      </div>
-    `;
+    const card = document.createElement("div");
+    card.className = "mycard";
+    card.innerHTML = `${icon}<span>${cat.name}</span>`;
+
+    card.addEventListener("click", () => goToCategory(cat.name));
+
+    categoriesContainer.appendChild(card);
   });
 }
+
+
 
 
 
@@ -259,40 +262,46 @@ if (categoriesContainer) {
   startCountdown("2025-08-23T23:59:59", "Hero");
   startCountdown("2025-08-23T23:59:59", "Flash");
 
+const indicatorsContainer = document.getElementById("carouselIndicators");
+const landingCarouselInner = document.getElementById("carouselInner");
+const featuredProducts = products.slice(0, 6);
 
-  const indicatorsContainer = document.getElementById("carouselIndicators");
-  const landingCarouselInner = document.getElementById("carouselInner");
-  const featuredProducts = products.slice(0, 6);
 
-  if (indicatorsContainer && landingCarouselInner) {
-    featuredProducts.forEach((product, index) => {
-      const indicatorBtn = document.createElement("button");
-      indicatorBtn.type = "button";
-      indicatorBtn.style.backgroundColor="var(--main-color)";
-      indicatorBtn.style.height="2rem";
-      indicatorBtn.style.width="2rem";
-      indicatorBtn.setAttribute("data-bs-target", "#landingCarousel");
-      indicatorBtn.setAttribute("data-bs-slide-to", index);
-      if (index === 0) indicatorBtn.classList.add("active");
-      indicatorsContainer.appendChild(indicatorBtn);
+const categoryMap = {};
+categories.forEach(cat => {
+  categoryMap[cat.id] = cat.name;
+});
 
-      const itemDiv = document.createElement("div");
-      itemDiv.className = `carousel-item ${index === 0 ? "active" : ""}`;
-      itemDiv.innerHTML = `
-        <div class="hero-banner" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
-          <div class="hero-content">
-            <h2>${product.category}</h2>
-            <h1>${product.name} - ${Number(product.discount) > 0 ? product.discount + "% Off" : "Best Price"}</h1>
-            <button class="btn" id="shopnow">Shop Now →</button>
-          </div>
-          <div class="hero-img">
-            <img src="../assets/images/products/${product.imageUrl}" alt="${product.name}">
-          </div>
+if (indicatorsContainer && landingCarouselInner) {
+  featuredProducts.forEach((product, index) => {
+    const indicatorBtn = document.createElement("button");
+    indicatorBtn.type = "button";
+    indicatorBtn.style.backgroundColor = "var(--main-color)";
+    indicatorBtn.style.border="white 2px solid";
+    indicatorBtn.style.height = "2rem";
+    indicatorBtn.style.width = "2rem";
+    indicatorBtn.setAttribute("data-bs-target", "#landingCarousel");
+    indicatorBtn.setAttribute("data-bs-slide-to", index);
+    if (index === 0) indicatorBtn.classList.add("active");
+    indicatorsContainer.appendChild(indicatorBtn);
+
+    const itemDiv = document.createElement("div");
+    itemDiv.className = `carousel-item ${index === 0 ? "active" : ""}`;
+    itemDiv.innerHTML = `
+      <div class="hero-banner" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
+        <div class="hero-content">
+          <h2>${categoryMap[product.categoryId] || "Unknown Category"}</h2>
+          <h1>${product.name} - ${Number(product.discount) > 0 ? product.discount + "% Off" : "Best Price"}</h1>
+          <button class="btn" id="shopnow">Shop Now →</button>
         </div>
-      `;
-      landingCarouselInner.appendChild(itemDiv);
-    });
-  }
+        <div class="hero-img">
+          <img src="../assets/images/products/${product.imageUrl}" alt="${product.name}">
+        </div>
+      </div>
+    `;
+    landingCarouselInner.appendChild(itemDiv);
+  });
+}
 
 function renderRandomCategories(categories, products) {
   const container = document.getElementById("randomCategoriesSection");
@@ -346,25 +355,34 @@ function renderRandomCategories(categories, products) {
 renderRandomCategories(categories, products);
 
 
+function renderFeaturedGrid(list) {
+  const randomProducts = [...list].sort(() => 0.5 - Math.random()).slice(0, 4);
+  const slots = ["one", "two", "three", "four"];
+  const imgSlots = [".one img", ".two img", ".three img", ".four img"];
+  const nameSlots = [".one h3", ".two h3", ".three h3", ".four h3"];
+  const priceSlots = [".one p", ".two p", ".three p", ".four p"];
 
-  function renderFeaturedGrid(list) {
-    const randomProducts = [...list].sort(() => 0.5 - Math.random()).slice(0, 4);
-    const slots = ["one", "two", "three", "four"];
-
-    slots.forEach((slot, index) => {
-      const product = randomProducts[index];
+  slots.forEach((slot, index) => {
+    const product = randomProducts[index];
+    if (product) {
       const slotDiv = document.querySelector(`.${slot}`);
-      if (product && slotDiv) {
-        slotDiv.style.backgroundImage = `url('../assets/images/products/${product.imageUrl}')`;
-        slotDiv.style.backgroundSize = "auto 80%";
-        slotDiv.style.backgroundPosition = "center";
-        slotDiv.style.backgroundRepeat = "no-repeat";
-        slotDiv.style.cursor = "pointer";
-        slotDiv.onclick = () => (window.location.href = `../pages/productDetails.html?id=${product.id}`);
-      }
-    });
-  }
-  renderFeaturedGrid(products);
+      const imgSlotDiv = document.querySelector(imgSlots[index]);
+      const nameSlotDiv = document.querySelector(nameSlots[index]);
+      const priceSlotDiv = document.querySelector(priceSlots[index]);
+
+      imgSlotDiv.src = `../assets/images/products/${product.imageUrl}`;
+      nameSlotDiv.textContent = product.name;
+      priceSlotDiv.textContent = `$${product.price.toFixed(2)}`;
+
+      slotDiv.style.cursor = "pointer";
+      slotDiv.onclick = () => {
+        window.location.href = `../pages/productDetails.html?id=${product.id}`;
+      };
+    }
+  });
+}
+renderFeaturedGrid(products);
+
 
   const searchInput = document.getElementById("searchInput");
   const searchResults = document.getElementById("searchResults");
