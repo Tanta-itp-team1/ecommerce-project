@@ -77,6 +77,15 @@
         </div>
     </header>
 
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
     <!-- Breadcrumb & Product Details -->
     <div class="container my-5">
         <nav class="breadcrumb-nav mb-4">
@@ -98,23 +107,21 @@
                 <div class="d-flex flex-column h-100 justify-content-between p-4 bg-white rounded shadow-sm">
                     <div>
                         <h4 id="productTitle">Product Title</h4>
-                        <p>
-                            <span class="text-warning" id="productRating">★★★★☆</span>
-                            <span class="text-muted" id="reviewCount">(0 Reviews)</span> |
+                        <p class="text-start">
+                             
                             <span class="text-success" id="stockStatus">In Stock</span>
                         </p>
                         <h5 class="text-danger mb-3" id="productPrice">$25.00</h5>
                         <p class="text-muted" id="productDescription">
                             Product description goes here.
                         </p>
-
                         <div class="d-flex align-items-center mb-4">
                             <div class="input-group" style="width: 120px;">
                                 <button class="btn btn-outline-secondary" onclick="decreaseQuantity()">−</button>
                                 <input type="text" class="form-control text-center" value="1" id="quantityInput" readonly>
                                 <button class="btn btn-danger" onclick="increaseQuantity()">+</button>
                             </div>
-                            <button class="btn btn-danger ms-3 w-25" id="buyNowBtn">Buy Now</button>
+                            <button class="btn btn-danger ms-3 w-50" id="buyNowBtn">Buy Now</button>
                         </div>
                     </div>
 
@@ -140,26 +147,6 @@
         </div>
     </div>
 
-    <!-- Reviews Section -->
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Customer Reviews</h4>
-                <hr>
-
-                <!-- Add Review Form -->
-                <div id="add-review-section">
-                    <!-- Review loaded -->
-                </div>
-
-                <!-- Reviews List -->
-                <div id="reviews-list">
-                    <p class="text-muted">Loading reviews...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Toast Notification -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
         <div id="buyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -173,7 +160,6 @@
             </div>
         </div>
     </div>
-
     <footer>
         <div class="container">
             <div class="row">
