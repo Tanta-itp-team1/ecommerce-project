@@ -67,7 +67,7 @@
     </nav>
 
 
-    <div class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar" id="adminSidebar" >
       <div class="sidebar-menu">
         <div class="sidebar-header">Navigation</div>
         <ul class="nav flex-column" id="sidebarMenu">
@@ -555,9 +555,13 @@ const sidebarToggle = document.getElementById('sidebarToggle');
 const adminSidebar = document.getElementById('adminSidebar');
 
 sidebarToggle.addEventListener('click', () => {
-  adminSidebar.classList.toggle('d-none'); 
-  
+
+  adminSidebar.classList.toggle('collapsed');
+
+
+  mainContent.classList.toggle('expanded');
 });
+
 </script>
 
 
