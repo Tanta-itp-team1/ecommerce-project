@@ -17,6 +17,7 @@
       rel="stylesheet"
     />
   <link rel="stylesheet" href="./css/dashboard.css">
+  <script src="../js/initData.js"></script>
 </head>
 <body>
 
@@ -284,55 +285,73 @@
 
       </div>
     </div>
-
 <script>
+// ==================== إعداد البيانات ====================
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || { role: "admin" };
-let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [] };
-let allProducts = ecommerceData.products;
+let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [], categories: [] };
+let products = ecommerceData.products || [];
+let categories = ecommerceData.categories || [];
 
+// المنتجات اللي هتظهر حسب دور المستخدم
 let visibleProducts = loggedInUser.role === "seller"
-  ? allProducts.filter(p => p.sellerId === loggedInUser.id)
-  : allProducts;
+  ? products.filter(p => p.sellerId === loggedInUser.id)
+  : products;
 
 // ==================== Pagination ====================
 let currentPage = 1;
 let itemsPerPage = 5;
 
+function renderPagination(totalItems, page) {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+  for (let i = 1; i <= totalPages; i++) {
+    pagination.innerHTML += `
+      <li class="page-item ${i === page ? 'active' : ''}">
+        <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+      </li>`;
+  }
+}
+
+function goToPage(page) {
+  currentPage = page;
+  renderProducts("productsTableBody", visibleProducts, currentPage);
+}
+
 // ==================== Toast Function ====================
 function showToast(message, type = "success") {
   const toastEl = document.getElementById("liveToast");
   const toastBody = document.getElementById("toastMessage");
-
   toastBody.textContent = message;
   toastEl.className = `toast align-items-center text-bg-${type} border-0`;
-
   const toast = new bootstrap.Toast(toastEl);
   toast.show();
 }
 
 // ==================== Render Products ====================
-function renderProducts(containerId, products, page = 1) {
+function renderProducts(containerId, productsList, page = 1) {
   const start = (page - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  const paginated = products.slice(start, end);
+  const paginated = productsList.slice(start, end);
 
   const container = document.getElementById(containerId);
   container.innerHTML = "";
 
   if (!paginated.length) {
-    container.innerHTML = `<tr><td colspan="6">No products found</td></tr>`;
+    container.innerHTML = `<tr><td colspan="6" class="text-center">No products found</td></tr>`;
     return;
   }
 
   paginated.forEach((p, index) => {
-    const imageSrc = p.imageUrl && p.imageUrl.startsWith("data:")
-      ? p.imageUrl
+    const imageSrc = p.imageUrl && p.imageUrl.startsWith("data:") 
+      ? p.imageUrl 
       : `../assets/images/products/${p.imageUrl || "default.png"}`;
+    const categoryName = categories.find(c => c.id === p.categoryId)?.name || "Unknown";
 
     container.innerHTML += `
       <tr>
         <td>${start + index + 1}</td>
-        <td><img src="${imageSrc}" alt="${p.name}" style="width:80px; height:80px; object-fit:cover;"></td>
+        <td><img src="${imageSrc}" alt="${p.name}" style="width:80px;height:80px;object-fit:cover;"></td>
         <td>${p.name}</td>
         <td class="fw-bold d-none d-md-table-cell">$${p.price}</td>
         <td class="d-none d-md-table-cell">
@@ -343,11 +362,10 @@ function renderProducts(containerId, products, page = 1) {
         <td>
           ${showControlButtons(p)}
         </td>
-      </tr>
-    `;
+      </tr>`;
   });
 
-  renderPagination(products.length, page);
+  renderPagination(productsList.length, page);
 }
 
 // ==================== Control Buttons ====================
@@ -362,33 +380,12 @@ function showControlButtons(product) {
       </button>
       <button class="btn btn-sm btn-secondary" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
         <i class="fas fa-eye"></i> View
-      </button>
-    `;
+      </button>`;
   }
   return `
     <button class="btn btn-sm btn-secondary" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
       <i class="fas fa-eye"></i> View
-    </button>
-  `;
-}
-
-// ==================== Pagination ====================
-function renderPagination(totalItems, page) {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const pagination = document.getElementById("pagination");
-  pagination.innerHTML = "";
-
-  for (let i = 1; i <= totalPages; i++) {
-    pagination.innerHTML += `
-      <li class="page-item ${i === page ? 'active' : ''}">
-        <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
-      </li>`;
-  }
-}
-
-function goToPage(page) {
-  currentPage = page;
-  renderProducts("productsTableBody", visibleProducts, currentPage);
+    </button>`;
 }
 
 // ==================== Image Upload ====================
@@ -399,37 +396,42 @@ function setupImageUpload(inputId, previewId, type) {
   document.getElementById(inputId).addEventListener('change', function(e) {
     let file = e.target.files[0];
     let reader = new FileReader();
-
     reader.onload = function(event) {
       if (type === "create") selectedImageCreate = event.target.result;
       if (type === "edit") selectedImageEdit = event.target.result;
-
       let preview = document.getElementById(previewId);
       preview.src = event.target.result;
       preview.style.display = "block";
     };
-
     if (file) reader.readAsDataURL(file);
   });
 }
-
-// For Edit Modal
+setupImageUpload("productImageCreate", "previewImageCreate", "create");
 setupImageUpload("productImageEdit", "previewImageEdit", "edit");
 
-// For Create Modal
-setupImageUpload("productImageCreate", "previewImageCreate", "create");
+// ==================== Category Dropdown ====================
+function populateCategoryDropdown(selectId, selectedId = null) {
+  const select = document.getElementById(selectId);
+  select.innerHTML = `<option value="">Select Category</option>`;
+  categories.forEach(cat => {
+    const option = document.createElement("option");
+    option.value = cat.id;
+    option.textContent = cat.name;
+    if (selectedId && selectedId == cat.id) option.selected = true;
+    select.appendChild(option);
+  });
+}
+populateCategoryDropdown("productCategoryCreate");
 
 // ==================== Validation ====================
-const nameRegex = /^[A-Za-z][A-Za-z0-9 ]*$/; 
-
-function validateFields(name, category, price, discount, stock, image) {
+const nameRegex = /^[A-Za-z][A-Za-z0-9 ]*$/;
+function validateFields(name, categorySelect, price, discount, stock, image) {
   let isValid = true;
-
   if (!nameRegex.test(name.value.trim())) { name.classList.add("is-invalid"); isValid = false; }
   else { name.classList.remove("is-invalid"); }
 
-  if (!category.value.trim()) { category.classList.add("is-invalid"); isValid = false; }
-  else { category.classList.remove("is-invalid"); }
+  if (!categorySelect.value) { categorySelect.classList.add("is-invalid"); isValid = false; }
+  else { categorySelect.classList.remove("is-invalid"); }
 
   if (price.value <= 0 || !price.value) { price.classList.add("is-invalid"); isValid = false; }
   else { price.classList.remove("is-invalid"); }
@@ -444,20 +446,22 @@ function validateFields(name, category, price, discount, stock, image) {
 
   return isValid;
 }
+
+// ==================== Create Product ====================
 document.getElementById("createProductBtn").addEventListener("click", function () {
   const name = document.getElementById("productNameCreate");
-  const categoryId = parseInt(document.getElementById("productCategoryCreate").value);
+  const categorySelect = document.getElementById("productCategoryCreate");
   const price = document.getElementById("productPriceCreate");
   const discount = document.getElementById("productDiscountCreate");
   const stock = document.getElementById("productStockCreate");
   const description = document.getElementById("productDescriptionCreate");
 
-  if (!validateFields(name, categoryId, price, discount, stock, selectedImageCreate)) return;
+  if (!validateFields(name, categorySelect, price, discount, stock, selectedImageCreate)) return;
 
   let newProduct = {
     id: Date.now(),
     name: name.value.trim(),
-    categoryId,
+    categoryId: parseInt(categorySelect.value),
     price: parseFloat(price.value),
     discount: parseInt(discount.value) || 0,
     stock: parseInt(stock.value) || 0,
@@ -468,14 +472,12 @@ document.getElementById("createProductBtn").addEventListener("click", function (
 
   ecommerceData.products.push(newProduct);
   localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
-
-  showToast("Product created successfully!", "success");
+  showToast("Product created successfully!");
   bootstrap.Modal.getInstance(document.getElementById("createProductModal")).hide();
 
   visibleProducts = (loggedInUser.role === "seller")
     ? ecommerceData.products.filter(p => p.sellerId === loggedInUser.id)
     : ecommerceData.products;
-
   renderProducts("productsTableBody", visibleProducts, currentPage);
 });
 
@@ -483,11 +485,9 @@ document.getElementById("createProductBtn").addEventListener("click", function (
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("edit-btn")) {
     let productId = e.target.getAttribute("data-id");
-    let product = ecommerceData.products.find(p => p.id == productId);
-
+    let product = products.find(p => p.id == productId);
     if (product) {
       localStorage.setItem("editProductId", product.id);
-
       document.getElementById("productNameEdit").value = product.name;
       populateCategoryDropdown("productCategoryEdit", product.categoryId);
       document.getElementById("productPriceEdit").value = product.price;
@@ -496,99 +496,64 @@ document.addEventListener("click", function(e) {
       document.getElementById("productDescriptionEdit").value = product.description;
 
       let preview = document.getElementById("previewImageEdit");
-      preview.src = product.imageUrl;
-      preview.style.display = "block";
-      selectedImageEdit = product.imageUrl;
+      preview.src = product.imageUrl || "";
+      preview.style.display = product.imageUrl ? "block" : "none";
+      selectedImageEdit = product.imageUrl || "";
 
-      let modal = new bootstrap.Modal(document.getElementById("editProductModal"));
-      modal.show();
+      new bootstrap.Modal(document.getElementById("editProductModal")).show();
     }
   }
 });
 
 document.getElementById("updateProductBtn").addEventListener("click", function () {
+  const productId = localStorage.getItem("editProductId");
+  const product = products.find(p => p.id == productId);
+  if (!product) return;
+
   const name = document.getElementById("productNameEdit");
-  const categoryId = parseInt(document.getElementById("productCategoryEdit").value);
+  const categorySelect = document.getElementById("productCategoryEdit");
   const price = document.getElementById("productPriceEdit");
   const discount = document.getElementById("productDiscountEdit");
   const stock = document.getElementById("productStockEdit");
   const description = document.getElementById("productDescriptionEdit");
 
-  if (!validateFields(name, categoryId, price, discount, stock, selectedImageEdit)) return;
-
-  const productId = parseInt(localStorage.getItem("editProductId"));
-  let product = ecommerceData.products.find(p => p.id === productId);
+  if (!validateFields(name, categorySelect, price, discount, stock, selectedImageEdit)) return;
 
   product.name = name.value.trim();
-  product.categoryId = categoryId;
+  product.categoryId = parseInt(categorySelect.value);
   product.price = parseFloat(price.value);
-  product.discount = parseInt(discount.value) || 0;
-  product.stock = parseInt(stock.value) || 0;
+  product.discount = parseInt(discount.value);
+  product.stock = parseInt(stock.value);
   product.description = description.value.trim();
   product.imageUrl = selectedImageEdit;
 
   localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
-
-  showToast("Product updated successfully!", "success");
+  showToast("Product updated successfully!");
   bootstrap.Modal.getInstance(document.getElementById("editProductModal")).hide();
-
-  visibleProducts = (loggedInUser.role === "seller")
-    ? ecommerceData.products.filter(p => p.sellerId === loggedInUser.id)
-    : ecommerceData.products;
-
   renderProducts("productsTableBody", visibleProducts, currentPage);
 });
-// ==================== Category Dropdown ====================
-function populateCategoryDropdown(selectId, selectedId = null) {
-  const select = document.getElementById(selectId);
-  select.innerHTML = `<option value="">Select Category</option>`;
-
-  ecommerceData.categories.forEach(cat => {
-    const option = document.createElement("option");
-    option.value = cat.id;
-    option.textContent = cat.name;
-    if (selectedId && selectedId == cat.id) option.selected = true;
-    select.appendChild(option);
-  });
-}
 
 // ==================== Delete Product ====================
-let productToDelete = null;
-
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("delete-btn")) {
-    productToDelete = e.target.getAttribute("data-id");
-    let modal = new bootstrap.Modal(document.getElementById("deleteConfirmModal"));
-    modal.show();
+    const id = e.target.getAttribute("data-id");
+    ecommerceData.products = ecommerceData.products.filter(p => p.id != id);
+    localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
+
+    visibleProducts = (loggedInUser.role === "seller")
+      ? ecommerceData.products.filter(p => p.sellerId === loggedInUser.id)
+      : ecommerceData.products;
+
+    showToast("Product deleted successfully!");
+    renderProducts("productsTableBody", visibleProducts, currentPage);
   }
 });
 
-document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
-  if (!productToDelete) return;
-
-  ecommerceData.products = ecommerceData.products.filter(p => p.id != productToDelete);
-  localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
-
-  showToast("Product deleted successfully!", "success");
-  productToDelete = null;
-
-  bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal")).hide();
-
-  visibleProducts = (loggedInUser.role === "seller")
-    ? ecommerceData.products.filter(p => p.sellerId === loggedInUser.id)
-    : ecommerceData.products;
-
-  renderProducts("productsTableBody", visibleProducts, currentPage);
-});
-
-// ==================== Sidebar Toggle ====================
-document.getElementById("sidebarToggle").addEventListener("click", function() {
-  document.getElementById("adminSidebar").classList.toggle("collapsed");
-});
-
-// ==================== First Load ====================
+// ==================== Initialize ====================
 renderProducts("productsTableBody", visibleProducts, currentPage);
+
 </script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
