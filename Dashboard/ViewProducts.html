@@ -278,6 +278,8 @@
 
       </div>
     </div>
+    <div class="overlay" id="sidebarOverlay"></div>
+
 <script>
 // ==================== إعداد البيانات ====================
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || { role: "admin" };
@@ -564,11 +566,23 @@ renderProducts("productsTableBody", visibleProducts, currentPage);
 const sidebarToggle = document.getElementById('sidebarToggle');
 const adminSidebar = document.getElementById('adminSidebar');
 const mainContent = document.querySelector('.main-content');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
 
 sidebarToggle.addEventListener('click', () => {
-  adminSidebar.classList.toggle('collapsed');
-  mainContent.classList.toggle('expanded');
+  if (window.innerWidth <= 992) {
+    adminSidebar.classList.toggle('show');
+    sidebarOverlay.classList.toggle('show');
+  } else {
+    adminSidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('expanded');
+  }
 });
+
+sidebarOverlay.addEventListener('click', () => {
+  adminSidebar.classList.remove('show');
+  sidebarOverlay.classList.remove('show');
+});
+
 </script>
 
 
