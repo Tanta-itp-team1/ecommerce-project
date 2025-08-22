@@ -9,7 +9,7 @@
     } else if (user.role === "seller") {
       window.location.href = "../../Dashboard/sellerhome.html";
     } else {
-      window.location.href = "../index.html";
+      window.location.href = "../../index.html";
     }
     return;
   }
@@ -91,7 +91,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
         } else if (matchedUser.role === "seller") {
           window.location.href = "../../Dashboard/sellerhome.html";
         } else {
-          window.location.href = "../index.html";
+          window.location.href = "../../index.html";
         }
       }, 2000);
     } else {
