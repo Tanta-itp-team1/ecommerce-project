@@ -27,7 +27,7 @@
           <i class="bi bi-list fs-4"></i>
         </button>
         <a class="navbar-brand fw-bold text-dark" href="dashboard.html">
-          <span class="text-primary">Admin</span>Pro
+          <span class="text-primary">Admin</span> Panel
         </a>
         <a href="../Home/homepage.html" target="_blank" class="btn btn-outline-primary ms-auto">
           Visit Site
@@ -51,11 +51,11 @@
               </li>
               <li><hr class="dropdown-divider my-2" /></li>
               <li>
-                <a class="dropdown-item d-flex align-items-center py-2" href="admin-profile.html">
-                  <i class="bi bi-person me-2"></i>Profile
+                <a class="dropdown-item d-flex align-items-center py-2" href="../pages/account.html">
+                  <i class="bi bi-person me-2"></i>Account
                 </a>
               </li>
-              <li>
+              <li onclick="localStorage.removeItem('loggedInUser');location.reload();">
                 <a class="dropdown-item d-flex align-items-center py-2 text-danger" href="#">
                   <i class="bi bi-box-arrow-right me-2"></i>Logout
                 </a>
@@ -79,9 +79,15 @@
           </li>
           <li class="sidebar-divider"></li>
           <li class="nav-item">
-            <a class="nav-link" href="ViewProducts.html">
+            <a class="nav-link active" href="ViewProducts.html">
               <i class="bi bi-box-seam"></i>
               <span>Products</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="categories.html">
+              <i class="bi bi-tags"></i>
+              <span>Categories</span>
             </a>
           </li>
           <li class="nav-item">
@@ -91,7 +97,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="users.html">
+            <a class="nav-link" href="users.html">
               <i class="bi bi-people"></i>
               <span>Users</span>
             </a>
@@ -286,7 +292,10 @@ const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || { role:
 let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { products: [], categories: [] };
 let products = ecommerceData.products || [];
 let categories = ecommerceData.categories || [];
-
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (!user || user.role != ("admin" || "seller")) {
+    location.href = "../pages/auth/login.html"
+  }
 let visibleProducts = loggedInUser.role === "seller"
   ? products.filter(p => p.sellerId === loggedInUser.id)
   : products;
@@ -372,14 +381,14 @@ function showControlButtons(product) {
       <button class="btn btn-sm btn-danger delete-btn" data-id="${product.id}">
         <i class="fas fa-trash"></i> Delete
       </button>
-      <button class="btn btn-sm btn-secondary" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
+      <a class="btn btn-sm btn-secondary" href='../pages/productDetails.html?id=${product.id}'" target="_blank">
         <i class="fas fa-eye"></i> View
-      </button>`;
+      </a>`;
   }
   return `
-    <button class="btn btn-sm btn-secondary" onclick="window.location.href='../pages/productDetails.html?id=${product.id}'">
+    <a class="btn btn-sm btn-secondary" href='../pages/productDetails.html?id=${product.id}' " target="_blank">
       <i class="fas fa-eye"></i> View
-    </button>`;
+    </a>`;
 }
 
 // ==================== Category Dropdown ====================

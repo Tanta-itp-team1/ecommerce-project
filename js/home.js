@@ -43,12 +43,12 @@ function renderCarousel(carouselId, items) {
             }, this)" title="Wishlist">
               <i class="${isFav ? "redHeart fas" : "far"} fa-heart"></i>
             </button>
-
-            <img src=${
-              p.imageUrl.startsWith("http") || p.imageUrl.startsWith("data")
-                ? p.imageUrl
-                : "../assets/images/products/" + p.imageUrl
-            }
+            <div class="mx-auto" onclick="goToProduct(${p.id});">
+              <img src=${
+                p.imageUrl.startsWith("http") || p.imageUrl.startsWith("data")
+                  ? p.imageUrl
+                  : "../assets/images/products/" + p.imageUrl
+              }
                  alt="${p.name}"
                  onerror="this.src='../assets/images/products/placeholder.jpg'">
 
@@ -61,7 +61,7 @@ function renderCarousel(carouselId, items) {
                   : `<span class="new">$${p.price}</span>`
               }
             </div>
-
+            </div>
             
             <button class="add-to-cart btn" onclick="addToCart(${p.id})">
               <i class="fas fa-shopping-cart"></i> Add To Cart
