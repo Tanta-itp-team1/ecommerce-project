@@ -16,7 +16,7 @@ const totalProducts = document.getElementById("totalProducts");
 const topPage = document.getElementById("topPage");
 
 // Order status counts
-const pendingOrders = myOrders.filter((o) => o.status === "pending").length;
+const pendingOrders = myOrders.filter((o) => o.status === "Pending").length;
 const completedOrders = myOrders.filter((o) => o.status === "Delivered").length;
 
 // Assign main stats
@@ -138,7 +138,7 @@ new Chart(revenueCtx, {
           data: [
             pendingOrders,
             completedOrders,
-            ecommerceData.orders.filter((o) => o.status === "canceled").length,
+            ecommerceData.orders.filter((o) => o.status === "Canceled").length,
           ],
           backgroundColor: ["#f6c23e", "#1cc88a", "#e74a3b"],
           hoverOffset: 6,
