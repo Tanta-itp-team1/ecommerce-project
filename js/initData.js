@@ -453,19 +453,19 @@
         //   // orderDate: "2025-08-10",
         // },
         {
-  orderId: 1755714232104,
-  userId: 2,
-  status: "Pending",
-  orderDate: "2025-08-20T18:23:52.104Z",
-  fullName: "Abdelrahman Ramadan",
-  email: "abdeodoo499@gmail.com",
-  address: "2 SaidShalbi\nTanta Algharbia",
-  items: [
-    { productId: 22, quantity: 1, price: 45 },
-    { productId: 27, quantity: 2, price: 102 }
-  ],
-  totalAmount: 1201.5
-}
+          orderId: 1755714232104,
+          userId: 2,
+          status: "Pending",
+          orderDate: "2025-08-20T18:23:52.104Z",
+          fullName: "Abdelrahman Ramadan",
+          email: "abdeodoo499@gmail.com",
+          address: "2 SaidShalbi\nTanta Algharbia",
+          items: [
+            { productId: 22, quantity: 1, price: 45 },
+            { productId: 27, quantity: 2, price: 102 },
+          ],
+          totalAmount: 1201.5,
+        },
       ],
       categories: [
         { id: 1, name: "Men's Fashion" },
