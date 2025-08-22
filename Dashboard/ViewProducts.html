@@ -292,7 +292,7 @@ let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { produ
 let products = ecommerceData.products || [];
 let categories = ecommerceData.categories || [];
 
-// المنتجات اللي هتظهر حسب دور المستخدم
+
 let visibleProducts = loggedInUser.role === "seller"
   ? products.filter(p => p.sellerId === loggedInUser.id)
   : products;
@@ -551,7 +551,13 @@ document.addEventListener("click", function(e) {
 
 // ==================== Initialize ====================
 renderProducts("productsTableBody", visibleProducts, currentPage);
+const sidebarToggle = document.getElementById('sidebarToggle');
+const adminSidebar = document.getElementById('adminSidebar');
 
+sidebarToggle.addEventListener('click', () => {
+  adminSidebar.classList.toggle('d-none'); 
+  
+});
 </script>
 
 
