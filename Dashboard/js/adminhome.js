@@ -249,11 +249,11 @@ window.addEventListener("load", function () {
           <span>${p.id} </span>
           <div class="d-flex align-items-center">
         <img src="${
-          p.imageUrl.startsWith("data:")
+          p.imageUrl.startsWith("http") || p.imageUrl.startsWith("data")
             ? p.imageUrl
-            : "../../assets/images/products/" + p.imageUrl
+            : "../assets/images/products/" + p.imageUrl
         }" 
-    alt="${p.name}" 
+                                    alt="${p.name}" 
     width="40" 
     height="40" 
     class="me-2 rounded">            ${p.name}
