@@ -9,7 +9,6 @@ if (!localStorage.getItem("ecommerceData")) {
       status: "active",
       joinDate: new Date().toISOString()
     }],
-    lastUserId: Date.now()
   }));
 }
 
@@ -89,7 +88,7 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
     submitBtn.disabled = false;
     submitBtn.innerHTML = "Register";
     
-    document.getElementById('toastError').querySelector('.toast-body').textContent = "❌ Email already exists!";
+    document.getElementById('toastError').querySelector('.toast-body').textContent = "Email already exists!";
     errorToast.show();
     return;
   }
@@ -134,4 +133,4 @@ if (localStorage.getItem("loggedInUser")) {
     case "seller": window.location.href = "../seller/dashboard.html"; break;
     default: window.location.href = "../../index.html";
   }
-}
+}     

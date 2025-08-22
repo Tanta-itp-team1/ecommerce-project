@@ -1,15 +1,11 @@
 /* eslint-disable no-undef */
-// Initialize toast
 const toastEl = document.getElementById("liveToast");
 const toastTitle = document.getElementById("toastTitle");
 const toastMessage = document.getElementById("toastMessage");
 const toast = new bootstrap.Toast(toastEl);
-
 function showToast(title, message, isSuccess = true) {
   toastTitle.textContent = title;
   toastMessage.textContent = message;
-
-  // Change header color based on success/error
   const toastHeader = toastEl.querySelector(".toast-header");
   if (isSuccess) {
     toastHeader.classList.remove("bg-danger", "text-white");
@@ -18,10 +14,8 @@ function showToast(title, message, isSuccess = true) {
     toastHeader.classList.remove("bg-success", "text-white");
     toastHeader.classList.add("bg-danger", "text-white");
   }
-
   toast.show();
 }
-
 const sidebar = document.getElementById("adminSidebar");
 const toggleBtn = document.getElementById("sidebarToggle");
 const mainContent = document.querySelector(".main-content");
@@ -43,18 +37,15 @@ function handleResize() {
     sidebar.classList.remove("show");
   }
 }
-
 toggleBtn.addEventListener("click", toggleSidebar);
 window.addEventListener("resize", handleResize);
 handleResize();
-
 // Validation patterns
 const validationPatterns = {
   name: /^[a-zA-Z\s]{2,50}$/,
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   password: /^.{6,}$/,
 };
-
 // Pagination variables
 let currentPage = 1;
 let pageSize = 10;
@@ -71,7 +62,7 @@ function initializeEcommerceData() {
           password: "Admin@123",
           role: "admin",
           status: "active",
-          joinDate: new Date().toISOString(),
+          joinedDate: new Date().toISOString(),
         },
         {
           id: 2,
@@ -80,7 +71,7 @@ function initializeEcommerceData() {
           password: "seller123",
           role: "seller",
           status: "active",
-          joinDate: new Date().toISOString(),
+          joinedDate: new Date().toISOString(),
         },
         {
           id: 3,
@@ -89,130 +80,13 @@ function initializeEcommerceData() {
           password: "customer123",
           role: "customer",
           status: "active",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 4,
-          name: "Jane Smith",
-          email: "jane@example.com",
-          password: "customer456",
-          role: "customer",
-          status: "active",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 5,
-          name: "Robert Johnson",
-          email: "robert@example.com",
-          password: "customer789",
-          role: "customer",
-          status: "inactive",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 6,
-          name: "Sarah Williams",
-          email: "sarah@example.com",
-          password: "customer012",
-          role: "customer",
-          status: "active",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 7,
-          name: "Michael Brown",
-          email: "michael@example.com",
-          password: "customer345",
-          role: "customer",
-          status: "active",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 8,
-          name: "Lisa Davis",
-          email: "lisa@example.com",
-          password: "customer678",
-          role: "customer",
-          status: "inactive",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 9,
-          name: "David Wilson",
-          email: "david@example.com",
-          password: "customer901",
-          role: "customer",
-          status: "active",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 10,
-          name: "Karen Taylor",
-          email: "karen@example.com",
-          password: "customer234",
-          role: "customer",
-          status: "active",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 11,
-          name: "Christopher Anderson",
-          email: "chris@example.com",
-          password: "customer567",
-          role: "customer",
-          status: "active",
-          joinDate: new Date().toISOString(),
-        },
-        {
-          id: 12,
-          name: "Amanda Thomas",
-          email: "amanda@example.com",
-          password: "customer890",
-          role: "customer",
-          status: "inactive",
-          joinDate: new Date().toISOString(),
-        },
+          joinedDate: new Date().toISOString(),
+        }
       ],
-      lastUserId: 12,
     };
     localStorage.setItem("ecommerceData", JSON.stringify(defaultData));
-  } else {
-    const existingData = JSON.parse(localStorage.getItem("ecommerceData"));
-    if (
-      !existingData.lastUserId &&
-      existingData.users &&
-      existingData.users.length > 0
-    ) {
-      existingData.lastUserId = Math.max(
-        ...existingData.users.map((user) => user.id)
-      );
-      localStorage.setItem("ecommerceData", JSON.stringify(existingData));
-    }
-  }
+  } 
 }
-
-function getNextUserId() {
-  const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || {
-    users: [],
-    lastUserId: 0,
-  };
-
-  // If we have users but no lastUserId, find the highest ID
-  if (
-    ecommerceData.users.length > 0 &&
-    (!ecommerceData.lastUserId || ecommerceData.lastUserId === 0)
-  ) {
-    ecommerceData.lastUserId = Math.max(
-      ...ecommerceData.users.map((user) => user.id)
-    );
-  }
-
-  const nextId = ecommerceData.lastUserId + 1;
-  ecommerceData.lastUserId = nextId;
-  localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
-  return nextId;
-}
-
 function filterCustomers() {
   const nameFilter = document.getElementById("nameFilter").value.toLowerCase();
   const roleFilter = document.getElementById("roleFilter").value;
@@ -240,23 +114,19 @@ function filterCustomers() {
       (customer) => customer.status === statusFilter
     );
   }
-
   // Reset to first page when filtering
-  currentPage = 1;
+  currentPage = 1;  
   renderCustomersTable();
 }
-
 function renderCustomersTable() {
   const tbody = document.querySelector("#customersTable tbody");
   tbody.innerHTML = "";
-
   // Calculate pagination values
   const totalItems = filteredCustomers.length;
   const totalPages = Math.ceil(totalItems / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalItems);
   const currentItems = filteredCustomers.slice(startIndex, endIndex);
-
   if (currentItems.length === 0) {
     tbody.innerHTML = `
                     <tr>
@@ -268,13 +138,11 @@ function renderCustomersTable() {
     updatePaginationControls(totalItems, totalPages);
     return;
   }
-
   currentItems.forEach((customer, index) => {
     const tr = document.createElement("tr");
-    const joinDate = customer.joinDate
-      ? new Date(customer.joinDate).toLocaleDateString()
+    const joinedDate = customer.joinedDate
+      ? new Date(customer.joinedDate).toLocaleDateString()
       : "N/A";
-
     tr.innerHTML = `
                     <td>${startIndex + index + 1}</td>
                     <td>${customer.name}</td>
@@ -301,7 +169,7 @@ function renderCustomersTable() {
                             }
                         </span>
                     </td>
-                    <td>${joinDate}</td>
+                    <td>${joinedDate}</td>
                     <td class="action-btns">
                         <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="${
                           customer.id
@@ -318,10 +186,7 @@ function renderCustomersTable() {
     tbody.appendChild(tr);
   });
 
-  // Update pagination controls
   updatePaginationControls(totalItems, totalPages);
-
-  // Add event listeners to action buttons
   document.querySelectorAll(".edit-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
       const id = parseInt(this.getAttribute("data-id"));
@@ -337,7 +202,6 @@ function renderCustomersTable() {
         document.getElementById("editRole").value = customer.role;
         document.getElementById("editStatus").checked =
           customer.status === "active";
-
         // Clear validation errors when opening modal
         document
           .querySelectorAll("#editCustomerForm .is-invalid")
@@ -352,7 +216,6 @@ function renderCustomersTable() {
       }
     });
   });
-
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
       const id = parseInt(this.getAttribute("data-id"));
@@ -370,7 +233,6 @@ function renderCustomersTable() {
 function updatePaginationControls(totalItems, totalPages) {
   const pageInfo = document.getElementById("pageInfo");
   const paginationControls = document.getElementById("paginationControls");
-
   // Update page info text
   const startIndex = (currentPage - 1) * pageSize + 1;
   const endIndex = Math.min(currentPage * pageSize, totalItems);
@@ -395,7 +257,6 @@ function updatePaginationControls(totalItems, totalPages) {
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-  // Adjust if we're at the end
   if (endPage - startPage + 1 < maxVisiblePages) {
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
@@ -592,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const ecommerceData = JSON.parse(
         localStorage.getItem("ecommerceData")
-      ) || { users: [], lastUserId: 0 };
+      ) || { users: [] };
       const users = ecommerceData.users;
 
       if (users.some((user) => user.email === email)) {
@@ -612,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function () {
           password,
           role,
           status: "active",
-          joinDate: new Date().toISOString(),
+          joinedDate: new Date().toISOString(),
         };
 
         users.push(newUser);
@@ -633,99 +494,99 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // Update customer
-  document
-    .getElementById("updateCustomerBtn")
-    .addEventListener("click", function () {
-      const id = parseInt(document.getElementById("editCustomerId").value);
-      const nameInput = document.getElementById("editName");
-      const emailInput = document.getElementById("editEmail");
-      const roleInput = document.getElementById("editRole");
+        document
+          .getElementById("updateCustomerBtn")
+          .addEventListener("click", function () {
+            const id = parseInt(document.getElementById("editCustomerId").value);
+            const nameInput = document.getElementById("editName");
+            const emailInput = document.getElementById("editEmail");
+            const roleInput = document.getElementById("editRole");
 
-      const isNameValid = validateInput(
-        nameInput,
-        validationPatterns.name,
-        "Please enter a valid name (2-50 characters)"
-      );
-      const isEmailValid = validateInput(
-        emailInput,
-        validationPatterns.email,
-        "Please enter a valid email address"
-      );
-      const isRoleValid = roleInput.value ? true : false;
+            const isNameValid = validateInput(
+              nameInput,
+              validationPatterns.name,
+              "Please enter a valid name (2-50 characters)"
+            );
+            const isEmailValid = validateInput(
+              emailInput,
+              validationPatterns.email,
+              "Please enter a valid email address"
+            );
+            const isRoleValid = roleInput.value ? true : false;
 
-      if (!isRoleValid) {
-        roleInput.classList.add("is-invalid");
-        roleInput.nextElementSibling.textContent = "Please select a role";
-      } else {
-        roleInput.classList.remove("is-invalid");
-      }
+            if (!isRoleValid) {
+              roleInput.classList.add("is-invalid");
+              roleInput.nextElementSibling.textContent = "Please select a role";
+            } else {
+              roleInput.classList.remove("is-invalid");
+            }
 
-      if (!isNameValid || !isEmailValid || !isRoleValid) {
-        showToast("Error", "Please fix all validation errors", false);
-        return;
-      }
+            if (!isNameValid || !isEmailValid || !isRoleValid) {
+              showToast("Error", "Please fix all validation errors", false);
+              return;
+            }
 
-      const name = nameInput.value.trim();
-      const email = emailInput.value.trim();
-      const role = roleInput.value;
-      const status = document.getElementById("editStatus").checked
-        ? "active"
-        : "inactive";
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const role = roleInput.value;
+            const status = document.getElementById("editStatus").checked
+              ? "active"
+              : "inactive";
 
-      const ecommerceData = JSON.parse(
-        localStorage.getItem("ecommerceData")
-      ) || { users: [] };
-      const users = ecommerceData.users;
-      const userIndex = users.findIndex((user) => user.id === id);
+            const ecommerceData = JSON.parse(
+              localStorage.getItem("ecommerceData")
+            ) || { users: [] };
+            const users = ecommerceData.users;
+            const userIndex = users.findIndex((user) => user.id === id);
 
-      if (userIndex === -1) {
-        showToast("Error", "Customer not found", false);
-        return;
-      }
+            if (userIndex === -1) {
+              showToast("Error", "Customer not found", false);
+              return;
+            }
 
-      if (
-        users.some((user, index) => user.email === email && index !== userIndex)
-      ) {
-        emailInput.classList.add("is-invalid");
-        emailInput.nextElementSibling.textContent =
-          "Email already exists for another customer";
-        showToast("Error", "Email already exists for another customer", false);
-        return;
-      }
+            if (
+              users.some((user, index) => user.email === email && index !== userIndex)
+            ) {
+              emailInput.classList.add("is-invalid");
+              emailInput.nextElementSibling.textContent =
+                "Email already exists for another customer";
+              showToast("Error", "Email already exists for another customer", false);
+              return;
+            }
 
-      setButtonLoading(this, true);
+            setButtonLoading(this, true);
 
-      setTimeout(() => {
-        users[userIndex] = {
-          ...users[userIndex],
-          name,
-          email,
-          role,
-          status,
-        };
+            setTimeout(() => {
+              users[userIndex] = {
+                ...users[userIndex],
+                name,
+                email,
+                role,
+                status,
+              };
 
-        ecommerceData.users = users;
-        localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
+              ecommerceData.users = users;
+              localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
 
-        bootstrap.Modal.getInstance(
-          document.getElementById("editCustomerModal")
-        ).hide();
-        loadCustomers();
+              bootstrap.Modal.getInstance(
+                document.getElementById("editCustomerModal")
+              ).hide();
+              loadCustomers();
 
-        setButtonLoading(this, false);
+              setButtonLoading(this, false);
 
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        if (loggedInUser && loggedInUser.id === id) {
-          localStorage.setItem(
-            "loggedInUser",
-            JSON.stringify(users[userIndex])
-          );
-          updateNavbarUser();
-        }
+              const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+              if (loggedInUser && loggedInUser.id === id) {
+                localStorage.setItem(
+                  "loggedInUser",
+                  JSON.stringify(users[userIndex])
+                );
+                updateNavbarUser();
+              }
 
-        showToast("Success", "Customer updated successfully");
-      }, 1000);
-    });
+              showToast("Success", "Customer updated successfully");
+            }, 1000);
+          });
 
   document
     .getElementById("confirmDeleteBtn")

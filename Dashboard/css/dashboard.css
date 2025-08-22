@@ -346,7 +346,6 @@ body {
 .is-invalid ~ .invalid-feedback {
   display: block;
 }
-/* Loading spinner */
 .spinner-border {
   width: 1rem;
   height: 1rem;
@@ -360,7 +359,6 @@ body {
 .btn-loading .btn-text {
   display: none;
 }
-/* Role badges */
 .role-badge-admin {
   background-color: #6366f1;
 }
@@ -387,12 +385,12 @@ body {
   margin-right: 5px;
 }
 .status-discount {
-  background: #ef4444; /* أحمر */
+  background: #ef4444; 
   color: white;
   border-radius: 5px;
 }
 .status-nodiscount {
-  background: #94a3b8; /* رمادي */
+  background: #94a3b8;
   color: white;
   border-radius: 5px;
 }

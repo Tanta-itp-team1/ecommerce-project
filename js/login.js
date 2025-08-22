@@ -1,9 +1,7 @@
-// Check if user is already logged in on page load
 (function () {
   const loggedInUser = localStorage.getItem("loggedInUser");
   if (loggedInUser) {
     const user = JSON.parse(loggedInUser);
-    // Redirect based on role
     if (user.role === "admin") {
       window.location.href = "../../Dashboard/adminhome.html";
     } else if (user.role === "seller") {

@@ -15,12 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     categories = [
       { id: 1, name: "Men's Fashion" },
-      { id: 2, name: "Women's Fashion" },
+      { id: 2, name: "Women 's Fashion" },
       { id: 3, name: "Electronics" },
       { id: 4, name: "Furniture" },
       { id: 5, name: "Toys" }
     ];
   }
+  
   if (!ecommerceData.products || ecommerceData.products.length === 0) {
     alert("No products available. Redirecting to home page.");
     window.location.href = "../index.html";
@@ -29,13 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = parseInt(urlParams.get("id"));
   if (!productId || isNaN(productId)) {
-    alert("Product not found.");
-    window.location.href = "../index.html";
+    window.location.href = "../404.html";
     return;
   }
   currentProduct = ecommerceData.products.find((p) => p.id === productId);
   if (!currentProduct) {
-    document.getElementById("productTitle").textContent = "Product Not Found";
+    window.location.href = "../404.html";
     return;
   }
   displayProductDetails(currentProduct);
@@ -47,14 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   if (decreaseBtn) {
     decreaseBtn.addEventListener("click", decreaseQuantity);
-  }
-  const logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      localStorage.removeItem('loggedInUser');
-      window.location.href = '../index.html';
-    });
   }
 });
 function getCategoryName(categoryId) {
@@ -164,7 +156,7 @@ function addToCart(productId, quantity) {
   }
   const ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { 
     products: [], 
-    users: [], 
+    users: [],  
     cart: [] 
   };
   let cartEntry = ecommerceData.cart.find((c) => c.userId === loggedInUser.id);
