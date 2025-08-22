@@ -292,7 +292,6 @@ let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { produ
 let products = ecommerceData.products || [];
 let categories = ecommerceData.categories || [];
 
-
 let visibleProducts = loggedInUser.role === "seller"
   ? products.filter(p => p.sellerId === loggedInUser.id)
   : products;
@@ -343,8 +342,8 @@ function renderProducts(containerId, productsList, page = 1) {
   }
 
   paginated.forEach((p, index) => {
-    const imageSrc = p.imageUrl && p.imageUrl.startsWith("data:") 
-      ? p.imageUrl 
+    const imageSrc = p.imageUrl && (p.imageUrl.startsWith("data:") || p.imageUrl.startsWith("http"))
+      ? p.imageUrl
       : `../assets/images/products/${p.imageUrl || "default.png"}`;
     const categoryName = categories.find(c => c.id === p.categoryId)?.name || "Unknown";
 
@@ -388,26 +387,44 @@ function showControlButtons(product) {
     </button>`;
 }
 
-// ==================== Image Upload ====================
+// ==================== Image Upload & URL ====================
 let selectedImageCreate = "";
 let selectedImageEdit = "";
 
-function setupImageUpload(inputId, previewId, type) {
-  document.getElementById(inputId).addEventListener('change', function(e) {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    reader.onload = function(event) {
-      if (type === "create") selectedImageCreate = event.target.result;
-      if (type === "edit") selectedImageEdit = event.target.result;
-      let preview = document.getElementById(previewId);
-      preview.src = event.target.result;
-      preview.style.display = "block";
+// Function to handle both file upload and URL input
+function setupImageHandlers(fileInputId, urlInputId, previewId, type) {
+  const fileInput = document.getElementById(fileInputId);
+  const urlInput = document.getElementById(urlInputId);
+  const preview = document.getElementById(previewId);
+
+  fileInput.addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      if (type === "create") selectedImageCreate = ev.target.result;
+      if (type === "edit") selectedImageEdit = ev.target.result;
+      preview.src = ev.target.result;
+      preview.classList.remove("d-none");
     };
-    if (file) reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
+    urlInput.value = ""; // Clear URL if file selected
+  });
+
+  urlInput.addEventListener("input", function(e) {
+    const url = e.target.value.trim();
+    if (!url) return;
+    if (type === "create") selectedImageCreate = url;
+    if (type === "edit") selectedImageEdit = url;
+    preview.src = url;
+    preview.classList.remove("d-none");
+    fileInput.value = ""; // Clear file input if URL entered
   });
 }
-setupImageUpload("productImageCreate", "previewImageCreate", "create");
-setupImageUpload("productImageEdit", "previewImageEdit", "edit");
+
+// Apply to Create and Edit forms
+setupImageHandlers("productImageCreate", "productImageUrlCreate", "previewImageCreate", "create");
+setupImageHandlers("productImageEdit", "productImageUrlEdit", "previewImageEdit", "edit");
 
 // ==================== Category Dropdown ====================
 function populateCategoryDropdown(selectId, selectedId = null) {
@@ -495,7 +512,7 @@ document.addEventListener("click", function(e) {
       document.getElementById("productStockEdit").value = product.stock;
       document.getElementById("productDescriptionEdit").value = product.description;
 
-      let preview = document.getElementById("previewImageEdit");
+      const preview = document.getElementById("previewImageEdit");
       preview.src = product.imageUrl || "";
       preview.style.display = product.imageUrl ? "block" : "none";
       selectedImageEdit = product.imageUrl || "";
@@ -551,18 +568,17 @@ document.addEventListener("click", function(e) {
 
 // ==================== Initialize ====================
 renderProducts("productsTableBody", visibleProducts, currentPage);
+
 const sidebarToggle = document.getElementById('sidebarToggle');
 const adminSidebar = document.getElementById('adminSidebar');
+const mainContent = document.querySelector('.main-content');
 
 sidebarToggle.addEventListener('click', () => {
-
   adminSidebar.classList.toggle('collapsed');
-
-
   mainContent.classList.toggle('expanded');
 });
-
 </script>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
