@@ -323,8 +323,7 @@ function renderProducts(containerId, products, page = 1) {
     container.innerHTML = `<tr><td colspan="6">No products found</td></tr>`;
     return;
   }
-const category = ecommerceData.categories.find(c => c.id == p.categoryId);
-    const categoryName = category ? category.name : "Uncategorized";
+
   paginated.forEach((p, index) => {
     const imageSrc = p.imageUrl && p.imageUrl.startsWith("data:")
       ? p.imageUrl
@@ -335,7 +334,6 @@ const category = ecommerceData.categories.find(c => c.id == p.categoryId);
         <td>${start + index + 1}</td>
         <td><img src="${imageSrc}" alt="${p.name}" style="width:80px; height:80px; object-fit:cover;"></td>
         <td>${p.name}</td>
-        <td class="fw-bold d-none d-md-table-cell">$${categoryName}</td>
         <td class="fw-bold d-none d-md-table-cell">$${p.price}</td>
         <td class="d-none d-md-table-cell">
           <span class="status-badge ${p.discount > 0 ? "status-discount" : "status-nodiscount"}">
