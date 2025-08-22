@@ -399,10 +399,14 @@ populateCategoryDropdown("productCategoryCreate");
 // ==================== Validation ====================
 function validateFields(name, categorySelect, price, discount, stock, image) {
   let isValid = true;
+if (!/^[A-Za-z][A-Za-z0-9 ]*$/.test(name.value.trim())) {
+  name.classList.add("is-invalid"); 
+  name.nextElementSibling.textContent = "Name must start with a letter"; 
+  isValid = false;
+} else { 
+  name.classList.remove("is-invalid"); 
+}
 
-  if (!/^[A-Za-z][A-Za-z0-9 ]*$/.test(name.value.trim())) {
-    name.classList.add("is-invalid"); isValid = false;
-  } else { name.classList.remove("is-invalid"); }
 
   if (!categorySelect.value) { categorySelect.classList.add("is-invalid"); isValid = false; }
   else { categorySelect.classList.remove("is-invalid"); }
