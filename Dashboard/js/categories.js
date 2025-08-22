@@ -1,6 +1,5 @@
 //load Data and loggedInUser
 const data = JSON.parse(localStorage.getItem("ecommerceData"));
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 // view all categories in the table
 const categoriesTable = document.querySelector("#categoriesTable tbody");
 renderCategories();

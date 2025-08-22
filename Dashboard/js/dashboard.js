@@ -1,7 +1,15 @@
 // Initialize sidebar toggle
 const sidebar = document.getElementById("adminSidebar");
 const toggleBtn = document.getElementById("sidebarToggle");
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+const adminOnlyLis = document.getElementsByClassName("adminOnly");
 
+if (loggedInUser.role === "seller") {
+  Array.from(adminOnlyLis).forEach((li) => {
+    li.classList.add("d-none");
+  });
+  document.getElementById("home").href = "./sellerhome.html";
+}
 function toggleSidebar() {
   if (window.innerWidth < 992) {
     sidebar.classList.toggle("show");

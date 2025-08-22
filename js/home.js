@@ -472,6 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "../pages/auth/login.html";
   });
 });
+  const accountDropdown = document.getElementById("account-dropdown");
 let user = loggedInUser;
 if (user) {
   document.getElementById("signupli").style.display = "none";

@@ -15,7 +15,7 @@
                         (function() {
                             const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
                             if (!loggedInUser || loggedInUser.role !== "admin") {
-                                window.location.href = "../auth/login.html";
+                                window.location.href = "../pages/auth/login.html";
                             }
                         })();
                     </script>
@@ -85,11 +85,10 @@
                                 <li class="sidebar-divider"></li>
                                 
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#productsCollapse">
+                                    <a class="nav-link" href="ViewProducts.html">
                                         <i class="bi bi-box-seam"></i>
                                         <span>Products</span>
                                     </a>
-                                    
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="categories.html">

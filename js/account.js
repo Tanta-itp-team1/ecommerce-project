@@ -243,7 +243,7 @@ function viewOrder(orderId) {
       item.quantity
     })
         </div>
-        <span>$${item.priceAtPurchase * item.quantity}</span>
+        <span>$${item.price * item.quantity}</span>
       </li>
     `;
   });
