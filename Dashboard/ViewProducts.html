@@ -293,7 +293,7 @@ let ecommerceData = JSON.parse(localStorage.getItem("ecommerceData")) || { produ
 let products = ecommerceData.products || [];
 let categories = ecommerceData.categories || [];
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!user || user.role != ("admin" || "seller")) {
+  if (!user || (user.role != "admin" && user.role !="seller")) {
     location.href = "../pages/auth/login.html"
   }
 let visibleProducts = loggedInUser.role === "seller"
