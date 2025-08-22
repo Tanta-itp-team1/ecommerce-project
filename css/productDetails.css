@@ -24,54 +24,7 @@
   animation-delay: 0.1s;
 }
 
-/* Star Rating - Responsive & Left-to-Right Hover */
-#star-rating {
-  display: inline-flex;
-  gap: 4px;
-  font-size: 2rem;
-  color: #e0e0e0;
-  user-select: none;
-}
 
-#star-rating .star {
-  cursor: pointer;
-  transition: color 0.15s ease, transform 0.1s ease;
-  min-width: 1.2em; /* Ensures consistent spacing */
-  text-align: center;
-}
-
-#star-rating .star:hover,
-#star-rating .star:hover ~ .star {
-  color: transparent;
-}
-
-#star-rating .star:hover {
-  color: #ffc107;
-}
-
-#star-rating .star:hover ~ .star {
-  color: #e0e0e0;
-}
-
-/* When a rating is selected */
-#star-rating.rated .star {
-  color: #e0e0e0;
-}
-
-#star-rating.rated .star.selected {
-  color: #ffc107;
-}
-
-#star-rating.rated .star.selected ~ .star {
-  color: #e0e0e0;
-}
-
-/* Active feedback */
-#star-rating .star:active {
-  transform: scale(0.9);
-}
-
-/* Responsive Adjustments */
 @media (max-width: 576px) {
   #star-rating {
     font-size: 1.75rem;
@@ -89,8 +42,5 @@
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  #add-review-section .card,
-  #reviews-list .card {
-    font-size: 0.95rem;
-  }
+  
 }
