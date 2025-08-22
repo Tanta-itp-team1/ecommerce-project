@@ -224,9 +224,14 @@
 
     <!-- Product Image -->
     <div class="col-md-2 text-center">
-      <img src="../assets/images/products/${product.imageUrl}" 
-           class="img-fluid rounded" 
-           alt="${product.name}" 
+      <img src="${
+              product.imageUrl.startsWith("http") ||
+                product.imageUrl.startsWith("data")
+                ? product.imageUrl
+                : "../assets/images/products/" +
+                product.imageUrl
+              }" 
+                                    alt="${product.name}" 
            style="max-height: 80px; object-fit: contain;">
     </div>
 
@@ -286,6 +291,7 @@
                     userCart.items = data;
                     localStorage.setItem("ecommerceData", JSON.stringify(ecommerceData));
                     loadCart();
+                    updateCounters();
                 }
             });
         });
