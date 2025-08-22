@@ -155,16 +155,12 @@
             <label class="form-label">Description</label>
             <textarea id="productDescriptionCreate" class="form-control"></textarea>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Product Image</label>
-            <input type="file" id="productImageCreate" class="form-control" accept="image/*" required>
-            <img id="previewImageCreate" class="img-fluid mt-2 d-none" style="max-height: 200px;">
-
-            <input type="file" id="productImageCreate" class="form-control">
-<input type="text" id="productImageUrlCreate" class="form-control mt-2" placeholder="Or enter Image URL">
-
-
-          </div>
+         <div class="mb-3">
+  <label class="form-label">Product Image</label>
+  <input type="file" id="productImageCreate" class="form-control" accept="image/*">
+  <input type="text" id="productImageUrlCreate" class="form-control mt-2" placeholder="Or enter Image URL">
+  <img id="previewImageCreate" class="img-fluid mt-2 d-none" style="max-height: 200px;">
+</div>
         </form>
       </div>
       <div class="modal-footer">
@@ -219,15 +215,12 @@
             <label class="form-label">Description</label>
             <textarea id="productDescriptionEdit" class="form-control"></textarea>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Product Image</label>
-            <input type="file" id="productImageEdit" class="form-control" accept="image/*">
-            <img id="previewImageEdit" class="img-fluid mt-2 d-none" style="max-height: 200px;">
-            
-<input type="file" id="productImageEdit" class="form-control">
-<input type="text" id="productImageUrlEdit" class="form-control mt-2" placeholder="Or enter Image URL">
-
-          </div>
+        <div class="mb-3">
+  <label class="form-label">Product Image</label>
+  <input type="file" id="productImageEdit" class="form-control" accept="image/*">
+  <input type="text" id="productImageUrlEdit" class="form-control mt-2" placeholder="Or enter Image URL">
+  <img id="previewImageEdit" class="img-fluid mt-2 d-none" style="max-height: 200px;">
+</div>
         </form>
       </div>
       <div class="modal-footer">
@@ -387,45 +380,6 @@ function showControlButtons(product) {
     </button>`;
 }
 
-// ==================== Image Upload & URL ====================
-let selectedImageCreate = "";
-let selectedImageEdit = "";
-
-// Function to handle both file upload and URL input
-function setupImageHandlers(fileInputId, urlInputId, previewId, type) {
-  const fileInput = document.getElementById(fileInputId);
-  const urlInput = document.getElementById(urlInputId);
-  const preview = document.getElementById(previewId);
-
-  fileInput.addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      if (type === "create") selectedImageCreate = ev.target.result;
-      if (type === "edit") selectedImageEdit = ev.target.result;
-      preview.src = ev.target.result;
-      preview.classList.remove("d-none");
-    };
-    reader.readAsDataURL(file);
-    urlInput.value = ""; // Clear URL if file selected
-  });
-
-  urlInput.addEventListener("input", function(e) {
-    const url = e.target.value.trim();
-    if (!url) return;
-    if (type === "create") selectedImageCreate = url;
-    if (type === "edit") selectedImageEdit = url;
-    preview.src = url;
-    preview.classList.remove("d-none");
-    fileInput.value = ""; // Clear file input if URL entered
-  });
-}
-
-// Apply to Create and Edit forms
-setupImageHandlers("productImageCreate", "productImageUrlCreate", "previewImageCreate", "create");
-setupImageHandlers("productImageEdit", "productImageUrlEdit", "previewImageEdit", "edit");
-
 // ==================== Category Dropdown ====================
 function populateCategoryDropdown(selectId, selectedId = null) {
   const select = document.getElementById(selectId);
@@ -441,28 +395,66 @@ function populateCategoryDropdown(selectId, selectedId = null) {
 populateCategoryDropdown("productCategoryCreate");
 
 // ==================== Validation ====================
-const nameRegex = /^[A-Za-z][A-Za-z0-9 ]*$/;
 function validateFields(name, categorySelect, price, discount, stock, image) {
   let isValid = true;
-  if (!nameRegex.test(name.value.trim())) { name.classList.add("is-invalid"); isValid = false; }
-  else { name.classList.remove("is-invalid"); }
+
+  if (!/^[A-Za-z][A-Za-z0-9 ]*$/.test(name.value.trim())) {
+    name.classList.add("is-invalid"); isValid = false;
+  } else { name.classList.remove("is-invalid"); }
 
   if (!categorySelect.value) { categorySelect.classList.add("is-invalid"); isValid = false; }
   else { categorySelect.classList.remove("is-invalid"); }
 
-  if (price.value <= 0 || !price.value) { price.classList.add("is-invalid"); isValid = false; }
+  if (!price.value || price.value <= 0) { price.classList.add("is-invalid"); isValid = false; }
   else { price.classList.remove("is-invalid"); }
 
   if (discount.value < 0 || discount.value > 100) { discount.classList.add("is-invalid"); isValid = false; }
   else { discount.classList.remove("is-invalid"); }
 
-  if (stock.value < 0 || !stock.value) { stock.classList.add("is-invalid"); isValid = false; }
+  if (!stock.value || stock.value < 0) { stock.classList.add("is-invalid"); isValid = false; }
   else { stock.classList.remove("is-invalid"); }
 
   if (!image) { showToast("Image is required", "danger"); isValid = false; }
 
   return isValid;
 }
+
+// ==================== Image Handlers ====================
+let selectedImageCreate = "";
+let selectedImageEdit = "";
+
+function setupImageHandlers(fileId, urlId, previewId, type) {
+  const fileInput = document.getElementById(fileId);
+  const urlInput = document.getElementById(urlId);
+  const preview = document.getElementById(previewId);
+
+  fileInput.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      if (type === "create") selectedImageCreate = ev.target.result;
+      else selectedImageEdit = ev.target.result;
+      preview.src = ev.target.result;
+      preview.classList.remove("d-none");
+    };
+    reader.readAsDataURL(file);
+    urlInput.value = "";
+  });
+
+  urlInput.addEventListener("input", e => {
+    const url = e.target.value.trim();
+    if (!url) return;
+    if (type === "create") selectedImageCreate = url;
+    else selectedImageEdit = url;
+    preview.src = url;
+    preview.classList.remove("d-none");
+    fileInput.value = "";
+  });
+}
+
+setupImageHandlers("productImageCreate", "productImageUrlCreate", "previewImageCreate", "create");
+setupImageHandlers("productImageEdit", "productImageUrlEdit", "previewImageEdit", "edit");
 
 // ==================== Create Product ====================
 document.getElementById("createProductBtn").addEventListener("click", function () {
